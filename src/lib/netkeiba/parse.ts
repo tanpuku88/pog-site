@@ -1,0 +1,248 @@
+// netkeiba の HTML を解析する。
+// ページの見た目が変わっても壊れにくいよう、列の位置ではなく見出しの文字で列を探す。
+import * as cheerio from "cheerio";
+
+export const JRA_VENUES = ["札幌", "函館", "福島", "新潟", "東京", "中山", "中京", "京都", "阪神", "小倉"];
+export const JRA_VENUE_CODES: Record<string, string> = {
+  "01": "札幌", "02": "函館", "03": "福島", "04": "新潟", "05": "東京",
+  "06": "中山", "07": "中京", "08": "京都", "09": "阪神", "10": "小倉",
+};
+
+export type HorseProfile = {
+  id: string;
+  name: string;
+  sex: string | null;
+  birth_year: number | null;
+  sire: string | null;
+  dam: string | null;
+  damsire: string | null;
+  trainer: string | null;
+  owner: string | null;
+  breeder: string | null;
+};
+
+export type RaceResult = {
+  race_date: string; // YYYY-MM-DD
+  venue: string;
+  race_name: string;
+  race_id: string | null;
+  finish: string | null;
+  prize_man: number;
+  is_jra: boolean;
+};
+
+const clean = (s: string | undefined | null) => (s ?? "").replace(/\s+/g, " ").trim();
+const orNull = (s: string) => (s === "" ? null : s);
+
+function horseIdFromHref(href: string | undefined): string | null {
+  const m = href?.match(/\/horse\/(\w{10})\/?/);
+  return m ? m[1] : null;
+}
+
+/** 見出し行から「見出し文字 → 列番号」の表を作る */
+function headerIndex($: cheerio.CheerioAPI, table: ReturnType<cheerio.CheerioAPI>): Map<string, number> {
+  const map = new Map<string, number>();
+  const headRow = table.find("tr").filter((_, tr) => $(tr).find("th").length > 0).first();
+  headRow.find("th").each((i, th) => {
+    map.set(clean($(th).text()).replace(/\s/g, ""), i);
+  });
+  return map;
+}
+
+function findCol(idx: Map<string, number>, ...names: string[]): number {
+  for (const n of names) {
+    for (const [k, v] of idx) if (k === n) return v;
+  }
+  for (const n of names) {
+    for (const [k, v] of idx) if (k.startsWith(n)) return v;
+  }
+  return -1;
+}
+
+/** 「4東京3」→「東京」、「大井」→「大井」 */
+export function venueName(kaisai: string): string {
+  return clean(kaisai).replace(/\d+/g, "").trim();
+}
+
+export function isJraVenue(venue: string): boolean {
+  return JRA_VENUES.includes(venue);
+}
+
+/** 「1,450.0」→ 1450。空欄や「-」は 0 */
+export function parsePrize(s: string): number {
+  const n = Number(clean(s).replace(/,/g, ""));
+  return Number.isFinite(n) ? n : 0;
+}
+
+/** 「2026/10/12」→「2026-10-12」 */
+export function parseDate(s: string): string | null {
+  const m = clean(s).match(/(\d{4})[\/年.-](\d{1,2})[\/月.-](\d{1,2})/);
+  if (!m) return null;
+  return `${m[1]}-${m[2].padStart(2, "0")}-${m[3].padStart(2, "0")}`;
+}
+
+/** 馬ページ（または成績ページ）から成績表を読む。表が見つからなければ null */
+export function parseRaceResults(html: string): RaceResult[] | null {
+  const $ = cheerio.load(html);
+  const table = $("table")
+    .filter((_, t) => {
+      const idx = headerIndex($, $(t));
+      return findCol(idx, "日付") >= 0 && findCol(idx, "賞金") >= 0;
+    })
+    .first();
+  if (table.length === 0) return null;
+
+  const idx = headerIndex($, table);
+  const cDate = findCol(idx, "日付");
+  const cVenue = findCol(idx, "開催");
+  const cName = findCol(idx, "レース名");
+  const cFinish = findCol(idx, "着順");
+  const cPrize = findCol(idx, "賞金");
+
+  const results: RaceResult[] = [];
+  table.find("tr").each((_, tr) => {
+    const tds = $(tr).find("td");
+    if (tds.length === 0) return;
+    const date = parseDate(tds.eq(cDate).text());
+    if (!date) return;
+    const venue = cVenue >= 0 ? venueName(tds.eq(cVenue).text()) : "";
+    const nameCell = cName >= 0 ? tds.eq(cName) : tds.eq(0);
+    const raceHref = nameCell.find("a").attr("href") ?? "";
+    results.push({
+      race_date: date,
+      venue,
+      race_name: clean(nameCell.text()) || "(不明)",
+      race_id: raceHref.match(/race\/(\w+)\/?/)?.[1] ?? null,
+      finish: cFinish >= 0 ? orNull(clean(tds.eq(cFinish).text())) : null,
+      prize_man: cPrize >= 0 ? parsePrize(tds.eq(cPrize).text()) : 0,
+      is_jra: isJraVenue(venue),
+    });
+  });
+  return results;
+}
+
+/** 馬ページからプロフィールを読む */
+export function parseHorseProfile(id: string, html: string): HorseProfile | null {
+  const $ = cheerio.load(html);
+  const name = clean($(".horse_title h1").first().text());
+  if (!name) return null;
+
+  const sub = clean($(".horse_title p.txt_01").first().text());
+  const sex = sub.match(/(牡|牝|セ)/)?.[1] ?? null;
+
+  const prof = new Map<string, string>();
+  $("table.db_prof_table tr").each((_, tr) => {
+    prof.set(clean($(tr).find("th").text()), clean($(tr).find("td").text()));
+  });
+  const birth = prof.get("生年月日") ?? "";
+  const birthYear = birth.match(/(\d{4})年/)?.[1];
+
+  // 血統表: 1行目の最初のセル=父、3行目の最初のセル=母、3行目の2番目=母父
+  const rows = $("table.blood_table tr");
+  const cell = (r: number, c: number) => orNull(clean(rows.eq(r).find("td").eq(c).find("a").first().text() || rows.eq(r).find("td").eq(c).text()));
+
+  return {
+    id,
+    name,
+    sex,
+    birth_year: birthYear ? Number(birthYear) : null,
+    sire: cell(0, 0),
+    dam: cell(2, 0),
+    damsire: cell(2, 1),
+    trainer: orNull(prof.get("調教師") ?? ""),
+    owner: orNull(prof.get("馬主") ?? ""),
+    breeder: orNull(prof.get("生産者") ?? ""),
+  };
+}
+
+export type SearchHit = {
+  id: string;
+  name: string;
+  sex: string | null;
+  birth_year: number | null;
+  sire: string | null;
+  dam: string | null;
+  damsire: string | null;
+  trainer: string | null;
+};
+
+/** 馬名検索の結果一覧を読む */
+export function parseHorseSearch(html: string): SearchHit[] {
+  const $ = cheerio.load(html);
+  const table = $("table")
+    .filter((_, t) => {
+      const idx = headerIndex($, $(t));
+      return findCol(idx, "馬名") >= 0 && findCol(idx, "父") >= 0;
+    })
+    .first();
+  if (table.length === 0) return [];
+  const idx = headerIndex($, table);
+  const col = {
+    name: findCol(idx, "馬名"),
+    sex: findCol(idx, "性"),
+    year: findCol(idx, "生年"),
+    trainer: findCol(idx, "厩舎", "調教師"),
+    sire: findCol(idx, "父"),
+    dam: findCol(idx, "母"),
+    damsire: findCol(idx, "母父"),
+  };
+  const hits: SearchHit[] = [];
+  table.find("tr").each((_, tr) => {
+    const tds = $(tr).find("td");
+    if (tds.length === 0) return;
+    const nameCell = tds.eq(col.name);
+    const id = horseIdFromHref(nameCell.find("a").attr("href"));
+    if (!id) return;
+    const t = (c: number) => (c >= 0 ? orNull(clean(tds.eq(c).text())) : null);
+    const year = t(col.year)?.match(/\d{4}/)?.[0];
+    hits.push({
+      id,
+      name: clean(nameCell.text()),
+      sex: t(col.sex),
+      birth_year: year ? Number(year) : null,
+      sire: t(col.sire),
+      dam: t(col.dam),
+      damsire: t(col.damsire),
+      trainer: t(col.trainer),
+    });
+  });
+  return hits;
+}
+
+/** 開催日のレース一覧から race_id を集める（JRAのみ） */
+export function parseRaceList(html: string): string[] {
+  const ids = new Set<string>();
+  for (const m of html.matchAll(/race_id=(\d{12})/g)) {
+    const venueCode = m[1].slice(4, 6);
+    if (JRA_VENUE_CODES[venueCode]) ids.add(m[1]);
+  }
+  return [...ids].sort();
+}
+
+export type Shutuba = {
+  race_id: string;
+  race_name: string | null;
+  venue: string | null;
+  race_no: number;
+  post_time: string | null;
+  horse_ids: string[];
+};
+
+/** 出馬表から出走馬の馬IDを集める */
+export function parseShutuba(raceId: string, html: string): Shutuba {
+  const $ = cheerio.load(html);
+  const horseIds = new Set<string>();
+  $("a[href*='/horse/']").each((_, a) => {
+    const id = horseIdFromHref($(a).attr("href"));
+    if (id) horseIds.add(id);
+  });
+  const data01 = clean($(".RaceData01").first().text());
+  return {
+    race_id: raceId,
+    race_name: orNull(clean($(".RaceName").first().text())),
+    venue: JRA_VENUE_CODES[raceId.slice(4, 6)] ?? null,
+    race_no: Number(raceId.slice(10, 12)),
+    post_time: data01.match(/(\d{1,2}:\d{2})/)?.[1] ?? null,
+    horse_ids: [...horseIds],
+  };
+}
