@@ -32,9 +32,6 @@ beforeAll(async () => {
   `);
   await db.exec(readFileSync("supabase/migrations/0001_init.sql", "utf8"));
   await db.exec(`
-    grant usage on schema public to authenticated;
-    grant all on all tables in schema public to authenticated;
-    grant usage on schema public to anon; grant select on all tables in schema public to anon;
     insert into auth.users (id, email) values ('${A}', 'a@example.com'), ('${B}', 'b@example.com'), ('${C}', 'c@example.com');
     insert into public.horses (id, name, birth_year) values ('h1', '馬1', 2024), ('h2', '馬2', 2024), ('h3', '馬3', 2024);
   `);

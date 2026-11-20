@@ -217,3 +217,10 @@ create policy picks_delete on public.picks for delete to authenticated
   using (user_id = auth.uid());
 
 grant execute on function public.join_group(text) to authenticated;
+
+-- ========== テーブルの利用権限 ==========
+-- Supabase の「Grant API access to new tables automatically」をオフで作った場合でも動くように、明示的に付与する。
+-- 実際に読める・書ける行は上の RLS で制限される。
+grant usage on schema public to anon, authenticated;
+grant select on public.horses, public.race_results, public.entries to anon, authenticated;
+grant select, insert, update, delete on public.profiles, public.groups, public.group_members, public.picks to authenticated;
