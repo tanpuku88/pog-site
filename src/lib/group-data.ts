@@ -1,4 +1,5 @@
 import { notFound, redirect } from "next/navigation";
+import { cache } from "react";
 import { getUser } from "@/lib/supabase/server";
 import { computeStandings, type ResultRow } from "@/lib/standings";
 import { todayJst } from "@/lib/util";
@@ -28,13 +29,13 @@ export type Horse = {
 };
 
 /** グループ画面の共通チェック: ログイン済みでメンバーであること */
-export async function requireGroup(groupId: string) {
+export const requireGroup = cache(async function requireGroup(groupId: string) {
   const { supabase, user } = await getUser();
   if (!user) redirect(`/login?next=/g/${groupId}`);
   const { data: group } = await supabase.from("groups").select("*").eq("id", groupId).maybeSingle<Group>();
   if (!group) notFound();
   return { supabase, user, group };
-}
+});
 
 /** ランキングと指名馬の表示に必要なデータをまとめて読む */
 export async function loadGroupBoard(groupId: string) {
