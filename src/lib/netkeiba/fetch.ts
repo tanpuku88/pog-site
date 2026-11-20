@@ -52,6 +52,7 @@ export function encodeEucJp(s: string): string {
 }
 
 export const horsePageUrl = (id: string) => `https://db.netkeiba.com/horse/${id}/`;
+export const horsePedUrl = (id: string) => `https://db.netkeiba.com/horse/ped/${id}/`;
 export const horseResultUrl = (id: string) => `https://db.netkeiba.com/horse/result/${id}/`;
 export const horseSearchUrl = (word: string) =>
   `https://db.netkeiba.com/?pid=horse_list&match=partial_match&list=100&word=${encodeEucJp(word)}`;

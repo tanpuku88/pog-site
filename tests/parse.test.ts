@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
   parseRaceResults, parseHorseProfile, parseHorseSearch, parseRaceList, parseShutuba,
-  venueName, parsePrize, parseDate,
+  venueName, parsePrize, parseDate, parsePedigreePage,
 } from "../src/lib/netkeiba/parse";
 import { extractHorseId, encodeEucJp } from "../src/lib/netkeiba/fetch";
 
@@ -117,5 +117,26 @@ describe("小さな変換", () => {
   it("EUC-JPでエンコードする", () => {
     expect(encodeEucJp("あ")).toBe("%A4%A2");
     expect(encodeEucJp("A1")).toBe("A1");
+  });
+});
+
+describe("血統表の解析", () => {
+  it("血統ページ（5代）から父・母・母父を読む", () => {
+    // 5代血統表: 父と母のセルは rowspan=16、母父は rowspan=8
+    const rows: string[] = [];
+    for (let i = 0; i < 32; i++) {
+      let tds = "";
+      if (i === 0) tds += `<td rowspan="16"><a href="/horse/ped/1/">サングレーザー</a><br>2014 鹿毛</td><td rowspan="8"><a>ディープインパクト</a></td>`;
+      if (i === 16) tds += `<td rowspan="16"><a href="/horse/ped/2/">カレンモエ</a><br>2015 鹿毛</td><td rowspan="8"><a>ロードカナロア</a></td>`;
+      if (i === 8 || i === 24) tds += `<td rowspan="8"><a>母方</a></td>`;
+      tds += `<td><a>先祖${i}</a></td>`;
+      rows.push(`<tr>${tds}</tr>`);
+    }
+    const html = `<table class="blood_table">${rows.join("")}</table>`;
+    expect(parsePedigreePage(html)).toEqual({ sire: "サングレーザー", dam: "カレンモエ", damsire: "ロードカナロア" });
+  });
+
+  it("血統表がなければ空を返す", () => {
+    expect(parsePedigreePage("<html><body>なし</body></html>")).toEqual({ sire: null, dam: null, damsire: null });
   });
 });
