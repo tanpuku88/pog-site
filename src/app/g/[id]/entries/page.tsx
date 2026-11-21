@@ -31,10 +31,10 @@ export default async function Entries({ params }: { params: Promise<{ id: string
         <div className="card muted">今週出走予定の指名馬はいません。出走予定は毎週木〜土曜の夕方に更新されます。</div>
       )}
       {[...byDate].map(([date, list]) => {
-        const d = new Date(`${date}T00:00:00+09:00`);
+        const d = new Date(`${date}T00:00:00Z`);
         return (
           <div key={date}>
-            <div className="sec-title"><h2>{d.getMonth() + 1}月{d.getDate()}日（{WEEK[d.getDay()]}）</h2><span className="muted">{list.length}頭</span></div>
+            <div className="sec-title"><h2>{d.getUTCMonth() + 1}月{d.getUTCDate()}日（{WEEK[d.getUTCDay()]}）</h2><span className="muted">{list.length}頭</span></div>
             <div className="card flush">
               <table className="list">
                 <tbody>

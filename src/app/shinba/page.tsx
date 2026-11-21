@@ -52,23 +52,46 @@ export default async function Shinba() {
 
   return (
     <>
-      <h1>今週の新馬戦</h1>
+      <h1 id="top">今週の新馬戦</h1>
       <p className="muted" style={{ marginTop: -8 }}>
         JRAの新馬戦に出走する馬の一覧です。出馬表が出る木曜〜土曜の夕方に更新します。指名数はこのサイトの全グループの合計です。
       </p>
+      {days.size > 0 && (
+        <nav className="race-jump" aria-label="レースへ移動">
+          {[...days].map(([date, races]) => {
+            const d = new Date(`${date}T00:00:00Z`);
+            return (
+              <div className="rj-day" key={date}>
+                <span className="rj-date">{d.getUTCMonth() + 1}/{d.getUTCDate()}（{WEEK[d.getUTCDay()]}）</span>
+                <div className="rj-list">
+                  {[...races].map(([raceId, list]) => (
+                    <a key={raceId} href={`#r-${raceId}`} className="rj-btn">
+                      <b>{list[0].venue}{list[0].race_no}R</b>
+                      {list[0].post_time && <small>{list[0].post_time}</small>}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </nav>
+      )}
       {days.size === 0 && <div className="card muted">今週の新馬戦の出走馬はまだ出ていません。出馬表が確定する木曜の夕方以降に表示されます。</div>}
       {[...days].map(([date, races]) => {
-        const d = new Date(`${date}T00:00:00+09:00`);
+        const d = new Date(`${date}T00:00:00Z`);
         return (
           <div key={date}>
-            <div className="sec-title"><h2>{d.getMonth() + 1}月{d.getDate()}日（{WEEK[d.getDay()]}）</h2><span className="muted">{races.size}レース</span></div>
+            <div className="sec-title"><h2>{d.getUTCMonth() + 1}月{d.getUTCDate()}日（{WEEK[d.getUTCDay()]}）</h2><span className="muted">{races.size}レース</span></div>
             {[...races].map(([raceId, list]) => {
               const r = list[0];
               return (
-                <div className="card flush" key={raceId} style={{ marginBottom: 12 }}>
+                <div className="card flush race-card" id={`r-${raceId}`} key={raceId} style={{ marginBottom: 12 }}>
                   <div style={{ padding: "10px 14px", borderBottom: "1px solid var(--line)", display: "flex", justifyContent: "space-between", gap: 8, flexWrap: "wrap" }}>
                     <span><span className="big">{r.venue}{r.race_no}R</span> {r.race_name}{r.post_time && <span className="muted">　{r.post_time}発走</span>}</span>
-                    <a className="muted" href={shutubaUrl(raceId)} target="_blank" rel="noreferrer">出馬表 ›</a>
+                    <span className="race-links">
+                      <a className="muted" href={shutubaUrl(raceId)} target="_blank" rel="noreferrer">出馬表 ›</a>
+                      <a className="muted" href="#top">↑ 上へ</a>
+                    </span>
                   </div>
                   <div className="scroll">
                     <table className="list compact">

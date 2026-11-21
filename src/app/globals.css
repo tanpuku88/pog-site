@@ -412,3 +412,24 @@ table.group-table .bar-week { background: #e0524a; }
   table.group-horses td.num { padding: 6px 4px; }
   .seg-wrap a { padding: 6px 10px; }
 }
+
+/* 新馬戦：各レースへ飛ぶボタン */
+html { scroll-behavior: smooth; }
+.race-card, #top { scroll-margin-top: 12px; }
+.race-jump { background: var(--card); border: 1px solid var(--line); border-top: 3px solid var(--accent); border-radius: 6px; padding: 8px 12px; margin-bottom: 8px; }
+.rj-day { display: flex; align-items: flex-start; gap: 10px; padding: 6px 0; }
+.rj-day + .rj-day { border-top: 1px dashed var(--line); }
+.rj-date { flex: none; width: 5.2em; font-weight: 800; font-size: 13px; padding-top: 6px; white-space: nowrap; }
+.rj-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.rj-btn { display: inline-flex; flex-direction: column; align-items: center; min-width: 64px; padding: 4px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--th); color: var(--text); text-decoration: none; line-height: 1.25; }
+.rj-btn b { font-size: 14px; white-space: nowrap; }
+.rj-btn small { font-size: 11px; color: var(--muted); }
+.rj-btn:hover, .rj-btn:active { border-color: var(--accent); background: var(--accent-weak); }
+.race-links { display: inline-flex; gap: 12px; }
+@media (max-width: 560px) {
+  .rj-day { flex-direction: column; gap: 4px; }
+  .rj-date { padding-top: 0; width: auto; }
+  .rj-list { display: grid; grid-template-columns: repeat(4, 1fr); width: 100%; }
+  .rj-btn { min-width: 0; padding: 5px 2px; }
+  .rj-btn b { font-size: 13px; }
+}
