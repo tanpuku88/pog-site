@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
+import GlobalNav from "@/components/GlobalNav";
 import { getUser } from "@/lib/supabase/server";
 import { GOOGLE_SITE_VERIFICATION, SITE_NAME, SITE_URL } from "@/config/site";
 
@@ -21,24 +22,37 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <header className="topbar">
           <div className="topbar-in">
-            <Link href="/" className="logo">🏇 POG<small>ペーパーオーナーゲーム</small></Link>
-            <nav>
-              <Link href="/shinba">新馬戦</Link>
-              <Link href="/sires">種牡馬</Link>
-              <Link href="/horses" className="hide-sm">馬を探す</Link>
+            <Link href="/" className="logo"><span className="logo-mark" aria-hidden>P</span>POG<small>ペーパーオーナーゲーム</small></Link>
+            <nav className="account">
               {user ? (
                 <>
-                  <Link href="/" className="hide-sm">グループ</Link>
                   <Link href="/me">マイページ</Link>
                   <form action="/auth/signout" method="post"><button>ログアウト</button></form>
                 </>
               ) : (
-                <Link href="/login">ログイン</Link>
+                <>
+                  <Link href="/login">ログイン</Link>
+                  <Link href="/login?mode=signup" className="signup">無料登録</Link>
+                </>
               )}
             </nav>
           </div>
+          <GlobalNav />
         </header>
         <main className="wrap">{children}</main>
+        <footer className="footer">
+          <div className="footer-in">
+            <nav>
+              <Link href="/popular">人気馬30傑</Link>
+              <Link href="/shinba">新馬戦</Link>
+              <Link href="/sires">種牡馬ランキング</Link>
+              <Link href="/horses">馬を探す</Link>
+              <Link href="/guide">使い方</Link>
+            </nav>
+            <p>成績データは毎晩自動で更新しています。賞金は中央競馬の本賞金（万円）です。</p>
+            <p className="copy">© {SITE_NAME}</p>
+          </div>
+        </footer>
       </body>
     </html>
   );

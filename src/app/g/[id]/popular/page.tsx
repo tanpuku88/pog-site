@@ -1,79 +1,48 @@
-import Link from "next/link";
 import { requireGroup } from "@/lib/group-data";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { loadGenerationBoard } from "@/lib/popular";
-import { formatMan } from "@/lib/util";
-import { HorseLabel, Rank } from "@/components/HorseLabel";
+import { loadGenerationBoard, rankBoard } from "@/lib/popular";
+import { PopularTable, BoardFilters, BoardStats, RisingBox, SireBox, parseBoardParams } from "@/components/PopularTable";
 import QuickPick from "./QuickPick";
 
 export default async function Popular({ params, searchParams }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ sort?: string }>;
+  searchParams: Promise<{ sex?: string; sort?: string }>;
 }) {
   const { id } = await params;
-  const { sort } = await searchParams;
-  const byPrizeMode = sort === "prize";
+  const { sex, sort } = parseBoardParams(await searchParams);
   const { group, supabase } = await requireGroup(id);
   const board = await loadGenerationBoard(createAdminClient(), group.crop_year, group);
-  const rows = byPrizeMode ? board.byPrize : board.byPicks;
-  const maxPicks = Math.max(1, ...board.byPicks.map((r) => r.picks));
+  const rows = rankBoard(board.rows, { sex, sort, limit: 30 });
 
-  // 自分のグループで誰が指名しているか
+  // 自分の大会で指名済みかどうか
   const { data: myPicks } = await supabase.from("picks").select("horse_id").eq("group_id", id);
   const inGroup = new Set((myPicks ?? []).map((p) => p.horse_id as string));
+  const actions = Object.fromEntries(rows.map((r) => [
+    r.horse.id,
+    inGroup.has(r.horse.id) ? <span className="pill">この大会で指名済み</span> : <QuickPick groupId={id} horseId={r.horse.id} />,
+  ]));
 
   return (
     <>
       <div className="sec-title">
-        <h2>{group.crop_year}年生まれ世代 {byPrizeMode ? "賞金ランキング" : "人気馬30傑"}</h2>
-        <div className="seg">
-          <Link href={`/g/${id}/popular`} className={byPrizeMode ? "" : "on"}>指名数順</Link>
-          <Link href={`/g/${id}/popular?sort=prize`} className={byPrizeMode ? "on" : ""}>賞金順</Link>
-        </div>
+        <h2>{group.crop_year}年生まれ世代 {sort === "prize" ? "賞金ランキング" : "人気馬30傑"}</h2>
+        <span className="muted">全大会の指名を集計・賞金はこの大会のルール</span>
       </div>
-      <p className="muted" style={{ marginTop: 0 }}>
-        このサイトの全グループで指名された{board.totalHorses}頭（のべ{board.totalPicks}指名）から集計しています。
-        {byPrizeMode ? "賞金はこの大会のルール（期間・対象）で数えています。" : "同じ指名数のときは賞金が多い順です。"}
-      </p>
-
-      {rows.length === 0 ? (
-        <div className="card muted">{byPrizeMode ? "まだ賞金を獲得した馬がいません。" : "まだ指名された馬がいません。"}</div>
-      ) : (
-        <div className="card flush scroll">
-          <table className="list">
-            <thead>
-              <tr>
-                <th className="c">順位</th>
-                <th>馬名・血統</th>
-                <th className="num">指名数</th>
-                <th className="num">賞金</th>
-                <th className="num hide-sm">成績</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((r) => (
-                <tr key={r.horse.id}>
-                  <td className="c"><Rank rank={r.rank} /></td>
-                  <td>
-                    <HorseLabel id={r.horse.id} horse={r.horse} groupId={id} />
-                    <div style={{ marginTop: 2 }}>
-                      {inGroup.has(r.horse.id)
-                        ? <span className="pill">この大会で指名済み</span>
-                        : <QuickPick groupId={id} horseId={r.horse.id} />}
-                    </div>
-                  </td>
-                  <td className="num">
-                    <span className="big">{r.picks}</span>
-                    {!byPrizeMode && <div className="bar" style={{ marginTop: 4 }}><span style={{ width: `${(r.picks / maxPicks) * 100}%` }} /></div>}
-                  </td>
-                  <td className="num big">{r.points > 0 ? formatMan(r.points) : <span className="muted">-</span>}</td>
-                  <td className="num hide-sm sub">{r.starts === 0 ? "未出走" : `${r.starts}戦${r.wins}勝`}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <BoardStats board={board} />
+      <div className="layout-2col">
+        <div>
+          <BoardFilters base={`/g/${id}/popular`} sex={sex} sort={sort} />
+          {rows.length === 0 ? (
+            <div className="card muted">{sort === "prize" ? "まだ賞金を獲得した馬がいません。" : "まだ指名された馬がいません。"}</div>
+          ) : (
+            <PopularTable rows={rows} sort={sort} groupCount={board.groupCount} groupId={id} actions={actions} />
+          )}
         </div>
-      )}
+        <aside className="side">
+          <RisingBox board={board} groupId={id} />
+          <SireBox board={board} />
+        </aside>
+      </div>
     </>
   );
 }

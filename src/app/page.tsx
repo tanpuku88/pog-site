@@ -1,30 +1,52 @@
 import Link from "next/link";
 import { getUser } from "@/lib/supabase/server";
-import { PopularTop, Columns, GuideLink } from "@/components/HomeSections";
+import { HomeBoard, Columns } from "@/components/HomeSections";
+
+const MENU = [
+  { href: "/popular", icon: "🏆", title: "人気馬30傑", text: "世代でよく指名される馬" },
+  { href: "/shinba", icon: "🐎", title: "今週の新馬戦", text: "デビュー馬と血統・指名数" },
+  { href: "/sires", icon: "🧬", title: "種牡馬ランキング", text: "産駒の賞金・勝ち上がり・AEI" },
+  { href: "/horses", icon: "🔍", title: "馬を探す", text: "馬名・父・母から2歳馬を検索" },
+];
+
+function QuickMenu() {
+  return (
+    <nav className="quick-menu">
+      {MENU.map((m) => (
+        <Link key={m.href} href={m.href}>
+          <span className="qm-icon" aria-hidden>{m.icon}</span>
+          <span><strong>{m.title}</strong><small>{m.text}</small></span>
+        </Link>
+      ))}
+    </nav>
+  );
+}
 
 export default async function Home() {
   const { supabase, user } = await getUser();
   if (!user) {
     return (
       <>
-        <div className="lead">
-          <h1>POGを、もっとラクに。もっと熱く。</h1>
-          <p>指名馬の登録は馬名を数文字入れるだけ。成績・賞金・順位は毎晩自動で更新されます。</p>
-          <Link href="/login?mode=signup" className="btn">無料で大会を作る</Link>{" "}<Link href="/guide" style={{ color: "#fff", marginLeft: 12 }}>使い方を見る ›</Link>
+        <div className="lead lead-home">
+          <div className="lead-text">
+            <p className="lead-kicker">POG（ペーパーオーナーゲーム）大会を無料で</p>
+            <h1>指名はかんたん、<br />順位は毎晩自動更新。</h1>
+            <p>馬名を数文字入れるだけで指名完了。成績・賞金・順位はサイトが自動で集計します。招待リンクをLINEで送れば、仲間はそのまま参加できます。</p>
+            <div className="lead-actions">
+              <Link href="/login?mode=signup" className="btn gold">無料で大会を作る</Link>
+              <Link href="/guide" className="btn ghost">使い方を見る</Link>
+            </div>
+          </div>
+          <ul className="lead-points">
+            <li><b>かんたん登録</b>馬名・父・母で検索、URL貼り付け、まとめて登録</li>
+            <li><b>自動で順位表</b>本賞金の合計でランキングを毎晩更新</li>
+            <li><b>出走予定もまとめて</b>指名馬の今週の出走と最新の成績</li>
+          </ul>
         </div>
-        <div className="features">
-          <div className="card"><strong>かんたん登録</strong><span className="muted">馬名・父・母で検索、URL貼り付け、まとめて登録に対応</span></div>
-          <div className="card"><strong>自動で順位表</strong><span className="muted">本賞金の合計でランキングを毎晩更新</span></div>
-          <div className="card"><strong>人気馬30傑</strong><span className="muted">世代でよく指名されている馬がひと目でわかる</span></div>
-          <div className="card"><strong>今週の出走</strong><span className="muted">指名馬の出走予定と最新の成績をまとめて表示</span></div>
-          <Link href="/shinba" className="card" style={{ textDecoration: "none", color: "inherit" }}><strong>今週の新馬戦 ›</strong><span className="muted">デビューする2歳馬と血統・指名数をチェック</span></Link>
-          <Link href="/sires" className="card" style={{ textDecoration: "none", color: "inherit" }}><strong>種牡馬ランキング ›</strong><span className="muted">父ごとの産駒数・勝ち上がり・賞金・人気</span></Link>
-          <Link href="/horses" className="card" style={{ textDecoration: "none", color: "inherit" }}><strong>馬を探す ›</strong><span className="muted">2歳馬を馬名・父・母から検索。血統・成績・指名数</span></Link>
-          <div className="card"><strong>招待リンクで集合</strong><span className="muted">大会を作ってLINEでリンクを送るだけ。開いた仲間はそのまま参加</span></div>
-        </div>
-        <PopularTop />
-        <Columns />
-        <GuideLink />
+        <QuickMenu />
+        <HomeBoard>
+          <Columns />
+        </HomeBoard>
       </>
     );
   }
@@ -38,25 +60,26 @@ export default async function Home() {
 
   return (
     <>
-      <div className="sec-title" style={{ marginTop: 8 }}><h2>参加中のグループ</h2></div>
+      <div className="sec-title" style={{ marginTop: 8 }}>
+        <h2>参加中の大会</h2>
+        <Link href="/groups/new">＋ 新しい大会を作る</Link>
+      </div>
       {groups.length === 0 && (
-        <div className="card muted">まだグループがありません。グループを作るか、招待リンクから参加してください。</div>
+        <div className="card muted">まだ大会がありません。大会を作るか、招待リンクから参加してください。</div>
       )}
-      {groups.map((g) => (
-        <div className="card" key={g.id}>
-          <Link href={`/g/${g.id}`} className="group-link">
-            <span>
-              <strong>{g.name}</strong>
-              <div className="muted">{g.crop_year}年生まれ世代</div>
-            </span>
-            <span className="muted">開く ›</span>
+      <div className="group-grid">
+        {groups.map((g) => (
+          <Link href={`/g/${g.id}`} className="group-tile" key={g.id}>
+            <strong>{g.name}</strong>
+            <span className="muted">{g.crop_year}年生まれ世代</span>
+            <span className="gt-go">順位表を開く ›</span>
           </Link>
-        </div>
-      ))}
-      <p><Link href="/groups/new" className="btn">新しいグループを作る</Link>{" "}<Link href="/shinba" className="btn secondary">今週の新馬戦</Link>{" "}<Link href="/sires" className="btn secondary">種牡馬ランキング</Link></p>
-      <PopularTop />
-      <Columns />
-      <GuideLink />
+        ))}
+      </div>
+      <QuickMenu />
+      <HomeBoard>
+        <Columns />
+      </HomeBoard>
     </>
   );
 }
