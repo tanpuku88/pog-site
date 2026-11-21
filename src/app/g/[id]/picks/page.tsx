@@ -23,7 +23,7 @@ export default async function MyPicks({ params }: { params: Promise<{ id: string
         scores={me?.horses ?? []}
         horseMap={horseMap}
         results={results}
-        includeNonJra={group.include_non_jra}
+        includeNonJra={group.include_non_jra} slots={group.picks_per_member}
         actions={(horseId) => <RemoveButton groupId={id} horseId={horseId} name={horseMap.get(horseId)?.name ?? ""} />}
       />
     </>
