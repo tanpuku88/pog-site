@@ -1,25 +1,43 @@
 :root {
-  --bg: #f6f7f4;
+  --bg: #eef1ee;
   --card: #ffffff;
-  --text: #1d2a1f;
-  --muted: #6b766d;
-  --line: #e2e6df;
-  --accent: #1f7a3d;
-  --accent-weak: #e6f2ea;
-  --danger: #b3261e;
-  --gold: #b88a00;
+  --text: #17211b;
+  --muted: #65706a;
+  --line: #dfe4e0;
+  --head: #0f3324;       /* ヘッダー帯 */
+  --head-2: #16482f;
+  --head-text: #f3f6f2;
+  --accent: #19703b;
+  --accent-weak: #e3f1e7;
+  --th: #f1f4f1;
+  --stripe: #f8faf8;
+  --danger: #c0291f;
+  --gold: #c9a227;
+  --silver: #9aa4ab;
+  --bronze: #b8743b;
+  --colt: #2b62c4;
+  --filly: #d2335c;
+  --gelding: #5b7d3a;
+  --win: #c0291f;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #121612;
-    --card: #1b211c;
-    --text: #e8ece8;
-    --muted: #98a399;
-    --line: #2b332c;
+    --bg: #0f1311;
+    --card: #171d19;
+    --text: #e7ece8;
+    --muted: #97a29b;
+    --line: #2a332d;
+    --head: #0a2218;
+    --head-2: #103223;
     --accent: #5cc27f;
-    --accent-weak: #1f3326;
+    --accent-weak: #1c3125;
+    --th: #1d2520;
+    --stripe: #1a211c;
     --danger: #ff8a80;
-    --gold: #e6c34a;
+    --colt: #7aa5ff;
+    --filly: #ff8aa8;
+    --gelding: #a8d27e;
+    --win: #ff7a6e;
   }
 }
 * { box-sizing: border-box; }
@@ -27,49 +45,149 @@ html, body { margin: 0; padding: 0; }
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", sans-serif;
+  font-family: system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", "Yu Gothic UI", sans-serif;
   line-height: 1.6;
-  font-size: 16px;
+  font-size: 15px;
 }
 a { color: var(--accent); }
-.wrap { max-width: 760px; margin: 0 auto; padding: 0 16px 48px; }
-header.site {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 16px; max-width: 760px; margin: 0 auto;
-}
-header.site .logo { font-weight: 700; color: var(--text); text-decoration: none; font-size: 18px; }
-header.site nav { display: flex; gap: 14px; font-size: 14px; }
+.wrap { max-width: 960px; margin: 0 auto; padding: 16px 16px 56px; }
+
+/* ===== ヘッダー帯 ===== */
+.topbar { background: linear-gradient(180deg, var(--head-2), var(--head)); color: var(--head-text); border-bottom: 3px solid var(--gold); }
+.topbar-in { max-width: 960px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.topbar .logo { color: #fff; text-decoration: none; font-weight: 800; font-size: 20px; letter-spacing: .04em; display: flex; align-items: center; gap: 8px; }
+.topbar .logo small { font-size: 11px; font-weight: 500; opacity: .75; letter-spacing: 0; }
+.topbar nav { display: flex; align-items: center; gap: 14px; font-size: 13px; }
+.topbar nav a { white-space: nowrap; color: var(--head-text); text-decoration: none; opacity: .9; }
+.topbar nav a:hover { opacity: 1; text-decoration: underline; }
+.topbar nav button { white-space: nowrap; background: rgba(255,255,255,.12); color: #fff; padding: 4px 10px; font-size: 12px; border-radius: 4px; }
+
+/* ===== グループの見出し ===== */
+.hero { background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 14px 16px 0; margin-bottom: 16px; }
+.hero h1 { margin: 0; font-size: 22px; }
+.hero .meta { display: flex; flex-wrap: wrap; gap: 6px 14px; color: var(--muted); font-size: 13px; margin: 4px 0 10px; }
+.progress { height: 6px; background: var(--th); border-radius: 3px; overflow: hidden; margin: 0 0 4px; }
+.progress > span { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), var(--gold)); }
+.progress-label { font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; margin-bottom: 8px; }
+
+.tabs { display: flex; gap: 0; overflow-x: auto; margin: 0 -16px; padding: 0 8px; border-top: 1px solid var(--line); }
+.tabs a { padding: 10px 14px; text-decoration: none; color: var(--muted); white-space: nowrap; font-size: 14px; font-weight: 600; border-bottom: 3px solid transparent; }
+.tabs a:hover { color: var(--text); }
+.tabs a.on { color: var(--accent); border-bottom-color: var(--accent); }
+
 h1 { font-size: 22px; margin: 8px 0 16px; }
-h2 { font-size: 18px; margin: 28px 0 10px; }
-.card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
-.muted { color: var(--muted); font-size: 14px; }
-.tabs { display: flex; gap: 4px; overflow-x: auto; border-bottom: 1px solid var(--line); margin-bottom: 16px; }
-.tabs a { padding: 8px 12px; text-decoration: none; color: var(--muted); white-space: nowrap; font-size: 15px; }
-.tabs a.on { color: var(--accent); border-bottom: 2px solid var(--accent); font-weight: 600; }
+h2 { font-size: 16px; margin: 24px 0 8px; }
+.sec-title { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px; margin: 24px 0 8px; padding-left: 10px; border-left: 4px solid var(--accent); }
+.sec-title h2 { margin: 0; }
+.sec-title .muted { font-size: 12px; }
+
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 14px 16px; margin-bottom: 12px; }
+.card.flush { padding: 0; overflow: hidden; }
+.muted { color: var(--muted); font-size: 13px; }
+
+/* ===== 数字のタイル ===== */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 4px; }
+.stat { background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 10px 14px; }
+.stat .k { font-size: 12px; color: var(--muted); }
+.stat .v { font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1.3; }
+.stat .v small { font-size: 12px; font-weight: 500; color: var(--muted); margin-left: 2px; }
+.stat .s { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ===== ボタン・入力 ===== */
 button, .btn {
-  display: inline-block; background: var(--accent); color: #fff; border: 0; border-radius: 8px;
-  padding: 10px 16px; font-size: 15px; cursor: pointer; text-decoration: none; font-family: inherit;
+  display: inline-block; background: var(--accent); color: #fff; border: 0; border-radius: 6px;
+  padding: 9px 16px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; font-family: inherit;
 }
 button.secondary, .btn.secondary { background: var(--accent-weak); color: var(--accent); }
-button.danger { background: transparent; color: var(--danger); padding: 4px 8px; }
+button.danger { background: transparent; color: var(--danger); padding: 4px 8px; font-weight: 500; }
 button:disabled { opacity: .5; cursor: default; }
 input, textarea, select {
-  width: 100%; padding: 10px 12px; font-size: 16px; border: 1px solid var(--line); border-radius: 8px;
+  width: 100%; padding: 9px 12px; font-size: 16px; border: 1px solid var(--line); border-radius: 6px;
   background: var(--card); color: var(--text); font-family: inherit;
 }
-label { display: block; font-size: 14px; color: var(--muted); margin: 12px 0 4px; }
+label { display: block; font-size: 13px; color: var(--muted); margin: 12px 0 4px; }
 .row { display: flex; gap: 8px; align-items: center; }
 .row > input { flex: 1; }
-table.list { width: 100%; border-collapse: collapse; font-size: 15px; }
-table.list th, table.list td { padding: 8px 6px; border-bottom: 1px solid var(--line); text-align: left; }
-table.list th { color: var(--muted); font-weight: 500; font-size: 13px; }
+
+/* ===== データ表 ===== */
+.scroll { overflow-x: auto; }
+table.list { width: 100%; border-collapse: collapse; font-size: 14px; }
+table.list th, table.list td { padding: 7px 10px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: middle; }
+table.list thead th { background: var(--th); color: var(--muted); font-weight: 600; font-size: 12px; white-space: nowrap; border-bottom: 2px solid var(--line); }
+table.list tbody tr:nth-child(even) td { background: var(--stripe); }
+table.list tbody tr:last-child td { border-bottom: 0; }
 table.list td.num, table.list th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+table.list td.c, table.list th.c { text-align: center; }
+table.list .sub { color: var(--muted); font-size: 12px; }
+table.list.compact td { padding: 5px 10px; font-size: 13px; }
+.big { font-weight: 700; font-size: 15px; }
+
+/* 順位バッジ */
+.rk { display: inline-flex; align-items: center; justify-content: center; min-width: 26px; height: 26px; padding: 0 4px; border-radius: 4px; font-weight: 800; font-size: 13px; background: var(--th); color: var(--text); font-variant-numeric: tabular-nums; }
+.rk-1 { background: var(--gold); color: #fff; }
+.rk-2 { background: var(--silver); color: #fff; }
+.rk-3 { background: var(--bronze); color: #fff; }
+
+/* 性別バッジ */
+.sex { display: inline-block; font-size: 11px; font-weight: 700; color: #fff; border-radius: 3px; padding: 0 5px; margin-left: 6px; vertical-align: 1px; line-height: 17px; }
+.sex-牡 { background: var(--colt); }
+.sex-牝 { background: var(--filly); }
+.sex-セ { background: var(--gelding); }
+
+/* 着順 */
+.fin { display: inline-block; min-width: 2.4em; text-align: center; font-weight: 700; border-radius: 3px; font-variant-numeric: tabular-nums; }
+.fin-1 { background: var(--win); color: #fff; }
+.fin-2 { background: #2b62c4; color: #fff; }
+.fin-3 { background: #3d8b40; color: #fff; }
+
+.horse-name { font-weight: 700; text-decoration: none; }
+.horse-name:hover { text-decoration: underline; }
+.ped { color: var(--muted); font-size: 12px; }
+.ped b { font-weight: 500; color: var(--text); }
+
 .rank { font-weight: 700; width: 2em; }
-.rank-1 { color: var(--gold); }
-.up { color: var(--accent); font-size: 13px; }
+.up { color: var(--accent); font-size: 12px; font-weight: 700; }
 .error { color: var(--danger); font-size: 14px; }
 .ok { color: var(--accent); font-size: 14px; }
 .hit { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 0; border-bottom: 1px solid var(--line); }
 .hit:last-child { border-bottom: 0; }
 .hit .sub { color: var(--muted); font-size: 13px; }
-.pill { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 99px; background: var(--accent-weak); color: var(--accent); }
+.pill { display: inline-block; font-size: 11px; font-weight: 700; padding: 0 7px; border-radius: 99px; background: var(--accent-weak); color: var(--accent); vertical-align: 1px; }
+.pill.hot { background: var(--win); color: #fff; }
+
+/* 切り替えボタン（人気順 / 賞金順） */
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--card); }
+.seg a { white-space: nowrap; padding: 6px 14px; font-size: 13px; text-decoration: none; color: var(--muted); font-weight: 600; }
+.seg a.on { background: var(--accent); color: #fff; }
+
+/* 指名数のバー */
+.bar { position: relative; height: 6px; background: var(--th); border-radius: 3px; min-width: 60px; }
+.bar > span { position: absolute; inset: 0 auto 0 0; background: var(--accent); border-radius: 3px; }
+
+/* 馬カード */
+.horse-card { background: var(--card); border: 1px solid var(--line); border-radius: 6px; margin-bottom: 12px; overflow: hidden; }
+.horse-card .hc-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; padding: 12px 16px; border-left: 4px solid var(--accent); }
+.horse-card .hc-pts { text-align: right; white-space: nowrap; }
+.horse-card .hc-pts strong { font-size: 20px; font-variant-numeric: tabular-nums; }
+.horse-card table.list { border-top: 1px solid var(--line); }
+
+.feed-date { font-size: 12px; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* トップページ */
+.lead { background: linear-gradient(135deg, var(--head-2), var(--head)); color: #fff; border-radius: 8px; padding: 28px 22px; margin-bottom: 16px; border-bottom: 3px solid var(--gold); }
+.lead h1 { margin: 0 0 8px; font-size: 26px; }
+.lead p { margin: 0 0 16px; opacity: .9; }
+.lead .btn { background: var(--gold); color: #1b1400; }
+.features { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+.features .card { margin: 0; }
+.features strong { display: block; margin-bottom: 4px; }
+.group-link { display: flex; justify-content: space-between; align-items: center; text-decoration: none; color: inherit; }
+.group-link:hover strong { text-decoration: underline; }
+
+@media (max-width: 560px) {
+  table.list th, table.list td { padding: 6px 6px; }
+  .hide-sm { display: none; }
+  .stat .v { font-size: 19px; }
+  .topbar .logo small { display: none; }
+  .topbar nav { gap: 10px; }
+}

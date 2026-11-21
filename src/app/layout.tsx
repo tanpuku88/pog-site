@@ -13,18 +13,21 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="ja">
       <body>
-        <header className="site">
-          <Link href="/" className="logo">🏇 POG</Link>
-          <nav>
-            {user ? (
-              <>
-                <Link href="/me">マイページ</Link>
-                <form action="/auth/signout" method="post"><button className="secondary" style={{ padding: "4px 10px", fontSize: 13 }}>ログアウト</button></form>
-              </>
-            ) : (
-              <Link href="/login">ログイン</Link>
-            )}
-          </nav>
+        <header className="topbar">
+          <div className="topbar-in">
+            <Link href="/" className="logo">🏇 POG<small>ペーパーオーナーゲーム</small></Link>
+            <nav>
+              {user ? (
+                <>
+                  <Link href="/">グループ</Link>
+                  <Link href="/me">マイページ</Link>
+                  <form action="/auth/signout" method="post"><button>ログアウト</button></form>
+                </>
+              ) : (
+                <Link href="/login">ログイン</Link>
+              )}
+            </nav>
+          </div>
         </header>
         <main className="wrap">{children}</main>
       </body>

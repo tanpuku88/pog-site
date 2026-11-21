@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { loadGroupBoard } from "@/lib/group-data";
 import { HorseTable } from "@/app/g/[id]/HorseTable";
+import { formatMan } from "@/lib/util";
 
 export default async function MemberPage({ params }: { params: Promise<{ id: string; userId: string }> }) {
   const { id, userId } = await params;
@@ -9,7 +10,7 @@ export default async function MemberPage({ params }: { params: Promise<{ id: str
   if (!me) notFound();
   return (
     <>
-      <h2 style={{ marginTop: 0 }}>{me.rank}位　{names.get(userId) ?? "名無し"}</h2>
+      <div className="sec-title" style={{ marginTop: 0 }}><h2>{me.rank}位　{names.get(userId) ?? "名無し"}</h2><span className="muted">合計 {formatMan(me.points)} 万円・{me.wins}勝</span></div>
       <HorseTable scores={me.horses} horseMap={horseMap} results={results} includeNonJra={group.include_non_jra} />
     </>
   );
