@@ -2,15 +2,27 @@
 // Webアプリ（馬の登録時）と定期実行スクリプトの両方から使う。
 import type { SupabaseClient } from "@supabase/supabase-js";
 import {
-  politeFetch, horsePageUrl, horseResultUrl, horseSearchUrl, extractHorseId,
+  politeFetch, horsePageUrl, horsePedUrl, horseResultUrl, horseSearchUrl, extractHorseId,
 } from "./netkeiba/fetch";
-import { parseHorseProfile, parseRaceResults, parseHorseSearch, type SearchHit } from "./netkeiba/parse";
+import { parseHorseProfile, parsePedigreePage, parseRaceResults, parseHorseSearch, type SearchHit } from "./netkeiba/parse";
 
 /** 馬ページを取得して、プロフィールと成績を保存する */
 export async function syncHorse(db: SupabaseClient, id: string) {
   const page = await politeFetch(horsePageUrl(id));
   const profile = parseHorseProfile(id, page.html);
   if (!profile) throw new Error(`馬ページを読めませんでした: ${id}`);
+
+  if (!profile.sire || !profile.dam) {
+    // 馬ページに血統表が入っていないことがあるので、血統ページから取り直す
+    try {
+      const ped = parsePedigreePage((await politeFetch(horsePedUrl(id))).html);
+      profile.sire ??= ped.sire;
+      profile.dam ??= ped.dam;
+      profile.damsire ??= ped.damsire;
+    } catch (e) {
+      console.warn(`血統ページを読めませんでした: ${id}: ${(e as Error).message}`);
+    }
+  }
 
   let results = parseRaceResults(page.html);
   if (results === null) {

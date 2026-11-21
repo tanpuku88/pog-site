@@ -78,12 +78,12 @@ async function insertPick(groupId: string, horseId: string): Promise<PickResult>
   const { supabase, user, group } = await context(groupId);
   const admin = createAdminClient();
   const { data: horse } = await admin
-    .from("horses").select("id, name, birth_year, results_fetched_at").eq("id", horseId).maybeSingle();
+    .from("horses").select("id, name, birth_year, sire, results_fetched_at").eq("id", horseId).maybeSingle();
 
-  // 初めて指名される馬は、血統と成績をnetkeibaから取り込む
+  // 初めて指名される馬（または血統が空の馬）は、血統と成績をnetkeibaから取り込む
   let name = horse?.name ?? horseId;
   let birthYear = horse?.birth_year ?? null;
-  if (!horse || !horse.results_fetched_at) {
+  if (!horse || !horse.results_fetched_at || !horse.sire) {
     try {
       const { profile } = await syncHorse(admin, horseId);
       name = profile.name;

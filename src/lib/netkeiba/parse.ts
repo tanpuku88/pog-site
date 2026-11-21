@@ -137,18 +137,14 @@ export function parseHorseProfile(id: string, html: string): HorseProfile | null
   const birth = prof.get("生年月日") ?? "";
   const birthYear = birth.match(/(\d{4})年/)?.[1];
 
-  // 血統表: 1行目の最初のセル=父、3行目の最初のセル=母、3行目の2番目=母父
-  const rows = $("table.blood_table tr");
-  const cell = (r: number, c: number) => orNull(clean(rows.eq(r).find("td").eq(c).find("a").first().text() || rows.eq(r).find("td").eq(c).text()));
+  const blood = parseBloodTable($);
 
   return {
     id,
     name,
     sex,
     birth_year: birthYear ? Number(birthYear) : null,
-    sire: cell(0, 0),
-    dam: cell(2, 0),
-    damsire: cell(2, 1),
+    ...blood,
     trainer: orNull(prof.get("調教師") ?? ""),
     owner: orNull(prof.get("馬主") ?? ""),
     breeder: orNull(prof.get("生産者") ?? ""),
@@ -245,4 +241,30 @@ export function parseShutuba(raceId: string, html: string): Shutuba {
     post_time: data01.match(/(\d{1,2}:\d{2})/)?.[1] ?? null,
     horse_ids: [...horseIds],
   };
+}
+
+export type Pedigree = { sire: string | null; dam: string | null; damsire: string | null };
+
+/**
+ * 血統表（table.blood_table）から父・母・母父を読む。
+ * 馬ページの簡易版（2代）と血統ページ（5代）のどちらでも読めるように、
+ * 「1列目のセル（rowspan が一番大きいセル）」を父・母として扱う。
+ */
+export function parseBloodTable($: cheerio.CheerioAPI): Pedigree {
+  const rows = $("table.blood_table").first().find("tr").toArray();
+  const span = (el: unknown) => Number($(el as never).attr("rowspan") ?? 1) || 1;
+  const firstTds = rows.map((tr) => $(tr).find("td").first());
+  const max = Math.max(0, ...firstTds.map((td) => (td.length ? span(td.get(0)) : 0)));
+  const top = rows.filter((_, i) => firstTds[i].length && span(firstTds[i].get(0)) === max);
+  const name = (tr: unknown, c: number) => {
+    const td = $(tr as never).find("td").eq(c);
+    return orNull(clean(td.find("a").first().text() || td.text()));
+  };
+  if (max === 0 || top.length < 2) return { sire: null, dam: null, damsire: null };
+  return { sire: name(top[0], 0), dam: name(top[1], 0), damsire: name(top[1], 1) };
+}
+
+/** 血統ページ（/horse/ped/{id}/）から父・母・母父を読む */
+export function parsePedigreePage(html: string): Pedigree {
+  return parseBloodTable(cheerio.load(html));
 }
