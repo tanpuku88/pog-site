@@ -7,6 +7,10 @@ on:
         description: "生まれ年（空なら今シーズンの2歳世代）"
         required: false
         default: ""
+      start_id:
+        description: "この馬IDから調べる（空なら保存済みの続きから）"
+        required: false
+        default: ""
       probe:
         description: "調査だけする（取り込まない）"
         type: boolean
@@ -36,11 +40,12 @@ jobs:
         run: npm run import:crop
         env:
           CROP_YEAR: ${{ inputs.crop_year }}
+          START_ID: ${{ inputs.start_id }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
       # 時間切れで途中までだったら、続きを自動でもう一度動かす
       - if: ${{ !inputs.probe && steps.crop.outputs.more == 'true' }}
-        run: gh workflow run import-crop.yml --ref main -f crop_year="${{ inputs.crop_year }}"
+        run: gh workflow run import-crop.yml --ref main -f crop_year="${{ inputs.crop_year }}" -f start_id="${{ steps.crop.outputs.next_id }}"
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
