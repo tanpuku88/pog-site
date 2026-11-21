@@ -10,7 +10,7 @@ export default async function Home() {
         <div className="lead">
           <h1>POGを、もっとラクに。もっと熱く。</h1>
           <p>指名馬の登録は馬名を数文字入れるだけ。成績・賞金・順位は毎晩自動で更新されます。</p>
-          <Link href="/login" className="btn">無料ではじめる</Link>{" "}<Link href="/guide" style={{ color: "#fff", marginLeft: 12 }}>使い方を見る ›</Link>
+          <Link href="/login?mode=signup" className="btn">無料で大会を作る</Link>{" "}<Link href="/guide" style={{ color: "#fff", marginLeft: 12 }}>使い方を見る ›</Link>
         </div>
         <div className="features">
           <div className="card"><strong>かんたん登録</strong><span className="muted">馬名・父・母で検索、URL貼り付け、まとめて登録に対応</span></div>
@@ -19,6 +19,8 @@ export default async function Home() {
           <div className="card"><strong>今週の出走</strong><span className="muted">指名馬の出走予定と最新の成績をまとめて表示</span></div>
           <Link href="/shinba" className="card" style={{ textDecoration: "none", color: "inherit" }}><strong>今週の新馬戦 ›</strong><span className="muted">デビューする2歳馬と血統・指名数をチェック</span></Link>
           <Link href="/sires" className="card" style={{ textDecoration: "none", color: "inherit" }}><strong>種牡馬ランキング ›</strong><span className="muted">父ごとの産駒数・勝ち上がり・賞金・人気</span></Link>
+          <Link href="/horses" className="card" style={{ textDecoration: "none", color: "inherit" }}><strong>馬を探す ›</strong><span className="muted">2歳馬を馬名・父・母から検索。血統・成績・指名数</span></Link>
+          <div className="card"><strong>招待リンクで集合</strong><span className="muted">大会を作ってLINEでリンクを送るだけ。開いた仲間はそのまま参加</span></div>
         </div>
         <PopularTop />
         <Columns />

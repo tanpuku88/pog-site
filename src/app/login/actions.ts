@@ -1,17 +1,11 @@
 "use server";
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { safeNext } from "@/lib/util";
+import { siteOrigin } from "@/lib/site-origin";
 
 export type LoginState = { step: "email" | "code"; email?: string; error?: string; next?: string };
 
-async function siteOrigin() {
-  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
-  const h = await headers();
-  const proto = h.get("x-forwarded-proto") ?? "https";
-  return `${proto}://${h.get("host")}`;
-}
 
 export async function sendLoginEmail(_: LoginState, form: FormData): Promise<LoginState> {
   const email = String(form.get("email") ?? "").trim();

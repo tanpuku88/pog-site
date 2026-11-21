@@ -7,3 +7,7 @@ export const NOTE_URL = "https://note.com/pog2026";
 export const COLUMN_FEEDS: { label: string; url: string }[] = [
   { label: "運営者note", url: `${NOTE_URL}/rss` },
 ];
+
+/** 公開URL（検索エンジン向けのリンクやサイトマップに使う） */
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://pog-site.vercel.app").replace(/\/$/, "");
+export const SITE_NAME = "POG（ペーパーオーナーゲーム）";
