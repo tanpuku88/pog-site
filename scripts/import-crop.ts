@@ -24,6 +24,11 @@ async function main() {
     const target = fresh.filter((h) => h.birth_year === null || h.birth_year === cropYear);
     console.log(`  ${page}ページ目: ${hits.length}頭（新しく${fresh.length}頭、対象${target.length}頭）`);
     if (fresh.length === 0) break; // 最後のページを過ぎた
+    // 最初の5ページで対象が1頭もいなければ、絞り込みが効いていないので止める
+    if (page >= 5 && saved === 0 && target.length === 0) {
+      console.error("最初の5ページに対象の世代の馬がいません。netkeibaの一覧の絞り込みが効いていない可能性があります。");
+      process.exit(1);
+    }
 
     if (target.length > 0) {
       const now = new Date().toISOString();

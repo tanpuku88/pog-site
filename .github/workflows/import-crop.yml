@@ -7,6 +7,10 @@ on:
         description: "生まれ年（空なら今シーズンの2歳世代）"
         required: false
         default: ""
+      probe:
+        description: "調査だけする（取り込まない）"
+        type: boolean
+        default: false
   schedule:
     # 毎週月曜 4:00（日本時間）。新しく馬名が付いた馬を追加する
     - cron: "0 19 * * 0"
@@ -22,7 +26,10 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm run import:crop
+      - if: ${{ inputs.probe }}
+        run: npm run probe:netkeiba
+      - if: ${{ !inputs.probe }}
+        run: npm run import:crop
         env:
           CROP_YEAR: ${{ inputs.crop_year }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
