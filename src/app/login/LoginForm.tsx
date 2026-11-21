@@ -2,14 +2,17 @@
 import { useActionState, useState } from "react";
 import { sendLoginEmail, verifyCode, passwordAuth, type LoginState, type PasswordState } from "./actions";
 
-export default function LoginForm({ next }: { next: string }) {
+export default function LoginForm({ next, linkError }: { next: string; linkError?: boolean }) {
   const [tab, setTab] = useState<"login" | "signup" | "email">("login");
+  const [showLinkError, setShowLinkError] = useState(!!linkError);
+  const pick = (t: typeof tab) => (e: React.MouseEvent) => { e.preventDefault(); setTab(t); setShowLinkError(false); };
   return (
     <>
+      {showLinkError && <p className="error">メールのリンクからログインできませんでした。リンクの期限切れか、別のブラウザで開いた可能性があります。下からもう一度お試しください。</p>}
       <div className="seg" style={{ marginBottom: 8 }}>
-        <a href="#" className={tab === "login" ? "on" : ""} onClick={(e) => { e.preventDefault(); setTab("login"); }}>ログイン</a>
-        <a href="#" className={tab === "signup" ? "on" : ""} onClick={(e) => { e.preventDefault(); setTab("signup"); }}>新規登録</a>
-        <a href="#" className={tab === "email" ? "on" : ""} onClick={(e) => { e.preventDefault(); setTab("email"); }}>メールのリンクで</a>
+        <a href="#" className={tab === "login" ? "on" : ""} onClick={pick("login")}>ログイン</a>
+        <a href="#" className={tab === "signup" ? "on" : ""} onClick={pick("signup")}>新規登録</a>
+        <a href="#" className={tab === "email" ? "on" : ""} onClick={pick("email")}>メールのリンクで</a>
       </div>
       {tab === "email" ? <EmailForm next={next} /> : <PasswordForm key={tab} mode={tab} next={next} />}
     </>

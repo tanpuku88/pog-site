@@ -6,8 +6,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
     <>
       <h1>ログイン</h1>
       <div className="card">
-        {error && <p className="error">ログインできませんでした。もう一度お試しください。</p>}
-        <LoginForm next={next ?? "/"} />
+        <LoginForm next={next ?? "/"} linkError={!!error} />
       </div>
     </>
   );
