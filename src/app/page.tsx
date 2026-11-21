@@ -17,6 +17,7 @@ export default async function Home() {
           <div className="card"><strong>自動で順位表</strong><span className="muted">本賞金の合計でランキングを毎晩更新</span></div>
           <div className="card"><strong>人気馬30傑</strong><span className="muted">世代でよく指名されている馬がひと目でわかる</span></div>
           <div className="card"><strong>今週の出走</strong><span className="muted">指名馬の出走予定と最新の成績をまとめて表示</span></div>
+          <Link href="/shinba" className="card" style={{ textDecoration: "none", color: "inherit" }}><strong>今週の新馬戦 ›</strong><span className="muted">デビューする2歳馬と血統・指名数をチェック</span></Link>
         </div>
         <PopularTop />
         <Columns />
@@ -49,7 +50,7 @@ export default async function Home() {
           </Link>
         </div>
       ))}
-      <p><Link href="/groups/new" className="btn">新しいグループを作る</Link></p>
+      <p><Link href="/groups/new" className="btn">新しいグループを作る</Link>{" "}<Link href="/shinba" className="btn secondary">今週の新馬戦</Link></p>
       <PopularTop />
       <Columns />
       <GuideLink />
