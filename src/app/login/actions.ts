@@ -33,3 +33,42 @@ export async function verifyCode(state: LoginState, form: FormData): Promise<Log
   if (error) return { ...state, error: "コードが正しくないか、期限が切れています" };
   redirect(safeNext(state.next));
 }
+
+export type PasswordState = { mode: "login" | "signup"; error?: string; info?: string; next?: string };
+
+const AUTH_ERRORS: Record<string, string> = {
+  "Invalid login credentials": "メールアドレスかパスワードが違います",
+  "Email not confirmed": "メールアドレスの確認がまだです。届いたメールのリンクを開いてください",
+  "User already registered": "このメールアドレスはすでに登録されています。「ログイン」から入ってください",
+};
+const jaError = (m: string) => AUTH_ERRORS[m] ?? (/password/i.test(m) ? "パスワードは6文字以上にしてください" : m);
+
+/** メールアドレス＋パスワードでログイン、または新規登録 */
+export async function passwordAuth(state: PasswordState, form: FormData): Promise<PasswordState> {
+  const mode = form.get("mode") === "signup" ? "signup" : "login";
+  const email = String(form.get("email") ?? "").trim();
+  const password = String(form.get("password") ?? "");
+  const next = String(form.get("next") ?? state.next ?? "/");
+  if (!email.includes("@")) return { mode, next, error: "メールアドレスを入力してください" };
+  if (password.length < 6) return { mode, next, error: "パスワードは6文字以上にしてください" };
+  const supabase = await createClient();
+
+  if (mode === "login") {
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) return { mode, next, error: jaError(error.message) };
+    redirect(safeNext(next));
+  }
+
+  const displayName = String(form.get("display_name") ?? "").trim().slice(0, 20);
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      emailRedirectTo: `${await siteOrigin()}/auth/callback?next=${encodeURIComponent(next)}`,
+      data: displayName ? { display_name: displayName } : undefined,
+    },
+  });
+  if (error) return { mode, next, error: jaError(error.message) };
+  if (data.session) redirect(safeNext(next));
+  return { mode, next, info: `${email} に確認メールを送りました。メールのリンクを開くと登録が完了します。` };
+}

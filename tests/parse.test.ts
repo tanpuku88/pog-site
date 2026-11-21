@@ -140,3 +140,20 @@ describe("血統表の解析", () => {
     expect(parsePedigreePage("<html><body>なし</body></html>")).toEqual({ sire: null, dam: null, damsire: null });
   });
 });
+
+import { parseFeed } from "../src/lib/feeds";
+describe("RSSの解析", () => {
+  it("noteのRSSから記事を読む", () => {
+    const xml = `<?xml version="1.0"?><rss xmlns:media="http://search.yahoo.com/mrss/"><channel><title>x</title>
+      <item><title>2歳馬診断 第1回</title><link>https://note.com/a/n/n1</link><pubDate>Sat, 21 Nov 2026 10:00:00 +0900</pubDate><media:thumbnail>https://img/1.png</media:thumbnail></item>
+      <item><title>リンクなし</title></item></channel></rss>`;
+    const items = parseFeed(xml, "note");
+    expect(items).toHaveLength(1);
+    expect(items[0]).toMatchObject({ title: "2歳馬診断 第1回", url: "https://note.com/a/n/n1", source: "note", image: "https://img/1.png" });
+    expect(items[0].date).toBe("2026-11-21T01:00:00.000Z");
+  });
+  it("Atomも読める", () => {
+    const xml = `<feed xmlns="http://www.w3.org/2005/Atom"><entry><title>新馬戦回顧</title><link href="https://ex.com/p1"/><updated>2026-11-20T00:00:00Z</updated></entry></feed>`;
+    expect(parseFeed(xml, "blog")[0]).toMatchObject({ title: "新馬戦回顧", url: "https://ex.com/p1" });
+  });
+});

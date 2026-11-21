@@ -11,3 +11,12 @@ export async function updateName(form: FormData) {
   revalidatePath("/", "layout");
   redirect("/me?saved=1");
 }
+
+export async function updatePassword(form: FormData) {
+  const { supabase, user } = await getUser();
+  if (!user) redirect("/login");
+  const pw = String(form.get("password") ?? "");
+  if (pw.length < 6) redirect("/me?pwerror=1");
+  const { error } = await supabase.auth.updateUser({ password: pw });
+  redirect(error ? "/me?pwerror=1" : "/me?pwsaved=1");
+}

@@ -98,7 +98,7 @@ export default async function Ranking({ params }: { params: Promise<{ id: string
                 <tr key={`${r.horse_id}${r.race_date}${r.race_name}`}>
                   <td className="feed-date">{r.race_date.slice(5).replace("-", "/")}</td>
                   <td>
-                    <HorseLabel id={r.horse_id} horse={horseMap.get(r.horse_id)} showPed={false} />
+                    <HorseLabel id={r.horse_id} horse={horseMap.get(r.horse_id)} groupId={id} showPed={false} />
                     {firstWin.get(r.horse_id) === r.race_date && <span className="pill hot" style={{ marginLeft: 6 }}>勝ち上がり</span>}
                   </td>
                   <td>{r.venue} {r.race_name}</td>

@@ -19,6 +19,7 @@ export default async function MyPicks({ params }: { params: Promise<{ id: string
       </div>
       <div className="sec-title"><h2>自分の指名馬（{count}頭）</h2><span className="muted">合計 {formatMan(me?.points ?? 0)} 万円</span></div>
       <HorseTable
+        groupId={id}
         scores={me?.horses ?? []}
         horseMap={horseMap}
         results={results}
