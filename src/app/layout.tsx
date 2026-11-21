@@ -17,9 +17,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <div className="topbar-in">
             <Link href="/" className="logo">🏇 POG<small>ペーパーオーナーゲーム</small></Link>
             <nav>
+              <Link href="/shinba">新馬戦</Link>
               {user ? (
                 <>
-                  <Link href="/">グループ</Link>
+                  <Link href="/" className="hide-sm">グループ</Link>
                   <Link href="/me">マイページ</Link>
                   <form action="/auth/signout" method="post"><button>ログアウト</button></form>
                 </>
