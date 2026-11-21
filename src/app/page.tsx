@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getUser } from "@/lib/supabase/server";
+import { PopularTop, Columns, GuideLink } from "@/components/HomeSections";
 
 export default async function Home() {
   const { supabase, user } = await getUser();
@@ -9,7 +10,7 @@ export default async function Home() {
         <div className="lead">
           <h1>POGを、もっとラクに。もっと熱く。</h1>
           <p>指名馬の登録は馬名を数文字入れるだけ。成績・賞金・順位は毎晩自動で更新されます。</p>
-          <Link href="/login" className="btn">無料ではじめる</Link>
+          <Link href="/login" className="btn">無料ではじめる</Link>{" "}<Link href="/guide" style={{ color: "#fff", marginLeft: 12 }}>使い方を見る ›</Link>
         </div>
         <div className="features">
           <div className="card"><strong>かんたん登録</strong><span className="muted">馬名・父・母で検索、URL貼り付け、まとめて登録に対応</span></div>
@@ -17,6 +18,9 @@ export default async function Home() {
           <div className="card"><strong>人気馬30傑</strong><span className="muted">世代でよく指名されている馬がひと目でわかる</span></div>
           <div className="card"><strong>今週の出走</strong><span className="muted">指名馬の出走予定と最新の成績をまとめて表示</span></div>
         </div>
+        <PopularTop />
+        <Columns />
+        <GuideLink />
       </>
     );
   }
@@ -46,6 +50,9 @@ export default async function Home() {
         </div>
       ))}
       <p><Link href="/groups/new" className="btn">新しいグループを作る</Link></p>
+      <PopularTop />
+      <Columns />
+      <GuideLink />
     </>
   );
 }

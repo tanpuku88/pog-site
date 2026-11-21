@@ -1,12 +1,15 @@
+import Link from "next/link";
 import { horsePageUrl } from "@/lib/netkeiba/fetch";
 
 type H = { id: string; name: string; sex?: string | null; sire?: string | null; dam?: string | null; damsire?: string | null; trainer?: string | null };
 
 /** 馬名＋性別バッジ＋血統の1セル */
-export function HorseLabel({ horse, id, showPed = true, showTrainer = false }: { horse?: H; id: string; showPed?: boolean; showTrainer?: boolean }) {
+export function HorseLabel({ horse, id, groupId, showPed = true, showTrainer = false }: { horse?: H; id: string; groupId?: string; showPed?: boolean; showTrainer?: boolean }) {
   return (
     <>
-      <a className="horse-name" href={horsePageUrl(id)} target="_blank" rel="noreferrer">{horse?.name ?? id}</a>
+      {groupId
+        ? <Link className="horse-name" href={`/g/${groupId}/h/${id}`}>{horse?.name ?? id}</Link>
+        : <a className="horse-name" href={horsePageUrl(id)} target="_blank" rel="noreferrer">{horse?.name ?? id}</a>}
       {horse?.sex && <span className={`sex sex-${horse.sex}`}>{horse.sex}</span>}
       {showPed && (horse?.sire || horse?.dam) && (
         <div className="ped">

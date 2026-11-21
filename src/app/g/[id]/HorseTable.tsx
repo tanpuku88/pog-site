@@ -5,8 +5,9 @@ import { HorseLabel, Finish } from "@/components/HorseLabel";
 
 /** 指名馬ごとの成績一覧 */
 export function HorseTable({
-  scores, horseMap, results, includeNonJra, actions,
+  groupId, scores, horseMap, results, includeNonJra, actions,
 }: {
+  groupId: string;
   scores: HorseScore[];
   horseMap: Map<string, Horse>;
   results: ResultWithRace[];
@@ -23,7 +24,7 @@ export function HorseTable({
           <div className="horse-card" key={s.horse_id}>
             <div className="hc-head">
               <div>
-                <HorseLabel id={s.horse_id} horse={h} showTrainer />
+                <HorseLabel id={s.horse_id} horse={h} groupId={groupId} showTrainer />
               </div>
               <div className="hc-pts">
                 <strong>{formatMan(s.points)}</strong><span className="muted"> 万円</span>

@@ -42,7 +42,7 @@ export default async function Entries({ params }: { params: Promise<{ id: string
                     <tr key={`${e.horse_id}${e.race_id}`}>
                       <td style={{ whiteSpace: "nowrap" }}><span className="big">{e.venue}{e.race_no}R</span><div className="sub">{e.post_time ?? ""}</div></td>
                       <td>
-                        <HorseLabel id={e.horse_id} horse={horseMap.get(e.horse_id)} showPed={false} />
+                        <HorseLabel id={e.horse_id} horse={horseMap.get(e.horse_id)} groupId={id} showPed={false} />
                         <div className="sub">
                           <a href={shutubaUrl(e.race_id)} target="_blank" rel="noreferrer">{e.race_name ?? "出馬表"}</a>
                         </div>

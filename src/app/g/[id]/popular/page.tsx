@@ -55,7 +55,7 @@ export default async function Popular({ params, searchParams }: {
                 <tr key={r.horse.id}>
                   <td className="c"><Rank rank={r.rank} /></td>
                   <td>
-                    <HorseLabel id={r.horse.id} horse={r.horse} />
+                    <HorseLabel id={r.horse.id} horse={r.horse} groupId={id} />
                     <div style={{ marginTop: 2 }}>
                       {inGroup.has(r.horse.id)
                         ? <span className="pill">この大会で指名済み</span>
