@@ -2,7 +2,8 @@
 //   npm run probe:netkeiba
 import * as cheerio from "cheerio";
 import { politeFetch, horsePageUrl } from "../src/lib/netkeiba/fetch";
-import { parseHorseSearch, parseHorseProfile } from "../src/lib/netkeiba/parse";
+import { parseHorseSearch, parseHorseProfile, parseRaceList, parseShutuba, parseRaceResults } from "../src/lib/netkeiba/parse";
+import { raceListUrl, shutubaUrl, horseResultUrl } from "../src/lib/netkeiba/fetch";
 
 const BASE = "https://db.netkeiba.com/";
 
@@ -39,7 +40,28 @@ async function tryList(label: string, url: string) {
   console.log(`ページ送りリンク例: ${pager.join(" , ")}`);
 }
 
+async function probeRunners() {
+  // 過去の開催日のレース一覧と出馬表が読めるか（2歳馬の出走馬を集める用）
+  for (const d of ["20250607", "20251109", "20261115"]) {
+    try {
+      const ids = parseRaceList((await politeFetch(raceListUrl(d))).html);
+      console.log(`\n== レース一覧 ${d}: ${ids.length}レース ${ids.slice(0, 3).join(",")}`);
+      for (const rid of ids.slice(0, 2).concat(ids.slice(-1))) {
+        const s = parseShutuba(rid, (await politeFetch(shutubaUrl(rid))).html);
+        console.log(`  ${rid} ${s.race_name} 頭数${s.horse_ids.length} 例${s.horse_ids.slice(0, 4).join(",")}`);
+      }
+    } catch (e) { console.log(`== ${d} 失敗 ${(e as Error).message}`); }
+  }
+  const h = await politeFetch(horsePageUrl("2023104523"));
+  const p = parseHorseProfile("2023104523", h.html);
+  let r = parseRaceResults(h.html);
+  if (r === null) r = parseRaceResults((await politeFetch(horseResultUrl("2023104523"))).html);
+  console.log(`\n== 2023年生まれ例: ${p?.name} ${p?.owner} / ${p?.breeder} / ${p?.trainer} 成績${r?.length}件 ${JSON.stringify(r?.[0])}`);
+}
+
 async function main() {
+  await probeRunners();
+  if (process.env.PROBE_ONLY_RUNNERS !== "0") return;
   await showForm(`${BASE}?pid=horse_search_detail`);
   const variants: [string, string][] = [
     ["年齢2歳（現在）", `${BASE}?pid=horse_list&match=partial_match&under_age=2&over_age=2&sort=name&list=100&page=1`],
