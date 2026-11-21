@@ -62,9 +62,9 @@ export default async function PublicHorsePage({ params }: { params: Promise<{ id
     ["父", horse.sire ? <Link href={`/sires/${encodeURIComponent(horse.sire)}`}>{horse.sire}</Link> : null],
     ["母", horse.dam],
     ["母父", horse.damsire],
-    ["調教師", horse.trainer],
-    ["馬主", horse.owner],
-    ["生産者", horse.breeder],
+    ["調教師", horse.trainer ? <Link href={`/trainers/${encodeURIComponent(horse.trainer)}`}>{horse.trainer}</Link> : null],
+    ["馬主", horse.owner ? <Link href={`/owners/${encodeURIComponent(horse.owner)}`}>{horse.owner}</Link> : null],
+    ["生産者", horse.breeder ? <Link href={`/breeders/${encodeURIComponent(horse.breeder)}`}>{horse.breeder}</Link> : null],
   ];
 
   const jsonLd = {

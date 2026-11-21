@@ -5,7 +5,7 @@ import { HomeBoard, Columns } from "@/components/HomeSections";
 const MENU = [
   { href: "/popular", icon: "🏆", title: "注目馬30傑", text: "賞金・指名数で世代の注目馬" },
   { href: "/shinba", icon: "🐎", title: "今週の新馬戦", text: "デビュー馬と血統・指名数" },
-  { href: "/sires", icon: "🧬", title: "種牡馬ランキング", text: "産駒の賞金・勝ち上がり・AEI" },
+  { href: "/data", icon: "🧬", title: "POGデータ", text: "種牡馬・厩舎・馬主・牧場の勝ち上がり" },
   { href: "/horses", icon: "🔍", title: "馬を探す", text: "馬名・父・母から2歳馬を検索" },
 ];
 

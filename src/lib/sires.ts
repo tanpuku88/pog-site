@@ -4,7 +4,13 @@ import { countPicks, tallyResults, withRanks } from "./popular";
 import { countsForRules, isThisWeek, type ResultRow, type Rules } from "./standings";
 import { earnedPrize } from "./horse-summary";
 
-export type SireHorse = { id: string; name: string; sex: string | null; sire: string | null; dam: string | null; damsire: string | null; trainer: string | null };
+export type SireHorse = {
+  id: string; name: string; sex: string | null; sire: string | null; dam: string | null; damsire: string | null; trainer: string | null;
+  owner?: string | null; breeder?: string | null;
+};
+
+/** 何でまとめるか（種牡馬・厩舎・馬主・生産牧場） */
+export type GroupField = "sire" | "trainer" | "owner" | "breeder";
 
 export type SireRow = {
   sire: string;
@@ -19,11 +25,12 @@ export type SireRow = {
 type Tally = Map<string, { points: number; starts: number; wins: number }>;
 
 /** 産駒を種牡馬ごとにまとめる（純粋な計算） */
-export function aggregateSires(horses: SireHorse[], picks: Map<string, number>, tally: Tally): SireRow[] {
+export function aggregateSires(horses: SireHorse[], picks: Map<string, number>, tally: Tally, field: GroupField = "sire"): SireRow[] {
   const m = new Map<string, SireRow>();
   for (const h of horses) {
-    if (!h.sire) continue;
-    const r = m.get(h.sire) ?? { sire: h.sire, horses: 0, picks: 0, starters: 0, winners: 0, points: 0, top: null };
+    const key = h[field];
+    if (!key) continue;
+    const r = m.get(key) ?? { sire: key, horses: 0, picks: 0, starters: 0, winners: 0, points: 0, top: null };
     const t = tally.get(h.id);
     r.horses += 1;
     r.picks += picks.get(h.id) ?? 0;
@@ -33,7 +40,7 @@ export function aggregateSires(horses: SireHorse[], picks: Map<string, number>, 
       r.points += t.points;
       if (t.points > 0 && (!r.top || t.points > r.top.points)) r.top = { id: h.id, name: h.name, points: t.points };
     }
-    m.set(h.sire, r);
+    m.set(key, r);
   }
   for (const r of m.values()) r.points = Math.round(r.points * 10) / 10;
   return [...m.values()];
@@ -52,17 +59,48 @@ async function pageAll<T>(q: (from: number, to: number) => PromiseLike<{ data: T
   return out;
 }
 
-/** 世代の馬・指名・成績をまとめて読む */
-export async function loadCropData(db: SupabaseClient, cropYear: number, rules: Rules) {
-  const [horses, pickRows, results] = await Promise.all([
-    pageAll<SireHorse>((a, b) =>
-      db.from("horses").select("id, name, sex, sire, dam, damsire, trainer").eq("birth_year", cropYear).order("id").range(a, b)),
-    pageAll<{ horse_id: string }>((a, b) => db.from("picks").select("horse_id").order("group_id").order("horse_id").range(a, b)),
-    pageAll<ResultRow & { race_name: string }>((a, b) =>
-      db.from("race_results").select("horse_id, race_date, prize_man, is_jra, finish, race_name")
-        .gte("race_date", rules.season_start).lte("race_date", rules.season_end)
-        .order("horse_id").order("race_date").range(a, b)),
-  ]);
+const CHUNK = 150;
+
+/**
+ * 世代の馬・指名・成績をまとめて読む。
+ * only を渡すと、その種牡馬・厩舎・馬主・生産牧場の馬だけを読む（個別ページ用に軽く）。
+ */
+export async function loadCropData(db: SupabaseClient, cropYear: number, rules: Rules, only?: { field: GroupField; value: string }) {
+  const cols = "id, name, sex, sire, dam, damsire, trainer, owner, breeder";
+  const horses = await pageAll<SireHorse>((a, b) => {
+    let q = db.from("horses").select(cols).eq("birth_year", cropYear);
+    if (only) q = q.eq(only.field, only.value);
+    return q.order("id").range(a, b);
+  });
+  type R = ResultRow & { race_name: string };
+  const resultCols = "horse_id, race_date, prize_man, is_jra, finish, race_name";
+  let pickRows: { horse_id: string }[];
+  let results: R[];
+  if (only) {
+    // 対象の馬が少ないので、馬IDで絞って読む
+    const idList = horses.map((h) => h.id);
+    const chunks: string[][] = [];
+    for (let i = 0; i < idList.length; i += CHUNK) chunks.push(idList.slice(i, i + CHUNK));
+    const parts = await Promise.all(chunks.map(async (ids) => {
+      const [p, r] = await Promise.all([
+        pageAll<{ horse_id: string }>((a, b) => db.from("picks").select("horse_id").in("horse_id", ids).order("group_id").order("horse_id").range(a, b)),
+        pageAll<R>((a, b) => db.from("race_results").select(resultCols).in("horse_id", ids)
+          .gte("race_date", rules.season_start).lte("race_date", rules.season_end)
+          .order("horse_id").order("race_date").range(a, b)),
+      ]);
+      return { p, r };
+    }));
+    pickRows = parts.flatMap((x) => x.p);
+    results = parts.flatMap((x) => x.r);
+  } else {
+    [pickRows, results] = await Promise.all([
+      pageAll<{ horse_id: string }>((a, b) => db.from("picks").select("horse_id").order("group_id").order("horse_id").range(a, b)),
+      pageAll<R>((a, b) =>
+        db.from("race_results").select(resultCols)
+          .gte("race_date", rules.season_start).lte("race_date", rules.season_end)
+          .order("horse_id").order("race_date").range(a, b)),
+    ]);
+  }
   const ids = new Set(horses.map((h) => h.id));
   const picks = countPicks(pickRows.map((p) => p.horse_id).filter((id) => ids.has(id)));
   const mine = results.filter((r) => ids.has(r.horse_id)).map((r) => ({ ...r, prize_man: Number(r.prize_man) }));
@@ -79,6 +117,7 @@ export type SireStats = SireRow & {
   runs: number;                               // 出走回数
   record: [number, number, number, number];   // [1着,2着,3着,着外]
   winRate: number;                            // 勝率（%）
+  winnerRate: number | null;                  // 勝ち上がり率（勝った頭数 ÷ 出走した頭数、%）
   earned: number;                             // 収得賞金の目安（万円）
   lastWeek: number;                           // 直近7日の賞金（万円）
   aei: number | null;                         // 1出走頭数あたり賞金 ÷ 全体の1出走頭数あたり賞金
@@ -88,10 +127,10 @@ export type SireStats = SireRow & {
 
 /** 種牡馬ごとの詳しい成績をまとめ、賞金順に並べて順位と変動を付ける（純粋な計算） */
 export function sireTable(
-  horses: SireHorse[], picks: Map<string, number>, tally: Tally, races: SireRace[], today: string,
+  horses: SireHorse[], picks: Map<string, number>, tally: Tally, races: SireRace[], today: string, field: GroupField = "sire",
 ): (SireStats & { rank: number })[] {
-  const base = aggregateSires(horses, picks, tally);
-  const sireOf = new Map(horses.map((h) => [h.id, h.sire]));
+  const base = aggregateSires(horses, picks, tally, field);
+  const sireOf = new Map(horses.map((h) => [h.id, h[field] ?? null]));
   const sexOf = new Map(horses.map((h) => [h.id, h.sex]));
   const extra = new Map<string, { runs: number; record: [number, number, number, number]; earned: number; lastWeek: number }>();
   const byHorse = new Map<string, SireRace[]>();
@@ -122,6 +161,7 @@ export function sireTable(
       runs: e.runs,
       record: e.record,
       winRate: e.runs > 0 ? Math.round((e.record[0] / e.runs) * 1000) / 10 : 0,
+      winnerRate: r.starters > 0 ? Math.round((r.winners / r.starters) * 1000) / 10 : null,
       earned: e.earned,
       lastWeek: Math.round(e.lastWeek * 10) / 10,
       aei: avg > 0 && r.starters > 0 ? Math.round((r.points / r.starters / avg) * 100) / 100 : null,

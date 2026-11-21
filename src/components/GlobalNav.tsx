@@ -6,7 +6,7 @@ const ITEMS = [
   { href: "/", label: "トップ", match: (p: string) => p === "/" },
   { href: "/popular", label: "注目馬30傑", match: (p: string) => p.startsWith("/popular") },
   { href: "/shinba", label: "新馬戦", match: (p: string) => p.startsWith("/shinba") },
-  { href: "/sires", label: "種牡馬", match: (p: string) => p.startsWith("/sires") },
+  { href: "/data", label: "POGデータ", match: (p: string) => ["/data", "/sires", "/trainers", "/owners", "/breeders"].some((x) => p.startsWith(x)) },
   { href: "/horses", label: "馬を探す", match: (p: string) => p.startsWith("/horses") || p.startsWith("/horse/") },
   { href: "/guide", label: "使い方", match: (p: string) => p.startsWith("/guide") },
 ];

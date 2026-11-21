@@ -11,6 +11,7 @@
     "update:results": "tsx scripts/update-results.ts",
     "update:entries": "tsx scripts/update-entries.ts",
     "import:crop": "tsx scripts/import-crop.ts",
+    "import:runners": "tsx scripts/import-runners.ts",
     "probe:netkeiba": "tsx scripts/probe-netkeiba.ts"
   },
   "dependencies": {
