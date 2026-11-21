@@ -52,7 +52,7 @@ export default async function HorsePage({ params }: { params: Promise<{ id: stri
               {horse.sex && <span className={`sex sex-${horse.sex}`} style={{ fontSize: 13, verticalAlign: 4 }}>{horse.sex}</span>}
             </h1>
             <div className="ped" style={{ fontSize: 13 }}>
-              {horse.sire && <>父 <b>{horse.sire}</b></>}
+              {horse.sire && <>父 <Link href={`/sires/${encodeURIComponent(horse.sire)}`} className="sire-link"><b>{horse.sire}</b></Link></>}
               {horse.dam && <>　母 <b>{horse.dam}</b></>}
               {horse.damsire && <>（母父 {horse.damsire}）</>}
             </div>
