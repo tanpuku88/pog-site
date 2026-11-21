@@ -62,3 +62,18 @@ describe("人気馬30傑：前週比・牡牝・種牡馬", () => {
     expect(popularSires(rows).map((x) => [x.sire, x.picks, x.horses, x.top.horse.id])).toEqual([["キタサンブラック", 5, 2, "b"], ["エピファネイア", 1, 1, "c"]]);
   });
 });
+
+describe("指名ゼロの馬（賞金だけの馬）の扱い", () => {
+  const horse = (id: string) => ({ id, name: id, sex: "牡", sire: "S", birth_year: 2024, dam: null, damsire: null, trainer: null, results_fetched_at: null });
+  const rows = [
+    { horse: horse("p"), picks: 2, prevPicks: 2, weekPicks: 0, points: 0, starts: 0, wins: 0 },
+    { horse: horse("z"), picks: 0, prevPicks: 0, weekPicks: 0, points: 900, starts: 2, wins: 1 },
+  ];
+  it("指名数順には出さず、賞金順には出す", () => {
+    expect(rankBoard(rows).map((r) => r.horse.id)).toEqual(["p"]);
+    expect(rankBoard(rows, { sort: "prize" }).map((r) => r.horse.id)).toEqual(["z"]);
+  });
+  it("人気の種牡馬は指名された馬だけで数える", () => {
+    expect(popularSires(rows).map((r) => [r.sire, r.picks, r.horses])).toEqual([["S", 2, 1]]);
+  });
+});
