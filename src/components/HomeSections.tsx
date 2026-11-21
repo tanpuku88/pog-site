@@ -3,7 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { loadGenerationBoard } from "@/lib/popular";
 import { defaultSeason } from "@/lib/standings";
 import { loadFeeds } from "@/lib/feeds";
-import { COLUMN_FEEDS } from "@/config/site";
+import { COLUMN_FEEDS, NOTE_URL } from "@/config/site";
 import { formatMan } from "@/lib/util";
 import { HorseLabel, Rank } from "./HorseLabel";
 
@@ -46,10 +46,16 @@ export async function PopularTop() {
 export async function Columns() {
   if (COLUMN_FEEDS.length === 0) return null;
   const items = await loadFeeds(COLUMN_FEEDS, 6);
-  if (items.length === 0) return null;
+  if (items.length === 0 && !NOTE_URL) return null;
   return (
     <>
-      <div className="sec-title"><h2>コラム・新馬情報</h2><span className="muted">新着記事</span></div>
+      <div className="sec-title">
+        <h2>コラム・新馬情報</h2>
+        {NOTE_URL
+          ? <a href={NOTE_URL} target="_blank" rel="noreferrer">運営者のnoteを見る ›</a>
+          : <span className="muted">新着記事</span>}
+      </div>
+      {items.length === 0 && <p className="muted">記事を準備中です。</p>}
       <div className="columns">
         {items.map((i) => (
           <a key={i.url} href={i.url} target="_blank" rel="noreferrer" className="column-card">
