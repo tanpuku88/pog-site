@@ -82,7 +82,7 @@ h2 { font-size: 16px; margin: 24px 0 8px; }
 .sec-title .muted { font-size: 12px; }
 
 .card { background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 14px 16px; margin-bottom: 12px; }
-.card.flush { padding: 0; overflow: hidden; }
+.card.flush { padding: 0; overflow-x: auto; }
 .muted { color: var(--muted); font-size: 13px; }
 
 /* ===== 数字のタイル ===== */
@@ -209,3 +209,11 @@ table.list.compact td { padding: 5px 10px; font-size: 13px; }
 .steps strong { display: block; }
 .sire-link { color: inherit; text-decoration: none; }
 .sire-link:hover { text-decoration: underline; color: var(--accent); }
+
+/* 指名馬の一覧表 */
+.card.flush { padding: 0; overflow-x: auto; }
+table.summary td { white-space: nowrap; }
+table.summary .ped-cell { font-size: 12px; line-height: 1.35; color: var(--muted); }
+table.summary .ped-cell a { color: inherit; }
+table.summary .nowrap { white-space: nowrap; }
+table.summary tr.empty-slot td { background: var(--th); }
