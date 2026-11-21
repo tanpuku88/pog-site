@@ -2,7 +2,7 @@ import { requireGroup } from "@/lib/group-data";
 import { inviteMessage } from "@/lib/invite";
 import { siteOrigin } from "@/lib/site-origin";
 import InviteShare from "@/components/InviteShare";
-import { updateRules, leaveGroup, resetInvite } from "./actions";
+import { updateRules, leaveGroup, resetInvite, deleteGroup } from "./actions";
 
 export default async function Settings({ params, searchParams }: {
   params: Promise<{ id: string }>;
@@ -51,6 +51,18 @@ export default async function Settings({ params, searchParams }: {
         </form>
       ) : (
         <div className="card muted">ルールの変更はグループを作った人だけができます。</div>
+      )}
+
+      {isOwner && (
+        <form action={deleteGroup.bind(null, id)} className="card">
+          <strong>大会を削除する</strong>
+          <p className="muted" style={{ margin: "4px 0 8px" }}>参加者全員の指名もまとめて消え、元に戻せません。</p>
+          <label style={{ display: "flex", gap: 8, alignItems: "center" }}>
+            <input type="checkbox" name="confirm" required style={{ width: "auto" }} />
+            削除してよいことを確認しました
+          </label>
+          <p><button className="danger">この大会を削除する</button></p>
+        </form>
       )}
 
       {!isOwner && (

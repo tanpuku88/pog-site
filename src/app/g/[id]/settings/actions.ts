@@ -40,3 +40,14 @@ export async function resetInvite(groupId: string) {
   revalidatePath(`/g/${groupId}`, "layout");
   redirect(`/g/${groupId}/settings?reset=1`);
 }
+
+/** 大会を削除する（指名・参加者もまとめて消える）。オーナーだけ */
+export async function deleteGroup(groupId: string, form: FormData) {
+  const { supabase, user } = await getUser();
+  if (!user) redirect("/login");
+  if (form.get("confirm") !== "on") redirect(`/g/${groupId}/settings`);
+  const { error } = await supabase.from("groups").delete().eq("id", groupId).eq("owner_id", user.id);
+  if (error) throw new Error(`削除できませんでした: ${error.message}`);
+  revalidatePath("/");
+  redirect("/");
+}
