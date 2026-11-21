@@ -43,7 +43,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <footer className="footer">
           <div className="footer-in">
             <nav>
-              <Link href="/popular">人気馬30傑</Link>
+              <Link href="/popular">注目馬30傑</Link>
               <Link href="/shinba">新馬戦</Link>
               <Link href="/sires">種牡馬ランキング</Link>
               <Link href="/horses">馬を探す</Link>

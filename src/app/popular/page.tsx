@@ -8,8 +8,8 @@ import { PopularTable, BoardFilters, BoardStats, RisingBox, SireBox, parseBoardP
 const crop = defaultSeason().crop_year;
 
 export const metadata: Metadata = {
-  title: { absolute: `POG注目馬・人気馬ランキング30傑｜${crop}年生まれ2歳馬` },
-  description: `${crop}年生まれ2歳馬の注目馬30傑（賞金・勝ち数順）と、POGでよく指名されている人気馬30傑。指名数・指名率・前週からの順位変動・賞金を毎日更新。牡馬・牝馬別、人気の種牡馬も。`,
+  title: { absolute: `POG注目馬ランキング30傑｜${crop}年生まれ2歳馬` },
+  description: `${crop}年生まれ2歳馬の注目馬30傑（賞金・勝ち数順）。POGでよく指名されている順にも切り替えられます。指名数・指名率・前週からの順位変動・賞金を毎日更新。牡馬・牝馬別、人気の種牡馬も。`,
   alternates: { canonical: "/popular" },
 };
 
@@ -29,7 +29,7 @@ export default async function PopularPage({ searchParams }: { searchParams: Prom
   return (
     <>
       <div className="page-head">
-        <p className="crumb"><Link href="/">トップ</Link> › 人気馬ランキング</p>
+        <p className="crumb"><Link href="/">トップ</Link> › 注目馬30傑</p>
         <h1>{season.crop_year}年生まれ世代 {boardTitle(sex, sort)}</h1>
         <p className="muted">
           {sort === "prize"

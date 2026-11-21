@@ -19,7 +19,7 @@ export async function HomeBoard({ children }: { children?: React.ReactNode }) {
     <div className="layout-2col">
       <div>
         <div className="sec-title">
-          <h2>{season.crop_year}年生まれ世代 {board?.defaultSort === "picks" ? "人気馬TOP10" : "注目馬TOP10"}</h2>
+          <h2>{season.crop_year}年生まれ世代 {board?.defaultSort === "picks" ? "注目馬TOP10（指名数順）" : "注目馬TOP10"}</h2>
           <Link href="/popular">30傑をすべて見る ›</Link>
         </div>
         {!board || (board.defaultSort === "picks" ? board.byPicks : board.byPrize).length === 0 ? (
