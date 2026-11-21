@@ -1,44 +1,44 @@
 import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { loadGenerationBoard } from "@/lib/popular";
+import { loadGenerationBoard, type GenerationBoard } from "@/lib/popular";
 import { defaultSeason } from "@/lib/standings";
 import { loadFeeds } from "@/lib/feeds";
 import { COLUMN_FEEDS, NOTE_URL } from "@/config/site";
-import { formatMan } from "@/lib/util";
-import { HorseLabel, Rank } from "./HorseLabel";
+import { PopularTable, RisingBox, SireBox } from "./PopularTable";
 
-/** トップページ：今の世代の人気馬トップ10 */
-export async function PopularTop() {
+/** トップページ：人気馬TOP10（本文）と急上昇・人気の種牡馬（横の欄） */
+export async function HomeBoard({ children }: { children?: React.ReactNode }) {
   const season = defaultSeason();
-  let board: Awaited<ReturnType<typeof loadGenerationBoard>> | null = null;
+  let board: GenerationBoard | null = null;
   try {
     board = await loadGenerationBoard(createAdminClient(), season.crop_year, { ...season, include_non_jra: false }, 10);
   } catch {
     board = null;
   }
   return (
-    <>
-      <div className="sec-title"><h2>{season.crop_year}年生まれ世代 人気馬TOP10</h2><span className="muted">このサイトでの指名数</span></div>
-      {!board || board.byPicks.length === 0 ? (
-        <div className="card muted">まだ指名がありません。グループを作って最初の指名をしてみましょう。</div>
-      ) : (
-        <div className="card flush scroll">
-          <table className="list">
-            <thead><tr><th className="c">順位</th><th>馬名・血統</th><th className="num">指名数</th><th className="num">賞金</th></tr></thead>
-            <tbody>
-              {board.byPicks.map((r) => (
-                <tr key={r.horse.id}>
-                  <td className="c"><Rank rank={r.rank} /></td>
-                  <td><HorseLabel id={r.horse.id} horse={r.horse} /></td>
-                  <td className="num big">{r.picks}</td>
-                  <td className="num">{r.points > 0 ? formatMan(r.points) : <span className="muted">-</span>}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+    <div className="layout-2col">
+      <div>
+        <div className="sec-title">
+          <h2>{season.crop_year}年生まれ世代 人気馬TOP10</h2>
+          <Link href="/popular">30傑をすべて見る ›</Link>
         </div>
-      )}
-    </>
+        {!board || board.byPicks.length === 0 ? (
+          <div className="card muted">まだ指名がありません。大会を作って最初の指名をしてみましょう。</div>
+        ) : (
+          <PopularTable rows={board.byPicks} groupCount={board.groupCount} compact />
+        )}
+        {children}
+      </div>
+      <aside className="side">
+        {board && <RisingBox board={board} />}
+        {board && <SireBox board={board} limit={5} />}
+        <section className="box">
+          <h3 className="box-head">📘 はじめての方へ</h3>
+          <p className="box-text">大会を作る → 招待リンクをLINEで送る → 馬名を数文字入れて指名。成績と順位は毎晩自動で更新されます。</p>
+          <Link href="/guide" className="box-more">使い方を見る ›</Link>
+        </section>
+      </aside>
+    </div>
   );
 }
 
