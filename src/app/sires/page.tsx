@@ -3,6 +3,8 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { sireTable, loadCropData } from "@/lib/sires";
 import { defaultSeason } from "@/lib/standings";
 import { formatMan, todayJst } from "@/lib/util";
+import { DataTabs } from "@/components/DataTabs";
+import { KINDS } from "@/lib/connections";
 
 export const metadata = { title: "種牡馬ランキング | POG" };
 export const revalidate = 3600;
@@ -32,6 +34,7 @@ export default async function Sires({ searchParams }: { searchParams: Promise<{ 
 
   return (
     <>
+      <DataTabs current={KINDS.sire} />
       <h1>{season.crop_year}年生まれ世代 種牡馬ランキング</h1>
       <div className="sire-meta">
         <span>集計期間：{season.season_start.slice(2, 4)}年MD 〜 {season.season_end.slice(2, 4)}年ダービー</span>
@@ -87,7 +90,7 @@ export default async function Sires({ searchParams }: { searchParams: Promise<{ 
                     <td>
                       {r.top && <>
                         <span className={`sex-dot sex-${r.topSex ?? ""}`}>{r.topSex === "牝" ? "♀" : "♂"}</span>
-                        <a className="horse-name" href={`https://db.netkeiba.com/horse/${r.top.id}/`} target="_blank" rel="noreferrer">{r.top.name}</a>
+                        <Link className="horse-name" href={`/horse/${r.top.id}`}>{r.top.name}</Link>
                       </>}
                     </td>
                   </tr>

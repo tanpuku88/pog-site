@@ -1,0 +1,56 @@
+name: 出走した2歳馬の成績を取り込む
+
+on:
+  workflow_dispatch:
+    inputs:
+      crop_year:
+        description: "生まれ年（空なら今シーズンの2歳世代）"
+        required: false
+        default: ""
+      from_date:
+        description: "この日から（YYYY-MM-DD、空ならシーズンの初め）"
+        required: false
+        default: ""
+      to_date:
+        description: "この日まで（YYYY-MM-DD、空なら今日）"
+        required: false
+        default: ""
+  schedule:
+    # 毎日 23:00（日本時間）。直近2日のレースに出た2歳馬の成績を読む
+    - cron: "0 14 * * *"
+
+concurrency:
+  group: import-runners-${{ inputs.crop_year || 'current' }}
+  cancel-in-progress: false
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - id: runners
+        run: npm run import:runners
+        env:
+          CROP_YEAR: ${{ inputs.crop_year }}
+          FROM_DATE: ${{ inputs.from_date }}
+          TO_DATE: ${{ inputs.to_date }}
+          DAYS_BACK: ${{ github.event_name == 'schedule' && '2' || '' }}
+          # まとめて取り込むときは、ほかの取り込みと重なってもnetkeibaに負担をかけないよう間隔を広めに
+          NETKEIBA_INTERVAL_MS: ${{ github.event_name == 'schedule' && '3000' || '4000' }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      # 時間切れで途中までだったら、続きの日付から自動でもう一度動かす
+      - if: ${{ github.event_name != 'schedule' && steps.runners.outputs.more == 'true' }}
+        run: gh workflow run import-runners.yml --ref main -f crop_year="${{ inputs.crop_year }}" -f from_date="${{ inputs.from_date }}" -f to_date="${{ steps.runners.outputs.next_to }}"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}

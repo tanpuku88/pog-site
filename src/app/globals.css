@@ -366,3 +366,49 @@ table.rank-table .name-cell { min-width: 260px; }
   table.rank-table td.num.big { font-size: 14px; white-space: nowrap; }
   table.rank-table thead th small { display: none; }
 }
+
+/* POGデータ（種牡馬・厩舎・馬主・生産牧場） */
+.data-tabs { display: flex; overflow-x: auto; scrollbar-width: none; gap: 0; margin: 0 0 12px; border-bottom: 2px solid var(--line); }
+.data-tabs::-webkit-scrollbar { display: none; }
+.data-tabs a { flex: none; padding: 8px 14px; font-size: 14px; font-weight: 700; color: var(--muted); text-decoration: none; white-space: nowrap; border-bottom: 3px solid transparent; margin-bottom: -2px; }
+.data-tabs a.on { color: var(--accent); border-bottom-color: var(--accent); }
+.seg-wrap { display: flex; width: fit-content; max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+.seg-wrap::-webkit-scrollbar { display: none; }
+.nw { white-space: nowrap; }
+table.group-table th { text-align: center; line-height: 1.2; }
+table.group-table td { white-space: nowrap; }
+table.group-table td.g-name { white-space: normal; min-width: 180px; }
+table.group-table td .sub { font-size: 11px; color: var(--muted); }
+table.group-table td.graph { min-width: 110px; padding-right: 4px; }
+table.group-table td.graph span { display: inline-block; height: 10px; vertical-align: middle; }
+table.group-table .bar-base { background: #3d7cc9; }
+table.group-table .bar-week { background: #e0524a; }
+.show-sm-inline { display: none; }
+.stat-prev { border-top-color: var(--gold); }
+.stat-prev .s { white-space: normal; }
+@media (max-width: 560px) { .stat-prev { grid-column: 1 / -1; } }
+.rel-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin-top: 14px; }
+.chip-list { list-style: none; margin: 0; padding: 8px 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+.chip-list li { display: inline-flex; align-items: center; gap: 4px; background: var(--th); border-radius: 99px; padding: 2px 10px; font-size: 13px; max-width: 100%; }
+.chip-list li a { font-weight: 700; text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.chip-list li span { font-size: 11px; color: var(--muted); white-space: nowrap; }
+.data-hub { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.hub-rate { border-top: 1px solid var(--line); line-height: 1.7; }
+.hub-rate b { color: var(--text); }
+.hub-rate a { font-weight: 700; }
+@media (max-width: 860px) { .data-hub { grid-template-columns: 1fr; } }
+@media (max-width: 560px) {
+  .show-sm-inline { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  table.group-table { table-layout: auto; }
+  table.group-table th, table.group-table td { padding: 6px 4px; }
+  table.group-table td.g-name { min-width: 0; width: 100%; max-width: 0; }
+  table.group-table td.g-name .horse-name { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  table.group-table td.num.big { font-size: 14px; }
+  table.group-horses .name-cell { max-width: 0; width: 100%; }
+  table.group-horses .name-cell .horse-name { white-space: nowrap; }
+  table.group-horses .name-cell .ped > span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  table.group-horses .name-cell .ped-dam { margin-left: -1em; }
+  table.group-horses .name-cell .ped-damsire { display: none; }
+  table.group-horses td.num { padding: 6px 4px; }
+  .seg-wrap a { padding: 6px 10px; }
+}
