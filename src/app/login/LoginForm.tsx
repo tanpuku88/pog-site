@@ -2,8 +2,8 @@
 import { useActionState, useState } from "react";
 import { sendLoginEmail, verifyCode, passwordAuth, type LoginState, type PasswordState } from "./actions";
 
-export default function LoginForm({ next, linkError }: { next: string; linkError?: boolean }) {
-  const [tab, setTab] = useState<"login" | "signup" | "email">("login");
+export default function LoginForm({ next, linkError, initialTab = "login" }: { next: string; linkError?: boolean; initialTab?: "login" | "signup" }) {
+  const [tab, setTab] = useState<"login" | "signup" | "email">(initialTab);
   const [showLinkError, setShowLinkError] = useState(!!linkError);
   const pick = (t: typeof tab) => (e: React.MouseEvent) => { e.preventDefault(); setTab(t); setShowLinkError(false); };
   return (

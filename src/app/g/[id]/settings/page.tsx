@@ -1,31 +1,33 @@
-import { headers } from "next/headers";
 import { requireGroup } from "@/lib/group-data";
-import { updateRules, leaveGroup } from "./actions";
-import CopyButton from "./CopyButton";
+import { inviteMessage } from "@/lib/invite";
+import { siteOrigin } from "@/lib/site-origin";
+import InviteShare from "@/components/InviteShare";
+import { updateRules, leaveGroup, resetInvite } from "./actions";
 
 export default async function Settings({ params, searchParams }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ created?: string; saved?: string }>;
+  searchParams: Promise<{ created?: string; saved?: string; reset?: string }>;
 }) {
   const { id } = await params;
   const sp = await searchParams;
   const { group, user } = await requireGroup(id);
-  const h = await headers();
-  const origin = process.env.NEXT_PUBLIC_SITE_URL ?? `${h.get("x-forwarded-proto") ?? "https"}://${h.get("host")}`;
-  const inviteUrl = `${origin}/join/${group.invite_code}`;
+  const inviteUrl = `${await siteOrigin()}/join/${group.invite_code}`;
   const isOwner = group.owner_id === user.id;
 
   return (
     <>
       {sp.created && <p className="ok">グループを作りました。下の招待リンクを参加者に送ってください。</p>}
       {sp.saved && <p className="ok">設定を保存しました。</p>}
+      {sp.reset && <p className="ok">招待リンクを作り直しました。前のリンクはもう使えません。</p>}
       <div className="card">
         <strong>招待リンク</strong>
-        <p className="muted" style={{ margin: "4px 0 8px" }}>このリンクを開いてログインすると、グループに参加できます。</p>
-        <div className="row">
-          <input readOnly value={inviteUrl} />
-          <CopyButton text={inviteUrl} />
-        </div>
+        <p className="muted" style={{ margin: "4px 0 8px" }}>このリンクを送るだけで仲間を呼べます。開いた人は登録（またはログイン）すると、そのまま参加できます。</p>
+        <InviteShare url={inviteUrl} message={inviteMessage(group.name, inviteUrl)} />
+        {isOwner && (
+          <form action={resetInvite.bind(null, id)} style={{ marginTop: 12 }}>
+            <button className="secondary" style={{ fontSize: 12 }}>招待リンクを作り直す（前のリンクは使えなくなります）</button>
+          </form>
+        )}
       </div>
 
       {isOwner ? (

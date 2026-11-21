@@ -94,10 +94,10 @@ export default async function HorsePage({ params }: { params: Promise<{ id: stri
             <table className="list">
               <tbody>
                 {(entries ?? []).map((e) => {
-                  const d = new Date(`${e.race_date}T00:00:00+09:00`);
+                  const d = new Date(`${e.race_date}T00:00:00Z`);
                   return (
                     <tr key={e.race_id}>
-                      <td className="feed-date">{d.getMonth() + 1}/{d.getDate()}（{WEEK[d.getDay()]}）</td>
+                      <td className="feed-date">{d.getUTCMonth() + 1}/{d.getUTCDate()}（{WEEK[d.getUTCDay()]}）</td>
                       <td><span className="big">{e.venue}{e.race_no}R</span> <a href={shutubaUrl(e.race_id)} target="_blank" rel="noreferrer">{e.race_name ?? "出馬表"}</a></td>
                       <td className="num sub">{e.post_time ?? ""}</td>
                     </tr>

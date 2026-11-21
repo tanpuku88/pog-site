@@ -2,10 +2,15 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
 import { getUser } from "@/lib/supabase/server";
+import { SITE_NAME, SITE_URL } from "@/config/site";
 
 export const metadata: Metadata = {
-  title: "POG",
-  description: "指名馬の登録と成績集計がラクなPOGサイト",
+  metadataBase: new URL(SITE_URL),
+  title: { default: "POG（ペーパーオーナーゲーム）大会を無料で開ける｜指名・成績を自動集計", template: "%s | POG" },
+  description: "POG大会を無料で作れるサイト。招待リンクで仲間を呼び、馬名を数文字入れるだけで指名。2歳馬の血統・成績・指名数、種牡馬ランキング、新馬戦情報も。",
+  applicationName: SITE_NAME,
+  openGraph: { siteName: SITE_NAME, locale: "ja_JP", type: "website" },
+  twitter: { card: "summary" },
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -19,6 +24,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <nav>
               <Link href="/shinba">新馬戦</Link>
               <Link href="/sires">種牡馬</Link>
+              <Link href="/horses" className="hide-sm">馬を探す</Link>
               {user ? (
                 <>
                   <Link href="/" className="hide-sm">グループ</Link>

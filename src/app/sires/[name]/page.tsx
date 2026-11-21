@@ -1,4 +1,6 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { SITE_URL } from "@/config/site";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { aggregateSires, loadCropData } from "@/lib/sires";
 import { defaultSeason } from "@/lib/standings";
@@ -7,9 +9,18 @@ import { HorseLabel } from "@/components/HorseLabel";
 
 export const revalidate = 3600;
 
-export async function generateMetadata({ params }: { params: Promise<{ name: string }> }) {
+export async function generateMetadata({ params }: { params: Promise<{ name: string }> }): Promise<Metadata> {
   const { name } = await params;
-  return { title: `${decodeURIComponent(name)}産駒 | POG` };
+  const sire = decodeURIComponent(name);
+  const { crop_year } = defaultSeason();
+  const title = `${sire}産駒 POG｜${crop_year}年生まれ2歳馬一覧・成績・指名数`;
+  const description = `${sire}産駒（${crop_year}年生まれ世代）のPOG向け一覧。母・母父・厩舎・成績・賞金・指名数を賞金順にまとめています。`;
+  return {
+    title: { absolute: title },
+    description,
+    alternates: { canonical: `/sires/${encodeURIComponent(sire)}` },
+    openGraph: { title, description, url: `/sires/${encodeURIComponent(sire)}` },
+  };
 }
 
 export default async function SirePage({ params }: { params: Promise<{ name: string }> }) {
@@ -23,8 +34,18 @@ export default async function SirePage({ params }: { params: Promise<{ name: str
     .map((h) => ({ h, picks: picks.get(h.id) ?? 0, t: tally.get(h.id) ?? { points: 0, starts: 0, wins: 0 } }))
     .sort((a, b) => b.t.points - a.t.points || b.picks - a.picks || a.h.name.localeCompare(b.h.name, "ja"));
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "種牡馬ランキング", item: `${SITE_URL}/sires` },
+      { "@type": "ListItem", position: 2, name: `${sire}産駒`, item: `${SITE_URL}/sires/${encodeURIComponent(sire)}` },
+    ],
+  };
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       <p className="muted" style={{ margin: "0 0 8px" }}><Link href="/sires">‹ 種牡馬ランキング</Link></p>
       <h1 style={{ marginBottom: 4 }}>{sire} 産駒</h1>
       <p className="muted" style={{ marginTop: 0 }}>{season.crop_year}年生まれ世代</p>

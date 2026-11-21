@@ -1,11 +1,17 @@
 import Link from "next/link";
 import { loadGroupBoard } from "@/lib/group-data";
+import { inviteMessage } from "@/lib/invite";
+import { siteOrigin } from "@/lib/site-origin";
+import InviteShare from "@/components/InviteShare";
 import { formatMan } from "@/lib/util";
 import { HorseLabel, Finish, Rank } from "@/components/HorseLabel";
 
-export default async function Ranking({ params }: { params: Promise<{ id: string }> }) {
+export default async function Ranking({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ joined?: string }> }) {
   const { id } = await params;
-  const { standings, names, user, horseMap, results, picks } = await loadGroupBoard(id);
+  const { joined } = await searchParams;
+  const { standings, names, user, horseMap, results, picks, group } = await loadGroupBoard(id);
+  const myPicks = picks.filter((p) => p.user_id === user.id).length;
+  const inviteUrl = standings.length < 3 ? `${await siteOrigin()}/join/${group.invite_code}` : null;
   const lastFetched = [...horseMap.values()]
     .map((h) => h.results_fetched_at)
     .filter((d): d is string => !!d)
@@ -29,6 +35,20 @@ export default async function Ranking({ params }: { params: Promise<{ id: string
 
   return (
     <>
+      {joined && (
+        <div className="card" style={{ borderLeft: "4px solid var(--gold)" }}>
+          <strong>「{group.name}」に参加しました！</strong>
+          <div className="muted" style={{ margin: "4px 0 8px" }}>{myPicks === 0 ? `さっそく馬を指名しましょう（1人${group.picks_per_member}頭まで）。` : `指名済み ${myPicks}/${group.picks_per_member}頭`}</div>
+          <Link href={`/g/${id}/picks`} className="btn">馬を指名する</Link>
+        </div>
+      )}
+      {inviteUrl && (
+        <div className="card">
+          <strong>仲間を招待しましょう</strong>
+          <div className="muted" style={{ margin: "4px 0 8px" }}>参加者はいま{standings.length}人です。リンクを送るだけで参加できます。</div>
+          <InviteShare url={inviteUrl} message={inviteMessage(group.name, inviteUrl)} />
+        </div>
+      )}
       <div className="stats">
         <div className="stat">
           <div className="k">首位</div>

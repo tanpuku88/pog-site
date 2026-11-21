@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { horsePageUrl } from "@/lib/netkeiba/fetch";
 
 type H = { id: string; name: string; sex?: string | null; sire?: string | null; dam?: string | null; damsire?: string | null; trainer?: string | null };
 
@@ -9,7 +8,7 @@ export function HorseLabel({ horse, id, groupId, showPed = true, showTrainer = f
     <>
       {groupId
         ? <Link className="horse-name" href={`/g/${groupId}/h/${id}`}>{horse?.name ?? id}</Link>
-        : <a className="horse-name" href={horsePageUrl(id)} target="_blank" rel="noreferrer">{horse?.name ?? id}</a>}
+        : <Link className="horse-name" href={`/horse/${id}`}>{horse?.name ?? id}</Link>}
       {horse?.sex && <span className={`sex sex-${horse.sex}`}>{horse.sex}</span>}
       {showPed && (horse?.sire || horse?.dam) && (
         <div className="ped">
