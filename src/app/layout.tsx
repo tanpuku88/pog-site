@@ -18,6 +18,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <Link href="/" className="logo">🏇 POG<small>ペーパーオーナーゲーム</small></Link>
             <nav>
               <Link href="/shinba">新馬戦</Link>
+              <Link href="/sires">種牡馬</Link>
               {user ? (
                 <>
                   <Link href="/" className="hide-sm">グループ</Link>
