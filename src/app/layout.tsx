@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
 import { getUser } from "@/lib/supabase/server";
-import { SITE_NAME, SITE_URL } from "@/config/site";
+import { GOOGLE_SITE_VERIFICATION, SITE_NAME, SITE_URL } from "@/config/site";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   applicationName: SITE_NAME,
   openGraph: { siteName: SITE_NAME, locale: "ja_JP", type: "website" },
   twitter: { card: "summary" },
+  ...(GOOGLE_SITE_VERIFICATION ? { verification: { google: GOOGLE_SITE_VERIFICATION } } : {}),
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {

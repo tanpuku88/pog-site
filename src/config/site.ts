@@ -11,3 +11,6 @@ export const COLUMN_FEEDS: { label: string; url: string }[] = [
 /** 公開URL（検索エンジン向けのリンクやサイトマップに使う） */
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://pog-site.vercel.app").replace(/\/$/, "");
 export const SITE_NAME = "POG（ペーパーオーナーゲーム）";
+
+/** Google Search Console の所有権確認（HTMLタグの content の値） */
+export const GOOGLE_SITE_VERIFICATION = "8nEJuH-Vqyqw4K_qzI_VgSIhSLCUZx32DHtQnCe2OUM";
