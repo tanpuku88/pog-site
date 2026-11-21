@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 
 const ITEMS = [
   { href: "/", label: "トップ", match: (p: string) => p === "/" },
-  { href: "/popular", label: "人気馬30傑", match: (p: string) => p.startsWith("/popular") },
+  { href: "/popular", label: "注目馬30傑", match: (p: string) => p.startsWith("/popular") },
   { href: "/shinba", label: "新馬戦", match: (p: string) => p.startsWith("/shinba") },
   { href: "/sires", label: "種牡馬", match: (p: string) => p.startsWith("/sires") },
   { href: "/horses", label: "馬を探す", match: (p: string) => p.startsWith("/horses") || p.startsWith("/horse/") },

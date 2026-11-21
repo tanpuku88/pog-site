@@ -171,5 +171,5 @@ export function ExternalRankingNote() {
 
 export function boardTitle(sex: BoardSex, sort: BoardSort) {
   const s = sex === "牡" ? "牡馬 " : sex === "牝" ? "牝馬 " : "";
-  return sort === "prize" ? `${s}注目馬30傑（賞金順）` : `${s}人気馬30傑（指名数順）`;
+  return sort === "prize" ? `${s}注目馬30傑（賞金順）` : `${s}注目馬30傑（指名数順）`;
 }
