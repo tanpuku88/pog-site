@@ -56,6 +56,9 @@ export const horsePedUrl = (id: string) => `https://db.netkeiba.com/horse/ped/${
 export const horseResultUrl = (id: string) => `https://db.netkeiba.com/horse/result/${id}/`;
 export const horseSearchUrl = (word: string) =>
   `https://db.netkeiba.com/?pid=horse_list&match=partial_match&list=100&word=${encodeEucJp(word)}`;
+/** 年齢で絞った馬一覧（世代の一括取り込み用）。page は1から */
+export const horseListByAgeUrl = (age: number, page: number) =>
+  `https://db.netkeiba.com/?pid=horse_list&match=partial_match&under_age=${age}&over_age=${age}&sort=name&list=100&page=${page}`;
 export const raceListUrl = (yyyymmdd: string) =>
   `https://race.netkeiba.com/top/race_list_sub.html?kaisai_date=${yyyymmdd}`;
 export const shutubaUrl = (raceId: string) =>

@@ -1,0 +1,29 @@
+name: 世代の馬をまとめて取り込む
+
+on:
+  workflow_dispatch:
+    inputs:
+      crop_year:
+        description: "生まれ年（空なら今シーズンの2歳世代）"
+        required: false
+        default: ""
+  schedule:
+    # 毎週月曜 4:00（日本時間）。新しく馬名が付いた馬を追加する
+    - cron: "0 19 * * 0"
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run import:crop
+        env:
+          CROP_YEAR: ${{ inputs.crop_year }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
