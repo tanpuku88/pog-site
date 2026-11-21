@@ -217,3 +217,17 @@ table.summary .ped-cell { font-size: 12px; line-height: 1.35; color: var(--muted
 table.summary .ped-cell a { color: inherit; }
 table.summary .nowrap { white-space: nowrap; }
 table.summary tr.empty-slot td { background: var(--th); }
+
+/* 種牡馬ランキングの表 */
+.sire-meta { display: flex; justify-content: space-between; font-size: 13px; margin: -4px 0 4px; }
+table.sire-table th { text-align: center; line-height: 1.2; }
+table.sire-table td { white-space: nowrap; }
+table.sire-table td.graph { min-width: 120px; padding-right: 4px; }
+table.sire-table td.graph span { display: inline-block; height: 10px; vertical-align: middle; }
+table.sire-table .bar-base { background: #3d7cc9; }
+table.sire-table .bar-week { background: #e0524a; }
+.chg-up { color: #d0312d; font-weight: 700; font-size: 12px; }
+.chg-down { color: #888; font-size: 12px; }
+.sex-dot { font-size: 12px; margin-right: 3px; }
+.sex-dot.sex-牡, .sex-dot.sex-セ { color: #1aa3c8; }
+.sex-dot.sex-牝 { color: #e0709a; }
