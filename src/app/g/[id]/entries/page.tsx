@@ -1,6 +1,7 @@
 import { loadGroupBoard } from "@/lib/group-data";
 import { todayJst } from "@/lib/util";
 import { shutubaUrl } from "@/lib/netkeiba/fetch";
+import { HorseLabel } from "@/components/HorseLabel";
 
 const WEEK = ["日", "月", "火", "水", "木", "金", "土"];
 
@@ -33,16 +34,16 @@ export default async function Entries({ params }: { params: Promise<{ id: string
         const d = new Date(`${date}T00:00:00+09:00`);
         return (
           <div key={date}>
-            <h2>{d.getMonth() + 1}月{d.getDate()}日（{WEEK[d.getDay()]}）</h2>
-            <div className="card" style={{ padding: "8px 12px" }}>
+            <div className="sec-title"><h2>{d.getMonth() + 1}月{d.getDate()}日（{WEEK[d.getDay()]}）</h2><span className="muted">{list.length}頭</span></div>
+            <div className="card flush">
               <table className="list">
                 <tbody>
                   {list.map((e) => (
                     <tr key={`${e.horse_id}${e.race_id}`}>
-                      <td style={{ whiteSpace: "nowrap" }}>{e.venue}{e.race_no}R<div className="muted" style={{ fontSize: 12 }}>{e.post_time ?? ""}</div></td>
+                      <td style={{ whiteSpace: "nowrap" }}><span className="big">{e.venue}{e.race_no}R</span><div className="sub">{e.post_time ?? ""}</div></td>
                       <td>
-                        <strong>{horseMap.get(e.horse_id)?.name ?? e.horse_id}</strong>
-                        <div className="muted" style={{ fontSize: 13 }}>
+                        <HorseLabel id={e.horse_id} horse={horseMap.get(e.horse_id)} showPed={false} />
+                        <div className="sub">
                           <a href={shutubaUrl(e.race_id)} target="_blank" rel="noreferrer">{e.race_name ?? "出馬表"}</a>
                         </div>
                       </td>

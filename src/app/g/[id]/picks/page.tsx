@@ -1,6 +1,7 @@
 import { loadGroupBoard } from "@/lib/group-data";
 import { HorseTable } from "../HorseTable";
 import PickForm from "./PickForm";
+import { formatMan } from "@/lib/util";
 import RemoveButton from "./RemoveButton";
 
 export default async function MyPicks({ params }: { params: Promise<{ id: string }> }) {
@@ -16,7 +17,7 @@ export default async function MyPicks({ params }: { params: Promise<{ id: string
         <span className="muted">（あと{remaining}頭 / {group.picks_per_member}頭）</span>
         {remaining > 0 ? <PickForm groupId={id} /> : <p className="muted">指名頭数の上限に達しています。</p>}
       </div>
-      <h2>自分の指名馬（{count}頭）</h2>
+      <div className="sec-title"><h2>自分の指名馬（{count}頭）</h2><span className="muted">合計 {formatMan(me?.points ?? 0)} 万円</span></div>
       <HorseTable
         scores={me?.horses ?? []}
         horseMap={horseMap}

@@ -9,6 +9,7 @@ export default function Tabs({ id }: { id: string }) {
     { href: base, label: "ランキング", on: path === base || path.startsWith(`${base}/m/`) },
     { href: `${base}/picks`, label: "自分の指名馬", on: path.startsWith(`${base}/picks`) },
     { href: `${base}/entries`, label: "今週の出走", on: path.startsWith(`${base}/entries`) },
+    { href: `${base}/popular`, label: "人気馬30傑", on: path.startsWith(`${base}/popular`) },
     { href: `${base}/settings`, label: "設定", on: path.startsWith(`${base}/settings`) },
   ];
   return (
