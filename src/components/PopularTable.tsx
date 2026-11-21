@@ -31,7 +31,7 @@ export function PopularTable({ rows, sort = "picks", groupCount, groupId, action
         <thead>
           <tr>
             <th className="c">順位</th>
-            {showChange && <th className="c">前週</th>}
+            {showChange && <th className="c hide-sm">前週</th>}
             <th>馬名・血統</th>
             <th className="num">指名数</th>
             {!compact && <th className="num hide-sm">指名率</th>}
@@ -43,8 +43,11 @@ export function PopularTable({ rows, sort = "picks", groupCount, groupId, action
         <tbody>
           {rows.map((r) => (
             <tr key={r.horse.id} className={r.rank <= 3 ? `top${r.rank}` : undefined}>
-              <td className="c"><Rank rank={r.rank} /></td>
-              {showChange && <td className="c"><RankChange rank={r.rank} prev={r.prevRank} /></td>}
+              <td className="c rank-cell">
+                <Rank rank={r.rank} />
+                {showChange && <div className="show-sm"><RankChange rank={r.rank} prev={r.prevRank} /></div>}
+              </td>
+              {showChange && <td className="c hide-sm"><RankChange rank={r.rank} prev={r.prevRank} /></td>}
               <td className="name-cell">
                 <HorseLabel id={r.horse.id} horse={r.horse} groupId={groupId} showTrainer={!compact} />
                 {actions?.[r.horse.id] && <div style={{ marginTop: 3 }}>{actions[r.horse.id]}</div>}

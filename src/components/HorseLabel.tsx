@@ -12,10 +12,10 @@ export function HorseLabel({ horse, id, groupId, showPed = true, showTrainer = f
       {horse?.sex && <span className={`sex sex-${horse.sex}`}>{horse.sex}</span>}
       {showPed && (horse?.sire || horse?.dam) && (
         <div className="ped">
-          {horse?.sire && <>父 <Link href={`/sires/${encodeURIComponent(horse.sire)}`} className="sire-link"><b>{horse.sire}</b></Link></>}
-          {horse?.dam && <>　母 <b>{horse.dam}</b></>}
-          {horse?.damsire && <>（母父 {horse.damsire}）</>}
-          {showTrainer && horse?.trainer && <>　{horse.trainer}</>}
+          {horse?.sire && <span className="ped-sire">父 <Link href={`/sires/${encodeURIComponent(horse.sire)}`} className="sire-link"><b>{horse.sire}</b></Link></span>}
+          {horse?.dam && <span className="ped-dam">　母 <b>{horse.dam}</b></span>}
+          {horse?.damsire && <span className="ped-damsire">（母父 {horse.damsire}）</span>}
+          {showTrainer && horse?.trainer && <span className="ped-trainer">　{horse.trainer}</span>}
         </div>
       )}
     </>
