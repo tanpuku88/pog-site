@@ -1,19 +1,20 @@
 import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { aggregateSires, loadCropData } from "@/lib/sires";
+import { sireTable, loadCropData } from "@/lib/sires";
 import { defaultSeason } from "@/lib/standings";
-import { withRanks } from "@/lib/popular";
-import { formatMan } from "@/lib/util";
-import { Rank } from "@/components/HorseLabel";
+import { formatMan, todayJst } from "@/lib/util";
 
 export const metadata = { title: "種牡馬ランキング | POG" };
 export const revalidate = 3600;
 
+type K = { points: number; picks: number; winners: number; horses: number; earned: number; aei: number | null };
 const SORTS = {
-  points: { label: "賞金順", key: (r: { points: number }) => r.points },
-  picks: { label: "人気順", key: (r: { picks: number }) => r.picks },
-  winners: { label: "勝ち上がり順", key: (r: { winners: number }) => r.winners },
-  horses: { label: "産駒数順", key: (r: { horses: number }) => r.horses },
+  points: { label: "本賞金順", key: (r: K) => r.points },
+  earned: { label: "収得賞金順", key: (r: K) => r.earned },
+  aei: { label: "AEI順", key: (r: K) => r.aei ?? -1 },
+  winners: { label: "勝ち上がり順", key: (r: K) => r.winners },
+  picks: { label: "人気順", key: (r: K) => r.picks },
+  horses: { label: "産駒数順", key: (r: K) => r.horses },
 } as const;
 type SortKey = keyof typeof SORTS;
 
@@ -22,18 +23,23 @@ export default async function Sires({ searchParams }: { searchParams: Promise<{ 
   const sortKey: SortKey = sort && sort in SORTS ? (sort as SortKey) : "points";
   const season = defaultSeason();
   const rules = { ...season, include_non_jra: false };
-  const { horses, picks, tally } = await loadCropData(createAdminClient(), season.crop_year, rules);
+  const { horses, picks, tally, races } = await loadCropData(createAdminClient(), season.crop_year, rules);
   const key = SORTS[sortKey].key;
-  const rows = withRanks(
-    aggregateSires(horses, picks, tally).sort((a, b) => key(b) - key(a) || b.points - a.points || b.horses - a.horses),
-    key,
-  ).slice(0, 50);
+  const all = sireTable(horses, picks, tally, races, todayJst());
+  const rows = [...all].sort((a, b) => key(b) - key(a) || a.rank - b.rank).slice(0, 100);
+  const maxPoints = Math.max(1, ...all.map((r) => r.points));
+  const updated = new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" });
 
   return (
     <>
       <h1>{season.crop_year}年生まれ世代 種牡馬ランキング</h1>
-      <p className="muted" style={{ marginTop: -8 }}>
-        このサイトに登録されている{horses.length.toLocaleString()}頭を父ごとに集計しています。賞金はJRA本賞金（万円）で、成績を取得済みの馬の分です。
+      <div className="sire-meta">
+        <span>集計期間：{season.season_start.slice(2, 4)}年MD 〜 {season.season_end.slice(2, 4)}年ダービー</span>
+        <span className="muted">更新：{updated}</span>
+      </div>
+      <p className="muted" style={{ marginTop: 0 }}>
+        このサイトに登録されている{horses.length.toLocaleString()}頭を父ごとに集計（中央のレースのみ・賞金は万円）。
+        AEIは「1頭あたりの賞金」が全体平均の何倍か、収得賞金は成績から計算した目安です。
       </p>
       <div className="seg" style={{ marginBottom: 10 }}>
         {(Object.keys(SORTS) as SortKey[]).map((k) => (
@@ -44,32 +50,49 @@ export default async function Sires({ searchParams }: { searchParams: Promise<{ 
         <div className="card muted">まだデータがありません。世代の馬の取り込みが終わると表示されます。</div>
       ) : (
         <div className="card flush scroll">
-          <table className="list">
+          <table className="list compact sire-table">
             <thead>
               <tr>
-                <th className="c">順位</th>
-                <th>種牡馬</th>
-                <th className="num">産駒</th>
-                <th className="num">指名</th>
-                <th className="num hide-sm">出走</th>
-                <th className="num">勝ち上がり</th>
-                <th className="num">賞金</th>
-                <th className="hide-sm">稼ぎ頭</th>
+                <th className="c">順位</th><th className="c">変動</th><th>種牡馬</th><th>グラフ</th>
+                <th className="num">頭数</th><th className="num">出走<br />頭数</th><th className="num">出走<br />回数</th>
+                <th className="c">戦績</th><th className="num">勝率</th><th className="num">収得<br />賞金</th><th className="num">本賞金</th>
+                <th className="num">先週</th><th className="num">AEI</th><th className="num">指名</th><th>代表馬</th>
               </tr>
             </thead>
             <tbody>
-              {rows.map((r) => (
-                <tr key={r.sire}>
-                  <td className="c"><Rank rank={r.rank} /></td>
-                  <td><Link className="horse-name" href={`/sires/${encodeURIComponent(r.sire)}`}>{r.sire}</Link></td>
-                  <td className="num">{r.horses}</td>
-                  <td className="num">{r.picks || <span className="muted">-</span>}</td>
-                  <td className="num hide-sm">{r.starters}</td>
-                  <td className="num">{r.winners}{r.starters > 0 && <span className="sub"> ({Math.round((r.winners / r.starters) * 100)}%)</span>}</td>
-                  <td className="num big">{r.points > 0 ? formatMan(r.points) : <span className="muted">-</span>}</td>
-                  <td className="hide-sm sub">{r.top ? r.top.name : ""}</td>
-                </tr>
-              ))}
+              {rows.map((r) => {
+                const now = r.points - r.lastWeek;
+                return (
+                  <tr key={r.sire}>
+                    <td className="c">{r.rank}</td>
+                    <td className="c">
+                      {r.change > 0 && <span className="chg-up">↑{r.change}</span>}
+                      {r.change < 0 && <span className="chg-down">↓{-r.change}</span>}
+                    </td>
+                    <td><Link className="horse-name" href={`/sires/${encodeURIComponent(r.sire)}`}>{r.sire}</Link></td>
+                    <td className="graph">
+                      <span className="bar-base" style={{ width: `${(now / maxPoints) * 100}%` }} />
+                      <span className="bar-week" style={{ width: `${(r.lastWeek / maxPoints) * 100}%` }} />
+                    </td>
+                    <td className="num">{r.horses}</td>
+                    <td className="num">{r.starters}</td>
+                    <td className="num">{r.runs}</td>
+                    <td className="c">{r.runs > 0 ? r.record.join("-") : <span className="muted">-</span>}</td>
+                    <td className="num">{r.runs > 0 ? r.winRate.toFixed(1) : "-"}</td>
+                    <td className="num">{formatMan(r.earned)}</td>
+                    <td className="num"><strong>{formatMan(r.points)}</strong></td>
+                    <td className="num">{r.lastWeek > 0 ? formatMan(r.lastWeek) : <span className="muted">0</span>}</td>
+                    <td className="num">{r.aei !== null ? r.aei.toFixed(2) : "-"}</td>
+                    <td className="num">{r.picks || <span className="muted">-</span>}</td>
+                    <td>
+                      {r.top && <>
+                        <span className={`sex-dot sex-${r.topSex ?? ""}`}>{r.topSex === "牝" ? "♀" : "♂"}</span>
+                        <a className="horse-name" href={`https://db.netkeiba.com/horse/${r.top.id}/`} target="_blank" rel="noreferrer">{r.top.name}</a>
+                      </>}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
