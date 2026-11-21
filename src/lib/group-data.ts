@@ -1,5 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import { cache } from "react";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { getUser } from "@/lib/supabase/server";
 import { computeStandings, type ResultRow } from "@/lib/standings";
 import { todayJst } from "@/lib/util";
@@ -77,8 +78,8 @@ export async function loadGroupBoard(groupId: string) {
 export type ResultWithRace = ResultRow & { venue: string; race_name: string; race_id: string | null };
 
 /** シーズン中の成績を全件読む（1回1000件の上限があるので分けて読む） */
-async function fetchAllResults(
-  supabase: Awaited<ReturnType<typeof requireGroup>>["supabase"],
+export async function fetchAllResults(
+  supabase: SupabaseClient,
   horseIds: string[],
   group: Group,
 ) {

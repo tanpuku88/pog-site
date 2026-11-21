@@ -3,6 +3,8 @@ import { loadGroupBoard } from "@/lib/group-data";
 import { inviteMessage } from "@/lib/invite";
 import { siteOrigin } from "@/lib/site-origin";
 import InviteShare from "@/components/InviteShare";
+import ShareCard from "@/components/ShareCard";
+import { shareText } from "@/lib/share";
 import { formatMan } from "@/lib/util";
 import { HorseLabel, Finish, Rank } from "@/components/HorseLabel";
 
@@ -103,6 +105,16 @@ export default async function Ranking({ params, searchParams }: { params: Promis
           </tbody>
         </table>
       </div>
+
+      {standings.length > 0 && (
+        <ShareCard
+          groupId={id}
+          who="all"
+          title="順位表をシェア"
+          note="順位表が画像になり、Xに画像付きで投稿できます。招待リンクは載らないので、見た人が勝手に参加することはありません。"
+          text={shareText({ kind: "ranking", groupName: group.name, name: leader ? names.get(leader.user_id) : undefined, members: standings.length, points: leader?.points ?? 0 })}
+        />
+      )}
 
       <div className="sec-title"><h2>最新の成績</h2><span className="muted">指名馬のレース結果</span></div>
       {feed.length === 0 ? (

@@ -3,6 +3,8 @@ import { HorseTable } from "../HorseTable";
 import PickForm from "./PickForm";
 import { formatMan } from "@/lib/util";
 import RemoveButton from "./RemoveButton";
+import ShareCard from "@/components/ShareCard";
+import { myListShareText } from "@/lib/share";
 
 export default async function MyPicks({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -26,6 +28,15 @@ export default async function MyPicks({ params }: { params: Promise<{ id: string
         includeNonJra={group.include_non_jra} slots={group.picks_per_member}
         actions={(horseId) => <RemoveButton groupId={id} horseId={horseId} name={horseMap.get(horseId)?.name ?? ""} />}
       />
+      {me && count > 0 && (
+        <ShareCard
+          groupId={id}
+          who={user.id}
+          title="指名リストをシェア"
+          note="自分の指名馬と順位が画像になり、Xに画像付きで投稿できます。招待リンクは載りません。"
+          text={myListShareText(group.name, me, standings.length, horseMap)}
+        />
+      )}
     </>
   );
 }
