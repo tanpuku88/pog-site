@@ -100,7 +100,7 @@ export function rankBoard(rows: BaseRow[], opts: { sort?: BoardSort; sex?: Board
       .map((r) => [r.horse.id, r.rank]),
   );
   const ranked = withRanks(
-    [...pool].sort((a, b) => b.picks - a.picks || b.points - a.points || byName(a, b)),
+    pool.filter((r) => r.picks > 0).sort((a, b) => b.picks - a.picks || b.points - a.points || byName(a, b)),
     (r) => r.picks,
   );
   return ranked.slice(0, limit).map((r) => toRow(r, prev.get(r.horse.id) ?? null));
@@ -119,7 +119,7 @@ export function popularSires(rows: BaseRow[], limit = 10) {
   const m = new Map<string, { sire: string; picks: number; horses: number; top: BaseRow }>();
   for (const r of rows) {
     const s = r.horse.sire;
-    if (!s) continue;
+    if (!s || r.picks === 0) continue;
     const t = m.get(s) ?? { sire: s, picks: 0, horses: 0, top: r };
     t.picks += r.picks;
     t.horses += 1;
@@ -154,12 +154,36 @@ async function chunked<T>(ids: string[], f: (part: string[]) => Promise<T[]>): P
   return out;
 }
 
-/** 世代の人気馬と賞金ランキングの元データ（指名されたことのある馬すべて） */
+/** 指名がこれより少ない間は、世代全体の賞金順（注目馬）を最初に見せる */
+export const MIN_PICKS_FOR_POPULAR = 300;
+
+async function seasonPrizeHorseIds(db: SupabaseClient, rules: Rules): Promise<string[]> {
+  const ids = new Set<string>();
+  for (let from = 0; ; from += PAGE) {
+    const { data, error } = await db
+      .from("race_results")
+      .select("horse_id")
+      .gt("prize_man", 0)
+      .gte("race_date", rules.season_start)
+      .lte("race_date", rules.season_end)
+      .order("horse_id")
+      .order("race_date")
+      .range(from, from + PAGE - 1);
+    if (error) throw error;
+    for (const r of data ?? []) ids.add(r.horse_id as string);
+    if (!data || data.length < PAGE) break;
+  }
+  return [...ids];
+}
+
+/** 世代の人気馬と賞金ランキングの元データ（指名された馬＋賞金を獲った馬すべて） */
 export async function loadGenerationBoard(db: SupabaseClient, cropYear: number, rules: Rules, limit = 30, now = new Date()) {
   const pickCounts = countPicksWithWeek(await allPicks(db), now);
+  const prizeIds = await seasonPrizeHorseIds(db, rules);
+  const candidateIds = [...new Set([...pickCounts.keys(), ...prizeIds])];
 
-  // 指名されたことのある、この世代の馬
-  const horses = await chunked([...pickCounts.keys()], async (part) => {
+  // 指名されたか賞金を獲ったことのある、この世代の馬
+  const horses = await chunked(candidateIds, async (part) => {
     const { data, error } = await db.from("horses").select("*").in("id", part).eq("birth_year", cropYear);
     if (error) throw error;
     return (data ?? []) as Horse[];
@@ -190,8 +214,10 @@ export async function loadGenerationBoard(db: SupabaseClient, cropYear: number, 
   return {
     rows,
     byPicks: rankBoard(rows, { sort: "picks", limit }),
+    /** 指名がまだ少ないときは賞金順を最初に見せる */
+    defaultSort: (rows.reduce((s, r) => s + r.picks, 0) >= MIN_PICKS_FOR_POPULAR ? "picks" : "prize") as BoardSort,
     byPrize: rankBoard(rows, { sort: "prize", limit }),
-    totalHorses: horses.length,
+    totalHorses: rows.filter((r) => r.picks > 0).length,
     totalPicks: rows.reduce((s, r) => s + r.picks, 0),
     weekPicks: rows.reduce((s, r) => s + r.weekPicks, 0),
     groupCount: groupCount ?? 0,

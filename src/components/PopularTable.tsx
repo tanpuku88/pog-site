@@ -50,10 +50,12 @@ export function PopularTable({ rows, sort = "picks", groupCount, groupId, action
                 {actions?.[r.horse.id] && <div style={{ marginTop: 3 }}>{actions[r.horse.id]}</div>}
               </td>
               <td className="num picks-cell">
-                <span className="big">{r.picks}</span>
-                <div className="bar"><span style={{ width: `${(r.picks / maxPicks) * 100}%` }} /></div>
+                {r.picks > 0 ? <>
+                  <span className="big">{r.picks}</span>
+                  <div className="bar"><span style={{ width: `${(r.picks / maxPicks) * 100}%` }} /></div>
+                </> : <span className="muted">-</span>}
               </td>
-              {!compact && <td className="num hide-sm">{groupCount > 0 ? `${Math.round((r.picks / groupCount) * 1000) / 10}%` : "-"}</td>}
+              {!compact && <td className="num hide-sm">{groupCount > 0 && r.picks > 0 ? `${Math.round((r.picks / groupCount) * 1000) / 10}%` : <span className="muted">-</span>}</td>}
               {!compact && showChange && <td className="num hide-sm">{r.weekPicks > 0 ? <span className="chg-up">+{r.weekPicks}</span> : <span className="muted">-</span>}</td>}
               <td className="c hide-sm sub">{r.starts === 0 ? "未出走" : `${r.starts}戦${r.wins}勝`}</td>
               <td className="num big">{r.points > 0 ? formatMan(r.points) : <span className="muted">-</span>}</td>
@@ -66,11 +68,11 @@ export function PopularTable({ rows, sort = "picks", groupCount, groupId, action
 }
 
 /** 絞り込み（総合・牡馬・牝馬）と並べ替え（指名数・賞金）の切り替え */
-export function BoardFilters({ base, sex, sort }: { base: string; sex: BoardSex; sort: BoardSort }) {
+export function BoardFilters({ base, sex, sort, defaultSort = "picks" }: { base: string; sex: BoardSex; sort: BoardSort; defaultSort?: BoardSort }) {
   const href = (s: BoardSex, o: BoardSort) => {
     const q = new URLSearchParams();
     if (s !== "all") q.set("sex", s === "牡" ? "colt" : "filly");
-    if (o !== "picks") q.set("sort", o);
+    if (o !== defaultSort) q.set("sort", o);
     const qs = q.toString();
     return qs ? `${base}?${qs}` : base;
   };
@@ -82,16 +84,16 @@ export function BoardFilters({ base, sex, sort }: { base: string; sex: BoardSex;
         ))}
       </div>
       <div className="seg">
+        <Link href={href(sex, "prize")} className={sort === "prize" ? "on" : ""}>注目馬（賞金順）</Link>
         <Link href={href(sex, "picks")} className={sort === "picks" ? "on" : ""}>指名数順</Link>
-        <Link href={href(sex, "prize")} className={sort === "prize" ? "on" : ""}>賞金順</Link>
       </div>
     </div>
   );
 }
 
-export function parseBoardParams(sp: { sex?: string; sort?: string }) {
+export function parseBoardParams(sp: { sex?: string; sort?: string }, defaultSort: BoardSort = "picks") {
   const sex: BoardSex = sp.sex === "colt" ? "牡" : sp.sex === "filly" ? "牝" : "all";
-  const sort: BoardSort = sp.sort === "prize" ? "prize" : "picks";
+  const sort: BoardSort = sp.sort === "prize" || sp.sort === "picks" ? sp.sort : defaultSort;
   return { sex, sort };
 }
 
@@ -151,4 +153,20 @@ export function SireBox({ board, limit = 10 }: { board: GenerationBoard; limit?:
       <Link href="/sires?sort=picks" className="box-more">種牡馬ランキングを見る ›</Link>
     </section>
   );
+}
+
+/** 全国のPOG指名ランキングへの案内（転載はせずリンクだけ） */
+export function ExternalRankingNote() {
+  return (
+    <p className="ext-note">
+      全国のPOGプレイヤーの指名数ランキングは
+      <a href="https://jra-van.jp/pog/" target="_blank" rel="noreferrer">JRA-VAN POG</a>
+      で見られます（外部サイト）。
+    </p>
+  );
+}
+
+export function boardTitle(sex: BoardSex, sort: BoardSort) {
+  const s = sex === "牡" ? "牡馬 " : sex === "牝" ? "牝馬 " : "";
+  return sort === "prize" ? `${s}注目馬30傑（賞金順）` : `${s}人気馬30傑（指名数順）`;
 }

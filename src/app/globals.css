@@ -345,3 +345,5 @@ table.sire-table .bar-week { background: #e0524a; }
 table.rank-table td.sub { white-space: nowrap; }
 table.rank-table .name-cell { min-width: 260px; }
 @media (max-width: 560px) { table.rank-table .name-cell { min-width: 0; } }
+.ext-note { font-size: 12px; color: var(--muted); margin: 8px 0 0; }
+.ext-note a { margin: 0 2px; font-weight: 700; }
