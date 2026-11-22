@@ -601,3 +601,17 @@ table.asia-terms caption { text-align: left; font-weight: 700; padding: 10px 12p
 .asia-others { display: flex; flex-wrap: wrap; gap: 8px; }
 .asia-others a { display: inline-flex; align-items: center; gap: 6px; background: var(--card); border: 1px solid var(--line); border-radius: 99px; padding: 6px 12px; font-size: 14px; color: var(--text); text-decoration: none; }
 .asia-others a:hover { background: var(--accent-weak); }
+
+/* ── 全国競馬場ガイド（/keibajo） ── */
+.kj-badge { flex: none; display: inline-flex; align-items: center; justify-content: center; min-width: 44px; height: 44px; padding: 0 4px; border-radius: 8px; font-weight: 900; font-size: 15px; color: #fff; background: #1f7a3d; }
+.kj-badge.nar { background: #b5541c; }
+.kj-mini { display: inline-block; font-size: 11px; font-weight: 700; color: #fff; background: #1f7a3d; border-radius: 99px; padding: 0 8px; vertical-align: middle; text-shadow: none; }
+.kj-mini.nar { background: #b5541c; }
+.kj-region { margin: 14px 0 6px; font-size: 15px; color: var(--th-text); border-left: 4px solid #b5541c; padding-left: 8px; }
+table.kj-compare td, table.kj-compare th { white-space: nowrap; }
+@media (max-width: 640px) { table.kj-compare td, table.kj-compare th { white-space: normal; font-size: 13px; } }
+.kj-official { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; background: var(--card); border: 2px solid var(--gold); border-radius: 8px; padding: 10px 12px; margin: 0 0 12px; }
+.kj-official-h { font-weight: 900; font-size: 14px; color: var(--th-text); margin-right: 4px; }
+.kj-official .btn { font-size: 13px; padding: 6px 12px; }
+.kj-official .btn.ghost { background: var(--card); color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.kj-official-note { flex-basis: 100%; font-size: 12px; }
