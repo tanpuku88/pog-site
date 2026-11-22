@@ -44,6 +44,7 @@ export type JapanRoute = {
   links?: { label: string; url: string }[]; // 公式の時刻表など
 };
 
+export type OfficialSite = { name: string; desc: string; url: string };
 export type Photo = { src: string; alt: string; credit: string; license: string; page: string };
 
 export type CountryGuide = {
@@ -72,6 +73,7 @@ export type CountryGuide = {
   fromJapan?: JapanRoute[];
   fromJapanNote?: string;
   photos?: Photo[];
+  official?: OfficialSite[];
 };
 
 export type CountryStub = { slug: string; name: string; flag: string; note: string };
