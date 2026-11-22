@@ -690,8 +690,8 @@ table.kj-compare td, table.kj-compare th { white-space: nowrap; }
 }
 
 /* ---- 表を鮮やかに ---- */
-.group-horses thead th, .group-table thead th { background: linear-gradient(180deg, var(--head-2), var(--head)); color: var(--head-text); border-bottom: 2px solid var(--gold); }
-.group-horses thead th a, .group-table thead th a { color: var(--head-text); }
+table.list.group-horses thead th, table.list.group-table thead th { background: linear-gradient(180deg, var(--head-2), var(--head)); color: var(--head-text); border-bottom: 2px solid var(--gold); }
+table.list.group-horses thead th a, table.list.group-table thead th a { color: var(--head-text); }
 .group-horses tbody tr.won { background: linear-gradient(90deg, #fff4d6 0, #fffdf5 40%, #fff 100%); }
 .group-horses tbody tr.won td:first-child { box-shadow: inset 4px 0 0 var(--gold); }
 .rec-badge { display: inline-block; min-width: 3.6em; text-align: center; border-radius: 4px; padding: 1px 6px; font-size: 12px; font-weight: 700; background: #eef2ef; color: var(--th-text); }

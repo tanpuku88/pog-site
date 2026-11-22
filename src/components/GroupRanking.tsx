@@ -48,7 +48,7 @@ export async function GroupRanking({ kind, sort }: { kind: Kind; sort?: string }
               <tr>
                 <th className="c">順位</th>
                 <th>{kind.label}</th>
-                <th className="num">2歳<br />馬</th>
+                <th className="num hide-sm">2歳<br />馬</th>
                 <th className="num">勝ち<br />上がり</th>
                 <th className="num">勝率</th>
                 <th className="num">本賞金</th>
@@ -75,8 +75,8 @@ export async function GroupRanking({ kind, sort }: { kind: Kind; sort?: string }
                       <Link className="horse-name" href={groupHref(kind, r.sire)} title={r.sire}>{shortName(r.sire)}</Link>
                       {r.top && <div className="sub show-sm-inline">代表 {r.top.name}</div>}
                     </td>
-                    <td className="num">{r.horses}<div className="sub">出走{r.starters}</div></td>
-                    <td className="num">{r.winners}頭<div className="sub">{r.winnerRate !== null ? `率${r.winnerRate.toFixed(0)}%` : "-"}</div></td>
+                    <td className="num hide-sm">{r.horses}<div className="sub">出走{r.starters}</div></td>
+                    <td className="num">{r.winners}頭<div className="sub">{r.starters > 0 ? `/出走${r.starters}` : "-"}</div></td>
                     <td className="num">{r.runs > 0 ? <span className={`rate-pill${r.winRate >= 15 ? " hot" : ""}`}>{r.winRate.toFixed(1)}%</span> : <span className="muted">-</span>}<div className="sub">{r.runs > 0 ? `${r.runs}戦` : ""}</div></td>
                     <td className="num big">{r.points > 0 ? formatMan(r.points) : <span className="muted">0</span>}</td>
                     <td className="graph hide-sm">
