@@ -28,7 +28,7 @@ export async function GroupRanking({ kind, sort }: { kind: Kind; sort?: string }
       <DataTabs current={kind} />
       <h1 style={{ marginBottom: 4 }}>{season.crop_year}年生まれ世代 {kind.label}ランキング</h1>
       <p className="muted" style={{ marginTop: 0 }}>
-        {kind.lead}をPOG向けにまとめました（このサイトに登録されている{horseCount.toLocaleString()}頭・中央のレースのみ・賞金は万円）。
+        {kind.lead}をPOG向けにまとめました（このサイトに登録されている{horseCount.toLocaleString()}頭・中央・地方のレース・賞金は万円）。
         勝ち上がり率は「1勝以上した頭数 ÷ 出走した頭数」です。
       </p>
       <div className="seg seg-wrap" style={{ marginBottom: 10 }}>

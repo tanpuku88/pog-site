@@ -61,6 +61,10 @@ export const horseListByAgeUrl = (age: number, page: number) =>
   `https://db.netkeiba.com/?pid=horse_list&match=partial_match&under_age=${age}&over_age=${age}&sort=name&list=100&page=${page}`;
 export const raceListUrl = (yyyymmdd: string) =>
   `https://race.netkeiba.com/top/race_list_sub.html?kaisai_date=${yyyymmdd}`;
+export const narRaceListUrl = (yyyymmdd: string) =>
+  `https://nar.netkeiba.com/top/race_list_sub.html?kaisai_date=${yyyymmdd}`;
+export const narShutubaUrl = (raceId: string) =>
+  `https://nar.netkeiba.com/race/shutuba.html?race_id=${raceId}`;
 export const shutubaUrl = (raceId: string) =>
   `https://race.netkeiba.com/race/shutuba.html?race_id=${raceId}`;
 

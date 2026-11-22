@@ -15,6 +15,10 @@ on:
         description: "この日まで（YYYY-MM-DD、空なら今日）"
         required: false
         default: ""
+      sources:
+        description: "読む先（jra,nar のどちらか、または両方。空なら両方）"
+        required: false
+        default: ""
   schedule:
     # 毎日 23:00（日本時間）。直近2日のレースに出た2歳馬の成績を読む
     - cron: "0 14 * * *"
@@ -43,6 +47,7 @@ jobs:
           CROP_YEAR: ${{ inputs.crop_year }}
           FROM_DATE: ${{ inputs.from_date }}
           TO_DATE: ${{ inputs.to_date }}
+          RACE_SOURCES: ${{ inputs.sources }}
           DAYS_BACK: ${{ github.event_name == 'schedule' && '2' || '' }}
           # まとめて取り込むときは、ほかの取り込みと重なってもnetkeibaに負担をかけないよう間隔を広めに
           NETKEIBA_INTERVAL_MS: ${{ github.event_name == 'schedule' && '3000' || '4000' }}
@@ -50,7 +55,7 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
       # 時間切れで途中までだったら、続きの日付から自動でもう一度動かす
       - if: ${{ github.event_name != 'schedule' && steps.runners.outputs.more == 'true' }}
-        run: gh workflow run import-runners.yml --ref main -f crop_year="${{ inputs.crop_year }}" -f from_date="${{ inputs.from_date }}" -f to_date="${{ steps.runners.outputs.next_to }}"
+        run: gh workflow run import-runners.yml --ref main -f crop_year="${{ inputs.crop_year }}" -f from_date="${{ inputs.from_date }}" -f to_date="${{ steps.runners.outputs.next_to }}" -f sources="${{ inputs.sources }}"
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}

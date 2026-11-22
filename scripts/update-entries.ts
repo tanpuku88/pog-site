@@ -1,12 +1,12 @@
-// 今日から3日先までのJRAの出馬表を見て、指名馬の出走予定を保存する。
-// GitHub Actions から木・金・土の夕方に実行する。
+// 今日から3日先までの出馬表（中央・地方）を見て、指名馬の出走予定と新馬戦の出走馬を保存する。
+// GitHub Actions から毎日夕方に実行する（地方は平日も開催があるため）。
 import { adminDb, pickedHorseIds } from "./db";
-import { politeFetch, raceListUrl, shutubaUrl } from "../src/lib/netkeiba/fetch";
-import { parseRaceList, parseShutuba } from "../src/lib/netkeiba/parse";
+import { politeFetch } from "../src/lib/netkeiba/fetch";
+import { parseShutuba } from "../src/lib/netkeiba/parse";
+import { enabledSources, isShinba } from "../src/lib/netkeiba/sources";
 import { syncHorse } from "../src/lib/horse-sync";
 
 const MAX_NEW_HORSES = Number(process.env.MAX_NEW_HORSES ?? 300);
-const isShinba = (name: string | null) => !!name && name.includes("新馬");
 
 const DAYS_AHEAD = Number(process.env.ENTRY_DAYS_AHEAD ?? 3);
 
@@ -26,15 +26,25 @@ async function main() {
   const rows: Record<string, unknown>[] = [];
   // 新馬戦は指名馬に限らず全出走馬を保存する（新馬戦ページ用）
   const shinbaRunners: { id: string; row: Record<string, unknown> }[] = [];
-  for (let i = 0; i <= DAYS_AHEAD; i++) {
+  for (let i = 0; i <= DAYS_AHEAD; i++) for (const src of enabledSources()) {
     const date = jstDate(i);
-    const list = await politeFetch(raceListUrl(date.replaceAll("-", "")));
-    const raceIds = parseRaceList(list.html);
+    let raceIds: string[] = [];
+    try {
+      raceIds = src.parseList((await politeFetch(src.listUrl(date.replaceAll("-", "")))).html);
+    } catch (e) {
+      console.warn(`${date} ${src.label}: レース一覧を読めませんでした ${(e as Error).message}`);
+      continue;
+    }
     if (raceIds.length === 0) continue;
-    console.log(`${date}: ${raceIds.length}レース`);
+    console.log(`${date} ${src.label}: ${raceIds.length}レース`);
     for (const raceId of raceIds) {
-      const page = await politeFetch(shutubaUrl(raceId));
-      const s = parseShutuba(raceId, page.html);
+      let s;
+      try {
+        s = parseShutuba(raceId, (await politeFetch(src.shutubaUrl(raceId))).html);
+      } catch (e) {
+        console.warn(`  ${raceId}: 出馬表を読めませんでした ${(e as Error).message}`);
+        continue;
+      }
       const shinba = isShinba(s.race_name);
       if (shinba) shinbaRunners.push(...s.horse_ids.map((id) => ({ id, row: { race_id: raceId, race_date: date, venue: s.venue, race_no: s.race_no, race_name: s.race_name, post_time: s.post_time } })));
       for (const horseId of s.horse_ids) {

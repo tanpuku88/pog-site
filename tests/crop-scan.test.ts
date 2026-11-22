@@ -1,10 +1,11 @@
 import { describe, it, expect } from "vitest";
-import { cropIdFirst, cropIdUpper, nextScanNumber, reachedEnd } from "../src/lib/crop-scan";
+import { cropIdFirst, cropIdUpper, foreignIdFirst, nextScanNumber, reachedEnd } from "../src/lib/crop-scan";
 
 describe("crop-scan", () => {
   it("世代の最初と上限のID", () => {
     expect(cropIdFirst(2024)).toBe("2024100001");
     expect(cropIdUpper(2024)).toBe("2024200000");
+    expect(foreignIdFirst(2024)).toBe("2024110001");
   });
   it("前回の続きから調べる", () => {
     expect(nextScanNumber(2024, null)).toBe(2024100001);

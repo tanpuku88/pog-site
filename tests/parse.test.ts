@@ -157,3 +157,21 @@ describe("RSSの解析", () => {
     expect(parseFeed(xml, "blog")[0]).toMatchObject({ title: "新馬戦回顧", url: "https://ex.com/p1" });
   });
 });
+
+import { parseNarRaceList, venueOfRaceId } from "../src/lib/netkeiba/parse";
+import { isShinba } from "../src/lib/netkeiba/sources";
+
+describe("地方競馬", () => {
+  it("レース一覧から地方の race_id を集め、ばんえいと中央は除く", () => {
+    const html = `<a href="../race/shutuba.html?race_id=202644112201">1R</a>
+      <a href="?race_id=202630112205">門別</a><a href="?race_id=202665112201">帯広</a><a href="?race_id=202605050811">東京</a>`;
+    expect(parseNarRaceList(html)).toEqual(["202630112205", "202644112201"]);
+  });
+  it("競馬場名と新馬戦の判定", () => {
+    expect(venueOfRaceId("202644112201")).toBe("大井");
+    expect(venueOfRaceId("202605050811")).toBe("東京");
+    expect(isShinba("2歳新馬")).toBe(true);
+    expect(isShinba("フレッシュチャレンジ")).toBe(true);
+    expect(isShinba("2歳未勝利")).toBe(false);
+  });
+});

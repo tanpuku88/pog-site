@@ -1,63 +1,53 @@
-// netkeiba の馬一覧・検索フォームの形を調べるための診断スクリプト（データベースには書き込まない）。
+// netkeiba のページの形を調べるための診断スクリプト（データベースには書き込まない）。
 //   npm run probe:netkeiba
 import * as cheerio from "cheerio";
-import { politeFetch, horsePageUrl } from "../src/lib/netkeiba/fetch";
-import { parseHorseSearch, parseHorseProfile } from "../src/lib/netkeiba/parse";
+import { politeFetch, horsePageUrl, narRaceListUrl, narShutubaUrl } from "../src/lib/netkeiba/fetch";
+import { parseHorseProfile, parseNarRaceList, parseShutuba } from "../src/lib/netkeiba/parse";
 
-const BASE = "https://db.netkeiba.com/";
 
-async function showForm(url: string) {
-  const page = await politeFetch(url);
-  const $ = cheerio.load(page.html);
-  console.log(`\n== フォーム ${url} -> ${page.url}`);
-  console.log(`title: ${$("title").text().trim()}`);
-  $("form").each((i, f) => {
-    const form = $(f);
-    const fields: string[] = [];
-    form.find("input, select").each((_, el) => {
-      const e = $(el);
-      const name = e.attr("name");
-      if (!name) return;
-      const type = e.is("select") ? `select(${e.find("option").slice(0, 6).map((_, o) => $(o).attr("value")).get().join("|")})` : e.attr("type") ?? "text";
-      fields.push(`${name}=${type}${e.attr("value") ? `:${e.attr("value")}` : ""}`);
+async function profileLine(id: string) {
+  try {
+    const p = await politeFetch(horsePageUrl(id));
+    const prof = parseHorseProfile(id, p.html);
+    const $ = cheerio.load(p.html);
+    let origin = "";
+    $("table.db_prof_table tr").each((_, tr) => {
+      if ($(tr).find("th").text().includes("産地")) origin = $(tr).find("td").text().trim();
     });
-    console.log(`form#${i} action=${form.attr("action")} method=${form.attr("method")}\n  ${fields.join("\n  ")}`);
-  });
+    return prof ? `${prof.name}（${prof.birth_year} 父${prof.sire} 産地${origin || "?"}）` : "なし";
+  } catch (e) {
+    return `失敗 ${(e as Error).message}`;
+  }
 }
 
-async function tryList(label: string, url: string) {
-  const page = await politeFetch(url);
-  const $ = cheerio.load(page.html);
-  const hits = parseHorseSearch(page.html);
-  const years = new Map<string, number>();
-  for (const h of hits) years.set(String(h.birth_year), (years.get(String(h.birth_year)) ?? 0) + 1);
-  const count = page.html.match(/([\d,]+)\s*件/)?.[0] ?? "-";
-  console.log(`\n== ${label}\n${url}\n-> ${page.url}\ntitle: ${$("title").text().trim()} / 件数表示: ${count} / ${hits.length}頭`);
-  console.log(`生年: ${[...years].map(([y, n]) => `${y}:${n}`).join(" ")}`);
-  console.log(`例: ${hits.slice(0, 3).map((h) => `${h.name}(${h.birth_year},父${h.sire})`).join(" / ")}`);
-  const pager = $("a").filter((_, a) => /page=|次/.test(($(a).attr("href") ?? "") + $(a).text())).slice(0, 3).map((_, a) => $(a).attr("href")).get();
-  console.log(`ページ送りリンク例: ${pager.join(" , ")}`);
+function jst(offset: number) {
+  return new Date(Date.now() + 9 * 3600_000 + offset * 86400_000).toISOString().slice(0, 10).replaceAll("-", "");
 }
 
 async function main() {
-  await showForm(`${BASE}?pid=horse_search_detail`);
-  const variants: [string, string][] = [
-    ["年齢2歳（現在）", `${BASE}?pid=horse_list&match=partial_match&under_age=2&over_age=2&sort=name&list=100&page=1`],
-    ["年齢2歳＋空の条件", `${BASE}?pid=horse_list&word=&match=partial_match&sire=&mare=&bms=&trainer=&owner=&breeder=&under_age=2&over_age=2&prize_min=&prize_max=&sort=prize&list=100`],
-    ["生年2024(birthyear)", `${BASE}?pid=horse_list&birthyear=2024&list=100`],
-    ["生年2024(birth_year)", `${BASE}?pid=horse_list&birth_year=2024&list=100`],
-  ];
-  for (const [label, url] of variants) {
-    try { await tryList(label, url); } catch (e) { console.log(`\n== ${label} 失敗: ${(e as Error).message}`); }
+  // 外国産馬（マル外）の馬IDの範囲を確かめる
+  console.log("== 外国産馬のID");
+  for (const n of [110001, 110002, 110005, 110010, 110015, 110016, 110020, 110030, 110050, 110080, 110100, 110150, 110200, 190001, 109990]) {
+    const id = `2024${n}`;
+    console.log(`ID ${id}: ${await profileLine(id)}`);
   }
-  // 馬IDの番号の範囲を確かめる（2024年生まれのIDは 2024 + 6桁）
-  for (const id of ["2024100001", "2024101000", "2024105000", "2024108000", "2024110000", "2024190001"]) {
+  for (const id of ["2023110001", "2023110050", "2023110100", "2023110150"]) console.log(`ID ${id}: ${await profileLine(id)}`);
+
+  // 地方競馬のレース一覧・出馬表（今日・明日・過去）
+  for (const off of [0, 1, -1, -30, -150]) {
+    const d = jst(off);
     try {
-      const p = await politeFetch(horsePageUrl(id));
-      const prof = parseHorseProfile(id, p.html);
-      console.log(`ID ${id}: ${prof ? `${prof.name}（${prof.birth_year} 父${prof.sire}）` : "なし"}`);
+      const list = await politeFetch(narRaceListUrl(d));
+      const ids = parseNarRaceList(list.html);
+      const all = [...new Set([...list.html.matchAll(/race_id=(\d{12})/g)].map((m) => m[1].slice(4, 6)))];
+      console.log(`\n== 地方 ${d}: ${ids.length}レース（場コード ${all.join(",")}） 例 ${ids.slice(0, 3).join(",")}`);
+      if (ids[0]) {
+        const sh = await politeFetch(narShutubaUrl(ids[0]));
+        const s = parseShutuba(ids[0], sh.html);
+        console.log(`  出馬表 ${ids[0]}: ${s.venue}${s.race_no}R「${s.race_name}」${s.post_time} 出走${s.horse_ids.length}頭 例${s.horse_ids.slice(0, 3).join(",")}`);
+      }
     } catch (e) {
-      console.log(`ID ${id}: 失敗 ${(e as Error).message}`);
+      console.log(`\n== 地方 ${d}: 失敗 ${(e as Error).message}`);
     }
   }
 }

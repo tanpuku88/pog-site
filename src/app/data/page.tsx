@@ -16,7 +16,7 @@ export const metadata = {
 export default async function DataHub() {
   const season = defaultSeason();
   const prev = previousSeason();
-  const rules = { ...season, include_non_jra: false };
+  const rules = { ...season, include_non_jra: true };
   const cur = await loadCropData(createAdminClient(), season.crop_year, rules);
   const today = todayJst();
   const tables = KIND_LIST.map((kind) => ({ kind, rows: sireTable(cur.horses, cur.picks, cur.tally, cur.races, today, kind.field) }));
@@ -63,7 +63,7 @@ export default async function DataHub() {
           );
         })}
       </div>
-      <p className="ext-note">中央のレースのみ・賞金は万円。勝ち上がり率は「1勝以上した頭数 ÷ 出走した頭数」。データはnetkeibaの公開ページから集計しています。</p>
+      <p className="ext-note">中央・地方のレース・賞金は万円。勝ち上がり率は「1勝以上した頭数 ÷ 出走した頭数」。データはnetkeibaの公開ページから集計しています。</p>
     </>
   );
 }

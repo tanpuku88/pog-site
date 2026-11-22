@@ -5,8 +5,9 @@
 //   CROP_YEAR=2023 FROM_DATE=2025-06-01 TO_DATE=2026-05-31 npm run import:runners
 import { appendFileSync } from "node:fs";
 import { adminDb } from "./db";
-import { politeFetch, raceListUrl, shutubaUrl } from "../src/lib/netkeiba/fetch";
-import { parseRaceList, parseShutuba } from "../src/lib/netkeiba/parse";
+import { politeFetch } from "../src/lib/netkeiba/fetch";
+import { parseShutuba } from "../src/lib/netkeiba/parse";
+import { enabledSources } from "../src/lib/netkeiba/sources";
 import { syncHorse } from "../src/lib/horse-sync";
 import { defaultSeason } from "../src/lib/standings";
 import { todayJst } from "../src/lib/util";
@@ -40,24 +41,27 @@ async function main() {
   let next: string | null = null;
   for (const date of dates) {
     if (Date.now() > deadline) { next = date; break; }
-    let raceIds: string[] = [];
-    try {
-      raceIds = parseRaceList((await politeFetch(raceListUrl(date.replaceAll("-", "")))).html);
-    } catch (e) {
-      console.warn(`${date}: レース一覧を読めませんでした ${(e as Error).message}`);
-      continue;
-    }
-    if (raceIds.length === 0) continue;
-
+    let raceCount = 0;
     const runners = new Set<string>();
-    for (const raceId of raceIds) {
+    for (const src of enabledSources()) {
+      let raceIds: string[] = [];
       try {
-        const s = parseShutuba(raceId, (await politeFetch(shutubaUrl(raceId))).html);
-        s.horse_ids.filter((id) => isCropId(id, cropYear)).forEach((id) => runners.add(id));
+        raceIds = src.parseList((await politeFetch(src.listUrl(date.replaceAll("-", "")))).html);
       } catch (e) {
-        console.warn(`  ${raceId}: 出馬表を読めませんでした ${(e as Error).message}`);
+        console.warn(`${date} ${src.label}: レース一覧を読めませんでした ${(e as Error).message}`);
+        continue;
+      }
+      raceCount += raceIds.length;
+      for (const raceId of raceIds) {
+        try {
+          const s = parseShutuba(raceId, (await politeFetch(src.shutubaUrl(raceId))).html);
+          s.horse_ids.filter((id) => isCropId(id, cropYear)).forEach((id) => runners.add(id));
+        } catch (e) {
+          console.warn(`  ${raceId}: 出馬表を読めませんでした ${(e as Error).message}`);
+        }
       }
     }
+    if (raceCount === 0) continue;
     const ids = [...runners];
     // レースの後にもう成績を読んだ馬は飛ばす
     const fetched = new Map<string, string | null>();
@@ -68,7 +72,7 @@ async function main() {
     }
     const todo = ids.filter((id) => !fetchedAfterRace(fetched.get(id) ?? null, date));
     skipped += ids.length - todo.length;
-    console.log(`${date}: ${raceIds.length}レース・${cropYear}年生まれ${ids.length}頭（成績を読む${todo.length}頭）`);
+    console.log(`${date}: ${raceCount}レース・${cropYear}年生まれ${ids.length}頭（成績を読む${todo.length}頭）`);
     for (const id of todo) {
       if (Date.now() > deadline) break;
       try {

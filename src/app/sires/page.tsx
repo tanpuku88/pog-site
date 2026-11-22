@@ -24,7 +24,7 @@ export default async function Sires({ searchParams }: { searchParams: Promise<{ 
   const { sort } = await searchParams;
   const sortKey: SortKey = sort && sort in SORTS ? (sort as SortKey) : "points";
   const season = defaultSeason();
-  const rules = { ...season, include_non_jra: false };
+  const rules = { ...season, include_non_jra: true };
   const { horses, picks, tally, races } = await loadCropData(createAdminClient(), season.crop_year, rules);
   const key = SORTS[sortKey].key;
   const all = sireTable(horses, picks, tally, races, todayJst());
@@ -41,7 +41,7 @@ export default async function Sires({ searchParams }: { searchParams: Promise<{ 
         <span className="muted">更新：{updated}</span>
       </div>
       <p className="muted" style={{ marginTop: 0 }}>
-        このサイトに登録されている{horses.length.toLocaleString()}頭を父ごとに集計（中央のレースのみ・賞金は万円）。
+        このサイトに登録されている{horses.length.toLocaleString()}頭を父ごとに集計（中央・地方のレース・賞金は万円）。
         AEIは「1頭あたりの賞金」が全体平均の何倍か、収得賞金は成績から計算した目安です。
       </p>
       <div className="seg" style={{ marginBottom: 10 }}>

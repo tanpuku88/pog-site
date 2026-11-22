@@ -8,6 +8,16 @@ export const JRA_VENUE_CODES: Record<string, string> = {
   "06": "中山", "07": "中京", "08": "京都", "09": "阪神", "10": "小倉",
 };
 
+/** 地方競馬の場コード（ばんえい＝帯広は対象外） */
+export const NAR_VENUE_CODES: Record<string, string> = {
+  "30": "門別", "35": "盛岡", "36": "水沢", "42": "浦和", "43": "船橋", "44": "大井", "45": "川崎",
+  "46": "金沢", "47": "笠松", "48": "名古屋", "50": "園田", "51": "姫路", "54": "高知", "55": "佐賀",
+};
+
+/** race_id（12桁）の場コードから競馬場名を返す。中央・地方どちらも */
+export const venueOfRaceId = (raceId: string): string | null =>
+  JRA_VENUE_CODES[raceId.slice(4, 6)] ?? NAR_VENUE_CODES[raceId.slice(4, 6)] ?? null;
+
 export type HorseProfile = {
   id: string;
   name: string;
@@ -207,10 +217,18 @@ export function parseHorseSearch(html: string): SearchHit[] {
 
 /** 開催日のレース一覧から race_id を集める（JRAのみ） */
 export function parseRaceList(html: string): string[] {
+  return raceIdsIn(html, JRA_VENUE_CODES);
+}
+
+/** 地方競馬の開催日のレース一覧から race_id を集める（ばんえいは除く） */
+export function parseNarRaceList(html: string): string[] {
+  return raceIdsIn(html, NAR_VENUE_CODES);
+}
+
+function raceIdsIn(html: string, codes: Record<string, string>): string[] {
   const ids = new Set<string>();
   for (const m of html.matchAll(/race_id=(\d{12})/g)) {
-    const venueCode = m[1].slice(4, 6);
-    if (JRA_VENUE_CODES[venueCode]) ids.add(m[1]);
+    if (codes[m[1].slice(4, 6)]) ids.add(m[1]);
   }
   return [...ids].sort();
 }
@@ -236,7 +254,7 @@ export function parseShutuba(raceId: string, html: string): Shutuba {
   return {
     race_id: raceId,
     race_name: orNull(clean($(".RaceName").first().text())),
-    venue: JRA_VENUE_CODES[raceId.slice(4, 6)] ?? null,
+    venue: venueOfRaceId(raceId),
     race_no: Number(raceId.slice(10, 12)),
     post_time: data01.match(/(\d{1,2}:\d{2})/)?.[1] ?? null,
     horse_ids: [...horseIds],
