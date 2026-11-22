@@ -7,7 +7,9 @@ export const korea: CountryGuide = {
   slug: "korea",
   name: "韓国",
   nameEn: "Korea",
-  flag: "🇰🇷",
+  flag: "kr",
+  scene: "mountain",
+  showMap: true,
   tagline: "100ウォンから買える、いちばん近い海外競馬",
   intro: [
     "日本から飛行機で2時間ほど。韓国の競馬は「韓国馬事会（KRA）」が開いていて、ソウル・釜山・済州の3つの競馬場（2026年からは永川も）で毎週末レースがあります。",

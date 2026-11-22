@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { COUNTRIES, COMING_SOON } from "@/content/asia";
-import { RaceHero } from "@/components/asia/Art";
+import { Flag, RaceHero } from "@/components/asia/Art";
 
 export const metadata: Metadata = {
   title: "アジア競馬ガイド｜旅行プラン・馬券の買い方・競馬場グルメ",
@@ -25,7 +25,7 @@ export default function AsiaTop() {
       <div className="asia-countries">
         {COUNTRIES.map((c) => (
           <Link key={c.slug} href={`/asia/${c.slug}`} className="asia-country">
-            <span className="asia-flag" aria-hidden>{c.flag}</span>
+            <span className="asia-flag"><Flag code={c.flag} name={c.name} /></span>
             <span>
               <strong>{c.name}の競馬</strong>
               <small>{c.tagline}</small>
@@ -35,7 +35,7 @@ export default function AsiaTop() {
         ))}
         {COMING_SOON.map((c) => (
           <div key={c.slug} className="asia-country soon">
-            <span className="asia-flag" aria-hidden>{c.flag}</span>
+            <span className="asia-flag"><Flag code={c.flag} name={c.name} /></span>
             <span>
               <strong>{c.name} <span className="pill">準備中</span></strong>
               <small>{c.note}</small>
@@ -43,7 +43,7 @@ export default function AsiaTop() {
           </div>
         ))}
       </div>
-      <p className="muted">イラストはすべてこのサイトのオリジナルです。開催日や料金は変わることがあるので、出かける前に各国の公式サイトも確認してください。</p>
+      <p className="muted">イラストはこのサイトのオリジナル、国旗の画像は flag-icons（MITライセンス）を使っています。開催日や料金は変わることがあるので、出かける前に各国の公式サイトも確認してください。</p>
     </>
   );
 }
