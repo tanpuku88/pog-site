@@ -44,6 +44,9 @@ export const OFFICIAL: Record<string, OfficialSite[]> = {
   thailand: [
     { name: "王立バンコク・スポーツクラブ（RBSC）", desc: "バンコクの競馬の主催クラブ（2026年11月はサイトがメンテナンス中。LINE @RBSC でも問い合わせ可）", url: "https://www.rbsc.org/" },
   ],
+  china: [
+    { name: "香港ジョッキークラブ（HKJC）", desc: "従化競馬場を運営。開催の再開はここで発表", url: "https://www.hkjc.com/" },
+  ],
   turkey: [
     { name: "トルコ・ジョッキークラブ（TJK）", desc: "トルコ競馬の主催者。開催日程・出馬表・結果", url: "https://www.tjk.org/" },
   ],

@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: { params: Promise<{ country: 
   const { country } = await params;
   const c = findCountry(country);
   if (!c) return {};
-  const title = `${c.name}競馬ガイド｜${c.tracks[0].name}への行き方・馬券の買い方・旅行プラン`;
+  const title = `${c.name}競馬ガイド｜${c.tracks[0].name}への行き方・楽しみ方・旅行プラン`;
   const description = seoDescription(c);
   const ph = c.photos?.[0];
   const images = ph ? [{ url: ph.src, alt: ph.alt }] : undefined;

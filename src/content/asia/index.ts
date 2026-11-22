@@ -15,12 +15,15 @@ import { kyrgyzstan } from "./kyrgyzstan";
 import { thailand } from "./thailand";
 import { oman } from "./oman";
 import { pakistan } from "./pakistan";
+import { china } from "./china";
+import { indonesia } from "./indonesia";
+import { iran } from "./iran";
 import { PHOTOS } from "./photos";
 import { ROUTES } from "./routes";
 import { OFFICIAL } from "./official";
 
 /** 公開中の国。新しい国はここに足す */
-export const COUNTRIES: CountryGuide[] = [korea, hongkong, thailand, mongolia, kazakhstan, kyrgyzstan, uae, saudi, qatar, bahrain, oman, india, pakistan, malaysia, philippines, turkey].map((c) => ({
+export const COUNTRIES: CountryGuide[] = [korea, hongkong, china, mongolia, kazakhstan, kyrgyzstan, thailand, malaysia, indonesia, philippines, india, pakistan, uae, saudi, qatar, bahrain, oman, iran, turkey].map((c) => ({
   ...c,
   fromJapan: c.fromJapan ?? ROUTES[c.slug],
   photos: c.photos ?? PHOTOS[c.slug],

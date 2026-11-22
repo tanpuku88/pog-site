@@ -9,6 +9,18 @@ const page = (name: string) => `https://commons.wikimedia.org/wiki/File:${name}`
 const p = (path: string, name: string, alt: string, credit: string, license: string): Photo => ({ src: thumb(path, name), alt, credit, license, page: page(name) });
 
 export const PHOTOS: Record<string, Photo[]> = {
+  china: [
+    p("f/fe", "Guangzhou_Skyline_20210522-01.jpg", "広州の街並み（従化競馬場は広州市の北部）", "中少", "CC BY-SA 4.0"),
+  ],
+  indonesia: [
+    p("6/6b", "The_Hamengku_Buwono_X_King%27s_Cup_Horse_Race_2025_in_Bantul%2C_Special_Region_of_Yogyakarta%2C_Indonesia.jpg", "2025年ハメンクブウォノ10世カップ（バントゥル）", "Czsalmon", "CC0"),
+    p("7/7e", "Pacuan_Kuda_Tradisional_Dataran_Tinggi_Gayo._Aceh.jpg", "アチェ州ガヨ高原の伝統競馬", "Laodeiqbal", "CC BY-SA 4.0"),
+    { src: "https://upload.wikimedia.org/wikipedia/commons/b/b1/Pacuan_Kuda_Pulomas.jpg", alt: "1971年のプロマス競馬場（ジャカルタ）", credit: "Indonesian Press Photo Service", license: "パブリックドメイン", page: page("Pacuan_Kuda_Pulomas.jpg") },
+  ],
+  iran: [
+    p("d/d1", "%D9%85%D8%B3%D8%A7%D8%A8%D9%82%D8%A7%D8%AA_%D8%A7%D8%B3%D8%A8_%D8%AF%D9%88%D8%A7%D9%86%DB%8C_%DA%AF%D9%86%D8%A8%D8%AF_%DA%A9%D8%A7%D9%88%D9%88%D8%B3_Horse_racing_In_Iran-_Gonbad-e_Kavus_04.jpg", "ゴンバデ・カーヴースの競馬", "Mostafameraji", "CC BY-SA 4.0"),
+    p("6/63", "%D9%85%D8%B3%D8%A7%D8%A8%D9%82%D8%A7%D8%AA_%D8%A7%D8%B3%D8%A8_%D8%AF%D9%88%D8%A7%D9%86%DB%8C_%DA%AF%D9%86%D8%A8%D8%AF_%DA%A9%D8%A7%D9%88%D9%88%D8%B3_Horse_racing_In_Iran-_Gonbad-e_Kavus_09.jpg", "ゴンバデ・カーヴースの競馬", "Mostafameraji", "CC BY-SA 4.0"),
+  ],
   mongolia: [
     p("3/3b", "Horse_race_in_Mongolia_Naadam.jpg", "ナーダムの競馬で草原を走る馬と子ども騎手", "Orgio89", "CC BY 3.0"),
     p("9/96", "Young_Naadam_Horse_Racers_in_Mongolia_-_2010.jpg", "ゴールに飛びこむ若い騎手たち（2010年）", "FischerFotos", "CC BY-SA 4.0"),
