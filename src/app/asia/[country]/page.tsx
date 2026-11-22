@@ -14,7 +14,9 @@ export async function generateMetadata({ params }: { params: Promise<{ country: 
   const { country } = await params;
   const c = findCountry(country);
   if (!c) return {};
+  const ph = c.photos?.[0];
   return {
+    ...(ph ? { openGraph: { images: [{ url: ph.src, alt: ph.alt }] } } : {}),
     title: `${c.name}競馬ガイド｜行き方・馬券の買い方・旅行プラン・グルメ`,
     description: `${c.name}の競馬を旅行で楽しむガイド。${c.tagline}。競馬場への行き方、馬券の買い方、モデルプラン、大レース、文化と地元グルメまで。`,
     alternates: { canonical: `/asia/${c.slug}` },
@@ -24,12 +26,15 @@ export async function generateMetadata({ params }: { params: Promise<{ country: 
 const MENU = [
   ["tracks", "競馬場"],
   ["howto", "遊び方"],
+  ["access", "日本からの行き方"],
   ["plans", "旅行プラン"],
   ["races", "大レース"],
   ["culture", "文化"],
   ["food", "グルメ"],
   ["manners", "注意点"],
 ] as const;
+
+const MODE: Record<string, string> = { plane: "飛行機", train: "電車", subway: "地下鉄", bus: "バス", taxi: "車", walk: "徒歩", ship: "船" };
 
 const fmtDate = (d: string) => d.replace(/^(\d{4})-(\d{2})-(\d{2})/, (_, y, m, dd) => `${y}年${Number(m)}月${Number(dd)}日`);
 
@@ -58,6 +63,21 @@ export default async function CountryPage({ params }: { params: Promise<{ countr
         {c.intro.map((p, i) => <p key={i}>{p}</p>)}
         <p className="muted">内容は{fmtDate(c.updated)}時点で公式資料などから確認したものです。</p>
       </div>
+
+      {c.photos && c.photos.length > 0 && (
+        <div className={`asia-photos n${Math.min(c.photos.length, 3)}`}>
+          {c.photos.map((ph) => (
+            <figure key={ph.src} className="asia-photo">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={ph.src} alt={ph.alt} loading="lazy" decoding="async" />
+              <figcaption>
+                {ph.alt}
+                <span>写真：<a href={ph.page} target="_blank" rel="noopener noreferrer">{ph.credit}</a>（{ph.license}／Wikimedia Commons）</span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      )}
 
       <div className="stats">
         {c.quickFacts.map((f) => (
@@ -100,6 +120,33 @@ export default async function CountryPage({ params }: { params: Promise<{ countr
           </tbody>
         </table>
       </div>
+
+      {c.fromJapan && c.fromJapan.length > 0 && (
+        <>
+          <div className="sec-title" id="access"><h2>日本からの行き方（東京・広島）</h2></div>
+          <p className="asia-note">ここに書いた時刻・便名は<b>2026年11月時点の時刻表をもとにした例</b>です。便は曜日や季節で変わるので、出発前にかならず下の公式時刻表で確認してください。</p>
+          <div className="asia-routes">
+            {c.fromJapan.map((r) => (
+              <article key={r.title} className={`card asia-route from-${r.from === "東京" ? "tokyo" : "hiroshima"}`}>
+                <p className="asia-route-from">{r.from}から</p>
+                <h3>{r.title}</h3>
+                <p className="muted">{r.summary}</p>
+                <ol className="asia-route-steps">
+                  {r.steps.map((st, i) => (
+                    <li key={i}>
+                      <span className={`asia-mode m-${st.mode}`}>{MODE[st.mode]}</span>
+                      <div>{st.time && <time>{st.time}</time>}<span>{st.text}</span></div>
+                    </li>
+                  ))}
+                </ol>
+                {r.links && (
+                  <p className="asia-route-links">公式の時刻表：{r.links.map((l, i) => <span key={l.url}>{i > 0 && "／"}<a href={l.url} target="_blank" rel="noopener noreferrer">{l.label}</a></span>)}</p>
+                )}
+              </article>
+            ))}
+          </div>
+        </>
+      )}
 
       <div className="sec-title" id="plans"><h2>モデル旅行プラン</h2></div>
       <div className="asia-plans">
@@ -174,7 +221,7 @@ export default async function CountryPage({ params }: { params: Promise<{ countr
             <li key={s.url}><a href={s.url} target="_blank" rel="noopener noreferrer">{s.label}</a> <span className="muted">（{s.date}）</span></li>
           ))}
         </ul>
-        <p className="muted" style={{ marginBottom: 0 }}>イラストはすべてこのサイトのオリジナルです。料金・時間は目安で、変わることがあります。馬券は無理のない範囲で楽しみましょう。</p>
+        <p className="muted" style={{ marginBottom: 0 }}>イラストはこのサイトのオリジナルです。写真はWikimedia Commonsのフリーライセンス写真で、撮影者とライセンスを各写真の下に載せています。料金・時間は目安で、変わることがあります。馬券は無理のない範囲で楽しみましょう。</p>
       </div>
 
       <p style={{ textAlign: "center", marginTop: 24 }}><Link href="/asia" className="btn">ほかの国を見る</Link></p>

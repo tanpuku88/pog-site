@@ -24,7 +24,11 @@ export default function AsiaTop() {
       <div className="sec-title"><h2>国をえらぶ</h2></div>
       <div className="asia-countries">
         {COUNTRIES.map((c) => (
-          <Link key={c.slug} href={`/asia/${c.slug}`} className="asia-country">
+          <Link key={c.slug} href={`/asia/${c.slug}`} className={c.photos?.[0] ? "asia-country has-photo" : "asia-country"}>
+            {c.photos?.[0] && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img className="asia-country-thumb" src={c.photos[0].src} alt="" loading="lazy" decoding="async" />
+            )}
             <span className="asia-flag"><Flag code={c.flag} name={c.name} /></span>
             <span>
               <strong>{c.name}の競馬</strong>
@@ -43,7 +47,7 @@ export default function AsiaTop() {
           </div>
         ))}
       </div>
-      <p className="muted">イラストはこのサイトのオリジナル、国旗の画像は flag-icons（MITライセンス）を使っています。開催日や料金は変わることがあるので、出かける前に各国の公式サイトも確認してください。</p>
+      <p className="muted">イラストはこのサイトのオリジナル、国旗の画像は flag-icons（MITライセンス）、写真は Wikimedia Commons のフリーライセンス写真（撮影者とライセンスは各国のページに記載）を使っています。開催日や料金は変わることがあるので、出かける前に各国の公式サイトも確認してください。</p>
     </>
   );
 }
