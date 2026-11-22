@@ -91,7 +91,7 @@ export default async function CountryPage({ params }: { params: Promise<{ countr
 
       <div className="card flush">
         <table className="list asia-terms">
-          <caption>馬券の言葉（指さしで使えます）</caption>
+          <caption>{c.termsTitle ?? "馬券の言葉（指さしで使えます）"}</caption>
           <thead><tr><th>日本</th><th>現地</th><th>読み</th><th className="hide-sm">意味</th></tr></thead>
           <tbody>
             {c.terms.map((t) => (

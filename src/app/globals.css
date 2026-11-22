@@ -492,7 +492,7 @@ html { scroll-behavior: smooth; }
 .asia-flag { flex: none; line-height: 0; }
 .flag-img { display: inline-block; vertical-align: -2px; border-radius: 3px; box-shadow: 0 0 0 1px rgba(0,0,0,.12); object-fit: cover; }
 .asia-tracks.no-map { grid-template-columns: 1fr; }
-.asia-tracks.no-map .asia-track-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 0 12px; }
+.asia-tracks.no-map .asia-track-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 0 12px; }
 
 .asia-tracks { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 12px; align-items: start; }
 .asia-map-card { position: sticky; top: 52px; padding: 10px; }

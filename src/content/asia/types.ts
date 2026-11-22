@@ -49,6 +49,7 @@ export type CountryGuide = {
   tracks: Track[];
   howTo: Step[];
   terms: Term[];
+  termsTitle?: string;        // 言葉の表の見出し（なければ「馬券の言葉」）
   plans: Plan[];
   bigRaces: BigRace[];
   pogCorner: string[];        // POG好き向けの見どころ
