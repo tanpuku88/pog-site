@@ -36,8 +36,14 @@ export const PHOTOS: Record<string, Photo[]> = {
     p("5/5f", "Bombay18.jpg", "マハラクシュミ競馬場のスタンドとムンバイの高層ビル", "Aam422", "パブリックドメイン"),
   ],
   malaysia: [
-    p("1/15", "Selangor_Turf_Club_Racing_Package.jpg", "セランゴール・ターフクラブのコースを見下ろす観覧席", "STurfClub", "CC BY-SA 4.0"),
     p("8/87", "Kuala_Lumpur_Malaysia_Skyline-01.jpg", "クアラルンプールの街並み", "CEphoto, Uwe Aranas", "CC BY-SA 3.0"),
+    {
+      src: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/KITLV_-_80031_-_Kleingrothe%2C_C.J._-_Medan_-_Racetrack_at_Penang_Island%2C_Malaysia_-_circa_1910.tif/lossy-page1-960px-KITLV_-_80031_-_Kleingrothe%2C_C.J._-_Medan_-_Racetrack_at_Penang_Island%2C_Malaysia_-_circa_1910.tif.jpg",
+      alt: "1910年ごろのペナン島の競馬場（2025年に閉場）",
+      credit: "C.J. Kleingrothe",
+      license: "パブリックドメイン",
+      page: page("KITLV_-_80031_-_Kleingrothe%2C_C.J._-_Medan_-_Racetrack_at_Penang_Island%2C_Malaysia_-_circa_1910.tif"),
+    },
     p("d/d0", "Nasi_lemak_on_banana_leaf.jpg", "バナナの葉にのせたナシレマ", "Jpatokal", "CC BY-SA 4.0"),
   ],
   philippines: [
