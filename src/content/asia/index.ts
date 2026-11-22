@@ -1,12 +1,12 @@
 import type { CountryGuide, CountryStub } from "./types";
 import { korea } from "./korea";
+import { hongkong } from "./hongkong";
 
 /** 公開中の国。新しい国はここに足す */
-export const COUNTRIES: CountryGuide[] = [korea];
+export const COUNTRIES: CountryGuide[] = [korea, hongkong];
 
 /** 準備中の国（一覧に「準備中」として出す） */
 export const COMING_SOON: CountryStub[] = [
-  { slug: "hongkong", name: "香港", flag: "hk", note: "シャティン・ハッピーバレー。12月の香港国際競走" },
   { slug: "uae", name: "ドバイ（UAE）", flag: "ae", note: "メイダン競馬場。3月のドバイワールドカップ" },
   { slug: "saudi", name: "サウジアラビア", flag: "sa", note: "2月のサウジカップ。世界最高賞金級" },
   { slug: "qatar", name: "カタール", flag: "qa", note: "アルライヤン競馬場。アミール杯" },
