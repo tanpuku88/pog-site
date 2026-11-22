@@ -7,6 +7,8 @@ import { earnedPrize } from "./horse-summary";
 export type SireHorse = {
   id: string; name: string; sex: string | null; sire: string | null; dam: string | null; damsire: string | null; trainer: string | null;
   owner?: string | null; breeder?: string | null;
+  /** セリの落札価格・一口クラブの募集総額（万円） */
+  sale_price_man?: number | null; sale_name?: string | null; club_price_man?: number | null; sale_checked_at?: string | null;
 };
 
 /** 何でまとめるか（種牡馬・厩舎・馬主・生産牧場） */
@@ -66,7 +68,7 @@ const CHUNK = 150;
  * only を渡すと、その種牡馬・厩舎・馬主・生産牧場の馬だけを読む（個別ページ用に軽く）。
  */
 export async function loadCropData(db: SupabaseClient, cropYear: number, rules: Rules, only?: { field: GroupField; value: string }) {
-  const cols = "id, name, sex, sire, dam, damsire, trainer, owner, breeder";
+  const cols = "id, name, sex, sire, dam, damsire, trainer, owner, breeder, sale_price_man, sale_name, club_price_man, sale_checked_at";
   const horses = await pageAll<SireHorse>((a, b) => {
     let q = db.from("horses").select(cols).eq("birth_year", cropYear);
     if (only) q = q.eq(only.field, only.value);

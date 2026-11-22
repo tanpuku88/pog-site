@@ -15,7 +15,7 @@ export const loadPublicHorse = unstable_cache(
   async (id: string) => {
     const db = createAdminClient();
     const [{ data: horse }, { data: results }, { data: entries }, { count: picks }] = await Promise.all([
-      db.from("horses").select("id, name, sex, birth_year, sire, dam, damsire, trainer, owner, breeder, updated_at").eq("id", id).maybeSingle<PublicHorse>(),
+      db.from("horses").select("id, name, sex, birth_year, sire, dam, damsire, trainer, owner, breeder, sale_price_man, sale_name, sale_year, club_price_man, updated_at").eq("id", id).maybeSingle<PublicHorse>(),
       db.from("race_results").select("race_date, venue, race_name, race_id, finish, prize_man, is_jra").eq("horse_id", id).order("race_date", { ascending: false }),
       db.from("entries").select("race_id, race_date, venue, race_no, race_name, post_time").eq("horse_id", id).gte("race_date", todayJst()).order("race_date"),
       db.from("picks").select("horse_id", { count: "exact", head: true }).eq("horse_id", id),

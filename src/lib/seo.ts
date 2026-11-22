@@ -4,6 +4,7 @@ export type PublicHorse = {
   id: string; name: string; sex: string | null; birth_year: number | null;
   sire: string | null; dam: string | null; damsire: string | null;
   trainer: string | null; owner: string | null; breeder: string | null;
+  sale_price_man?: number | null; sale_name?: string | null; sale_year?: number | null; club_price_man?: number | null;
   updated_at: string | null;
 };
 

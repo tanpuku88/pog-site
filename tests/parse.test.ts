@@ -175,3 +175,21 @@ describe("地方競馬", () => {
     expect(isShinba("2歳未勝利")).toBe(false);
   });
 });
+
+import { parseSale, parseClubPrice, parseYenMan } from "../src/lib/netkeiba/parse";
+describe("セリ・募集価格", () => {
+  it("セリ取引価格を読む", () => {
+    expect(parseSale("330万円 (2025年 北海道サマーセール)")).toEqual({ sale_price_man: 330, sale_name: "北海道サマーセール", sale_year: 2025 });
+    expect(parseSale("1億5,400万円 (2025年 セレクトセール)")).toMatchObject({ sale_price_man: 15400, sale_name: "セレクトセール" });
+    expect(parseSale("-")).toEqual({ sale_price_man: null, sale_name: null, sale_year: null });
+  });
+  it("募集総額を計算する", () => {
+    expect(parseClubPrice("1口:2.2万円/400口")).toBe(880);
+    expect(parseClubPrice("1口:5,000円/2,000口")).toBe(1000);
+    expect(parseClubPrice("")).toBeNull();
+  });
+  it("億・万・円", () => {
+    expect(parseYenMan("2億円")).toBe(20000);
+    expect(parseYenMan("-")).toBeNull();
+  });
+});

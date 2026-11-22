@@ -29,6 +29,12 @@ export type HorseProfile = {
   trainer: string | null;
   owner: string | null;
   breeder: string | null;
+  /** セリの落札価格（万円）・セリの名前・年。セリを通っていなければ null */
+  sale_price_man: number | null;
+  sale_name: string | null;
+  sale_year: number | null;
+  /** 一口クラブの募集総額（万円）＝ 1口の価格 × 口数 */
+  club_price_man: number | null;
 };
 
 export type RaceResult = {
@@ -158,6 +164,8 @@ export function parseHorseProfile(id: string, html: string): HorseProfile | null
     trainer: orNull(prof.get("調教師") ?? ""),
     owner: orNull(prof.get("馬主") ?? ""),
     breeder: orNull(prof.get("生産者") ?? ""),
+    ...parseSale(prof.get("セリ取引価格") ?? ""),
+    club_price_man: parseClubPrice(prof.get("募集情報") ?? ""),
   };
 }
 
@@ -285,4 +293,31 @@ export function parseBloodTable($: cheerio.CheerioAPI): Pedigree {
 /** 血統ページ（/horse/ped/{id}/）から父・母・母父を読む */
 export function parsePedigreePage(html: string): Pedigree {
   return parseBloodTable(cheerio.load(html));
+}
+
+/** 「1億5,400万円」「330万円」「5,000円」→ 万円。読めなければ null */
+export function parseYenMan(s: string): number | null {
+  const t = clean(s).replace(/,/g, "");
+  const m = t.match(/(?:(\d+(?:\.\d+)?)億)?(?:(\d+(?:\.\d+)?)万)?(?:(\d+)円)?/);
+  if (!m || (!m[1] && !m[2] && !m[3])) return null;
+  const v = Number(m[1] ?? 0) * 10000 + Number(m[2] ?? 0) + Number(m[3] ?? 0) / 10000;
+  return Math.round(v * 100) / 100;
+}
+
+/** 「330万円 (2025年 北海道サマーセール)」→ 価格・セリ名・年。「-」なら全部 null */
+export function parseSale(s: string): { sale_price_man: number | null; sale_name: string | null; sale_year: number | null } {
+  const t = clean(s);
+  const price = /\d/.test(t) ? parseYenMan(t.split(/[(（]/)[0]) : null;
+  if (!price) return { sale_price_man: null, sale_name: null, sale_year: null };
+  const inner = t.match(/[(（]\s*(?:(\d{4})年)?\s*([^)）]*)[)）]/);
+  return { sale_price_man: price, sale_name: orNull(clean(inner?.[2] ?? "")), sale_year: inner?.[1] ? Number(inner[1]) : null };
+}
+
+/** 「1口:2.2万円/400口」→ 880（万円） */
+export function parseClubPrice(s: string): number | null {
+  const m = clean(s).match(/1口\s*[:：]\s*([\d.,億万]+円)\s*\/\s*([\d,]+)口/);
+  if (!m) return null;
+  const unit = parseYenMan(m[1]);
+  const n = Number(m[2].replace(/,/g, ""));
+  return unit && n ? Math.round(unit * n * 10) / 10 : null;
 }

@@ -6,6 +6,9 @@ import { groupHref, KINDS, loadGroupDetail, shortName, titleOf, topValues, winne
 import { defaultSeason } from "@/lib/standings";
 import { formatMan } from "@/lib/util";
 import { HorseLabel } from "./HorseLabel";
+import { dataComment, writtenComment } from "@/lib/comments";
+import { loadOverallRate } from "@/lib/overall";
+import { formatPrice, pricedHorses, returnRate } from "@/lib/sales";
 import { DataTabs } from "./DataTabs";
 
 
@@ -28,6 +31,20 @@ const RELATED: Record<Kind["field"], Kind[]> = {
 export async function GroupDetail({ kind, name }: { kind: Kind; name: string }) {
   const { season, prev, summary, prevSummary, rows, prevTop, horses } = await loadGroupDetail(createAdminClient(), kind, name);
   const rate = summary ? winnerRate(summary) : null;
+  const avgRate = await loadOverallRate(season.crop_year).catch(() => null);
+  const tallyMap = new Map(rows.map((r) => [r.h.id, r.t]));
+  const sold = pricedHorses(horses, tallyMap, "sale");
+  const club = pricedHorses(horses, tallyMap, "club");
+  const sum = (xs: { price: number; prize: number }[]) => xs.reduce((a, x) => ({ price: a.price + x.price, prize: a.prize + x.prize }), { price: 0, prize: 0 });
+  const soldSum = sum(sold), clubSum = sum(club);
+  const saleRate = returnRate(soldSum.prize, soldSum.price);
+  const written = writtenComment(kind.field, name);
+  const auto = summary ? dataComment(kind.field, kind.label, {
+    horses: summary.horses, starters: summary.starters, winners: summary.winners, points: summary.points,
+    topName: summary.top?.name ?? null, avgRate,
+    prevStarters: prevSummary?.starters ?? 0, prevWinners: prevSummary?.winners ?? 0,
+    sale: sold.length ? { sold: sold.length, price: soldSum.price, returnRate: saleRate } : null,
+  }) : "";
   const prevRate = prevSummary ? winnerRate(prevSummary) : null;
   const colts = horses.filter((h) => h.sex !== "牝").length;
   const subCol = kind.field === "trainer" ? KINDS.owner : KINDS.trainer;
@@ -52,11 +69,28 @@ export async function GroupDetail({ kind, name }: { kind: Kind; name: string }) 
         <div className="card muted">この{kind.label}の{season.crop_year}年生まれの馬は登録されていません。</div>
       ) : (
         <>
+          {(written || auto) && (
+            <section className="comment-card">
+              <div className="cc-head"><span className="cc-icon" aria-hidden>🗣</span>POG目線のひとこと</div>
+              {written?.tags && <div className="cc-tags">{written.tags.map((t) => <span key={t} className="pill">{t}</span>)}</div>}
+              {written && <p>{written.text}</p>}
+              {auto && <p>{auto}</p>}
+              <p className="cc-note">{written ? "上の文は運営の見立て（2026年11月時点）、下の文は今の数字から毎日自動で作っています。" : "今の数字から毎日自動で作っている文章です。"}</p>
+            </section>
+          )}
           <div className="stats">
             <div className="stat"><div className="k">2歳{kind.member}</div><div className="v">{summary.horses}<small>頭</small></div><div className="s">牡{colts}・牝{summary.horses - colts}</div></div>
             <div className="stat"><div className="k">勝ち上がり</div><div className="v">{summary.winners}<small>頭</small></div><div className="s">出走{summary.starters}頭{rate !== null ? `・率${rate.toFixed(1)}%` : ""}</div></div>
             <div className="stat"><div className="k">本賞金の合計</div><div className="v">{formatMan(summary.points)}<small>万円</small></div><div className="s">{summary.top ? `稼ぎ頭 ${summary.top.name}` : "まだ賞金なし"}</div></div>
             <div className="stat"><div className="k">延べ指名数</div><div className="v">{summary.picks}</div><div className="s">このサイトの全大会</div></div>
+            {(sold.length > 0 || club.length > 0) && (
+              <div className="stat">
+                <div className="k">{sold.length > 0 ? "セリで買われた馬" : "一口クラブの募集馬"}</div>
+                {sold.length > 0
+                  ? <><div className="v">{sold.length}<small>頭・回収率{saleRate !== null ? `${saleRate.toFixed(0)}%` : "-"}</small></div><div className="s">平均{formatPrice(Math.round(soldSum.price / sold.length))}円{club.length ? `・募集馬${club.length}頭` : ""}</div></>
+                  : <><div className="v">{club.length}<small>頭・回収率{returnRate(clubSum.prize, clubSum.price)?.toFixed(0) ?? "-"}%</small></div><div className="s">平均募集総額{formatPrice(Math.round(clubSum.price / club.length))}円</div></>}
+              </div>
+            )}
             <div className="stat stat-prev">
               <div className="k">前の世代（{prev.crop_year}年生まれ）</div>
               {prevSummary && prevSummary.starters > 0
@@ -85,13 +119,14 @@ export async function GroupDetail({ kind, name }: { kind: Kind; name: string }) 
           <div className="sec-title"><h2>{season.crop_year}年生まれの{kind.member}</h2><span className="muted">賞金の多い順</span></div>
           <div className="card flush scroll">
             <table className="list group-horses">
-              <thead><tr><th>馬名・血統</th><th className="hide-sm">{subCol.label}</th><th className="num">指名</th><th className="num">成績</th><th className="num">賞金</th></tr></thead>
+              <thead><tr><th>馬名・血統</th><th className="hide-sm">{subCol.label}</th><th className="num">指名</th><th className="num hide-sm">価格</th><th className="num">成績</th><th className="num">賞金</th></tr></thead>
               <tbody>
                 {rows.map(({ h, picks: n, t }) => (
                   <tr key={h.id}>
                     <td className="name-cell"><HorseLabel id={h.id} horse={kind.field === "sire" ? { ...h, sire: null } : h} /></td>
                     <td className="hide-sm sub">{h[subCol.field] ? <Link href={groupHref(subCol, h[subCol.field]!)}>{shortName(h[subCol.field]!)}</Link> : ""}</td>
                     <td className="num">{n || <span className="muted">-</span>}</td>
+                    <td className="num hide-sm sub">{h.sale_price_man ? <span title={h.sale_name ?? "セリ"}>{formatPrice(Number(h.sale_price_man))}</span> : h.club_price_man ? <span title="一口クラブの募集総額">募{formatPrice(Number(h.club_price_man))}</span> : "-"}</td>
                     <td className="num sub">{t.starts === 0 ? "未出走" : `${t.starts}戦${t.wins}勝`}</td>
                     <td className="num big">{t.points > 0 ? formatMan(t.points) : <span className="muted">-</span>}</td>
                   </tr>
