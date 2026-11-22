@@ -7,13 +7,15 @@ import { SITE_NAME, SITE_URL } from "@/config/site";
 const TITLE = "なくなった競馬場の記録｜目黒・根岸から福山・荒尾まで";
 const DESC = "日本ダービーが生まれた目黒競馬場、日本初の洋式競馬の根岸競馬場、そして2000年代に姿を消した中津・足利・高崎・宇都宮・荒尾・福山などの地方競馬場。歴史・名馬・跡地の今と訪ね方を記録します。";
 
+const OG = LOST_TRACKS.find((t) => t.slug === "meguro")?.photos?.[0];
+
 export const metadata: Metadata = {
   title: TITLE,
   description: DESC,
   keywords: ["廃止 競馬場", "なくなった競馬場", "競馬場 跡地", "目黒競馬場", "根岸競馬場", "福山競馬場", "荒尾競馬場", "高崎競馬場", "宇都宮競馬場"],
   alternates: { canonical: "/keibajo/haishi" },
-  openGraph: { title: TITLE, description: DESC, url: "/keibajo/haishi", type: "website", siteName: SITE_NAME, locale: "ja_JP" },
-  twitter: { card: "summary", title: TITLE, description: DESC },
+  openGraph: { title: TITLE, description: DESC, url: "/keibajo/haishi", type: "website", siteName: SITE_NAME, locale: "ja_JP", images: OG ? [{ url: OG.src, alt: OG.alt }] : undefined },
+  twitter: { card: OG ? "summary_large_image" : "summary", title: TITLE, description: DESC, images: OG ? [OG.src] : undefined },
 };
 
 const SORTED = [...LOST_TRACKS].sort((a, b) => a.closedYear - b.closedYear);
@@ -52,6 +54,7 @@ export default function LostTop() {
 
       <div className="card asia-intro">
         <p>日本の競馬は、幕末の横浜・根岸から始まりました。日本ダービーは目黒で生まれ、戦後は全国に地方競馬場ができました。</p>
+        <p>日本ダービーが初めて行われた1932年の写真や、明治の根岸競馬場の絵など、自由に使える昔の写真も各ページに載せています。</p>
         <p>2001年の中津から2013年の福山まで、地方競馬場は次々と姿を消しました。それでも跡地の道の形や記念碑、駅の像などに、いまも名残が見つかります。</p>
         <p className="muted">内容は2026年11月22日に、Wikipediaの各記事と自治体の公式ページで確認したものです。確認できなかったことは「確認できていません」と書いています。</p>
       </div>
@@ -68,7 +71,11 @@ export default function LostTop() {
       <div className="sec-title"><h2>競馬場ごとの記録</h2></div>
       <div className="asia-countries">
         {SORTED.map((t) => (
-          <Link key={t.slug} href={`/keibajo/haishi/${t.slug}`} className="asia-country">
+          <Link key={t.slug} href={`/keibajo/haishi/${t.slug}`} className={t.photos?.length ? "asia-country has-photo" : "asia-country"}>
+            {t.photos?.[0] && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img className="asia-country-thumb" src={t.photos[0].src} alt="" loading="lazy" decoding="async" />
+            )}
             <span className="kj-badge lost">{t.closedYear}</span>
             <span>
               <strong>{t.name}</strong>

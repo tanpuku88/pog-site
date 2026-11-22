@@ -3,6 +3,7 @@
 // 確認できなかったことは「確認できていません」と書く。1件足すとページが1つ増える。
 
 import type { Photo, Source } from "@/content/asia/types";
+import { LOST_PHOTOS } from "./lost-photos";
 
 export type LostTrack = {
   slug: string;
@@ -33,7 +34,7 @@ const W = (title: string) => `https://ja.wikipedia.org/wiki/${encodeURIComponent
 const wiki = (title: string): Source => ({ label: `Wikipedia「${title}」`, url: W(title), date: "2026-11-22 確認" });
 const LIST = wiki("日本の廃止・休止競馬場一覧");
 
-export const LOST_TRACKS: LostTrack[] = [
+const RAW: LostTrack[] = [
   {
     slug: "meguro",
     name: "目黒競馬場",
@@ -515,6 +516,8 @@ export const LOST_TRACKS: LostTrack[] = [
     sources: [wiki("福山競馬場"), wiki("エフピコアリーナふくやま"), LIST],
   },
 ];
+
+export const LOST_TRACKS: LostTrack[] = RAW.map((t) => ({ ...t, photos: t.photos ?? LOST_PHOTOS[t.slug] }));
 
 /** 個別ページはないが、記録として残す廃止競馬場（一覧ページより） */
 export const LOST_BRIEF: { name: string; pref: string; closed: string; now: string }[] = [
