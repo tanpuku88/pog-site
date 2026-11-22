@@ -489,7 +489,10 @@ html { scroll-behavior: smooth; }
 .asia-country.soon { border-left-color: var(--line); opacity: .8; }
 .asia-country strong { display: block; font-size: 16px; }
 .asia-country small { display: block; color: var(--muted); font-size: 12px; line-height: 1.45; }
-.asia-flag { font-size: 34px; line-height: 1; }
+.asia-flag { flex: none; line-height: 0; }
+.flag-img { display: inline-block; vertical-align: -2px; border-radius: 3px; box-shadow: 0 0 0 1px rgba(0,0,0,.12); object-fit: cover; }
+.asia-tracks.no-map { grid-template-columns: 1fr; }
+.asia-tracks.no-map .asia-track-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 0 12px; }
 
 .asia-tracks { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 12px; align-items: start; }
 .asia-map-card { position: sticky; top: 52px; padding: 10px; }
@@ -540,6 +543,7 @@ table.asia-terms caption { text-align: left; font-weight: 700; padding: 10px 12p
 
 @media (max-width: 760px) {
   .asia-tracks { grid-template-columns: 1fr; }
+  .asia-tracks.no-map .asia-track-list { grid-template-columns: 1fr; }
   .asia-map-card { position: static; max-width: 260px; margin: 0 auto; }
   .asia-hero { min-height: 260px; }
   .asia-hero-text { padding: 16px; }

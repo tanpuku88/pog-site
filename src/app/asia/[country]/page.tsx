@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { COUNTRIES, findCountry } from "@/content/asia";
-import { FoodIcon, RaceHero, TrackMap } from "@/components/asia/Art";
+import { Flag, FoodIcon, RaceHero, TrackMap } from "@/components/asia/Art";
 
 export const dynamicParams = false;
 
@@ -42,9 +42,9 @@ export default async function CountryPage({ params }: { params: Promise<{ countr
     <>
       <p className="crumb"><Link href="/asia">アジア競馬ガイド</Link> ＞ {c.name}</p>
       <section className="asia-hero">
-        <RaceHero className="asia-hero-art" />
+        <RaceHero className="asia-hero-art" scene={c.scene} sky={c.sky} />
         <div className="asia-hero-text">
-          <p className="lead-kicker">{c.flag} {c.nameEn.toUpperCase()} RACING GUIDE</p>
+          <p className="lead-kicker"><Flag code={c.flag} name={c.name} size={14} /> {c.nameEn.toUpperCase()} RACING GUIDE</p>
           <h1>{c.name}競馬で遊ぼう</h1>
           <p>{c.tagline}</p>
         </div>
@@ -66,8 +66,8 @@ export default async function CountryPage({ params }: { params: Promise<{ countr
       </div>
 
       <div className="sec-title" id="tracks"><h2>競馬場</h2></div>
-      <div className="asia-tracks">
-        <div className="card asia-map-card"><TrackMap tracks={c.tracks} /></div>
+      <div className={c.showMap ? "asia-tracks" : "asia-tracks no-map"}>
+        {c.showMap && <div className="card asia-map-card"><TrackMap tracks={c.tracks} /></div>}
         <div className="asia-track-list">
           {c.tracks.map((t) => (
             <article key={t.name} className="card asia-track" style={{ borderLeftColor: t.color }}>

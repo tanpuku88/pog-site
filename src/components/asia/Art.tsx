@@ -22,15 +22,78 @@ function Horse({ x, y, s = 1, coat = "#3b2516", silk = "#c0291f", cap = "#fff" }
   );
 }
 
-/** ページ上部の大きな絵：夕方の競馬場を駆ける3頭 */
-export function RaceHero({ className }: { className?: string }) {
+/** 国旗の画像（flag-icons、MITライセンス。public/flags/LICENSE.txt） */
+export function Flag({ code, name, size = 34 }: { code: string; name: string; size?: number }) {
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img src={`/flags/${code}.svg`} alt={`${name}の国旗`} width={Math.round(size * 4 / 3)} height={size} className="flag-img" />;
+}
+
+type Scene = "mountain" | "city" | "desert";
+
+function Backdrop({ scene }: { scene: Scene }) {
+  if (scene === "city") {
+    // 高層ビルが並ぶ夜景（香港・ドバイなど）
+    const b = [[20, 60], [50, 95], [78, 70], [100, 120], [128, 80], [150, 140], [176, 90], [200, 110], [226, 75], [380, 85], [404, 130], [430, 100], [456, 165], [480, 92], [506, 120], [532, 80], [560, 105], [590, 70], [612, 95]];
+    return (
+      <g>
+        <path d="M0 190 L120 150 L220 175 L330 140 L440 172 L560 150 L640 168 L640 210 L0 210Z" fill="#2a2446" opacity=".7" />
+        {b.map(([x, h], i) => (
+          <g key={i}>
+            <rect x={x} y={202 - h} width="22" height={h} fill={i % 2 ? "#1b1a33" : "#232046"} />
+            {Array.from({ length: Math.floor(h / 16) }).map((_, j) => (
+              <rect key={j} x={x + 5} y={208 - h + j * 16} width="4" height="5" fill="#ffd98a" opacity={(i + j) % 3 ? 0.55 : 0.15} />
+            ))}
+          </g>
+        ))}
+        <rect x="250" y="168" width="120" height="34" fill="#1b1a33" />
+        <polygon points="240,168 380,168 366,154 254,154" fill="#24224a" />
+      </g>
+    );
+  }
+  if (scene === "desert") {
+    // 砂丘とヤシの木（中東）
+    return (
+      <g>
+        <path d="M0 185 Q120 150 240 180 T480 172 T640 178 L640 210 L0 210Z" fill="#c98a4b" opacity=".75" />
+        <path d="M0 196 Q160 172 320 194 T640 190 L640 210 L0 210Z" fill="#a86b35" />
+        {[60, 540, 590].map((x, i) => (
+          <g key={i} transform={`translate(${x} 202)`}>
+            <path d="M0 0 Q4 -30 2 -58" stroke="#3d2a1c" strokeWidth="5" fill="none" />
+            {[-60, -25, 15, 50, 90].map((r, k) => (
+              <path key={k} d="M2 -58 q20 -6 34 8" stroke="#2f5a2f" strokeWidth="5" fill="none" strokeLinecap="round" transform={`rotate(${r} 2 -58)`} />
+            ))}
+          </g>
+        ))}
+        <rect x="200" y="160" width="240" height="42" fill="#2a2446" />
+        <path d="M190 160 Q320 120 450 160Z" fill="#363063" />
+        {Array.from({ length: 10 }).map((_, i) => <rect key={i} x={212 + i * 22} y="172" width="12" height="8" fill="#ffd98a" opacity=".55" />)}
+      </g>
+    );
+  }
   return (
-    <svg className={className} viewBox="0 0 640 300" role="img" aria-label="山並みを背に競馬場を走る3頭の馬のイラスト" preserveAspectRatio="xMidYMax slice">
+    <g>
+      <path d="M0 175 L60 130 L110 155 L170 105 L230 150 L290 120 L350 160 L420 112 L480 150 L540 125 L600 160 L640 140 L640 200 L0 200Z" fill="#3a2f55" opacity=".85" />
+      <path d="M0 190 L80 160 L150 182 L230 150 L320 185 L400 158 L490 186 L580 162 L640 180 L640 210 L0 210Z" fill="#2a2446" />
+      <g fill="#1b1a33">
+        <rect x="40" y="168" width="230" height="34" />
+        <polygon points="30,168 280,168 262,152 48,152" fill="#24224a" />
+        {Array.from({ length: 11 }).map((_, i) => (
+          <rect key={i} x={50 + i * 20} y="176" width="12" height="8" fill="#ffd98a" opacity=".55" />
+        ))}
+      </g>
+    </g>
+  );
+}
+
+/** ページ上部の大きな絵：夕方の競馬場を駆ける3頭 */
+export function RaceHero({ className, scene = "mountain", sky = ["#1d2b5c", "#c8546b", "#f6b36b"] }: { className?: string; scene?: Scene; sky?: [string, string, string] }) {
+  return (
+    <svg className={className} viewBox="0 0 640 300" role="img" aria-label="競馬場を走る3頭の馬のイラスト" preserveAspectRatio="xMidYMax slice">
       <defs>
         <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#1d2b5c" />
-          <stop offset=".55" stopColor="#c8546b" />
-          <stop offset="1" stopColor="#f6b36b" />
+          <stop offset="0" stopColor={sky[0]} />
+          <stop offset=".55" stopColor={sky[1]} />
+          <stop offset="1" stopColor={sky[2]} />
         </linearGradient>
         <linearGradient id="dirt" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="#c9935a" />
@@ -39,17 +102,7 @@ export function RaceHero({ className }: { className?: string }) {
       </defs>
       <rect width="640" height="300" fill="url(#sky)" />
       <circle cx="500" cy="120" r="34" fill="#ffd98a" opacity=".9" />
-      {/* 山並み（韓国の山がちな景色をイメージ） */}
-      <path d="M0 175 L60 130 L110 155 L170 105 L230 150 L290 120 L350 160 L420 112 L480 150 L540 125 L600 160 L640 140 L640 200 L0 200Z" fill="#3a2f55" opacity=".85" />
-      <path d="M0 190 L80 160 L150 182 L230 150 L320 185 L400 158 L490 186 L580 162 L640 180 L640 210 L0 210Z" fill="#2a2446" />
-      {/* スタンド */}
-      <g fill="#1b1a33">
-        <rect x="40" y="168" width="230" height="34" />
-        <polygon points="30,168 280,168 262,152 48,152" fill="#24224a" />
-        {Array.from({ length: 11 }).map((_, i) => (
-          <rect key={i} x={50 + i * 20} y="176" width="12" height="8" fill="#ffd98a" opacity=".55" />
-        ))}
-      </g>
+      <Backdrop scene={scene} />
       {/* 芝の帯と砂のコース */}
       <rect y="202" width="640" height="16" fill="#2f6b3f" />
       <rect y="218" width="640" height="82" fill="url(#dirt)" />
@@ -79,7 +132,7 @@ export function TrackMap({ tracks }: { tracks: Track[] }) {
         fill="var(--accent-weak)" stroke="var(--accent)" strokeWidth="1"
       />
       <ellipse cx="31" cy="121" rx="10" ry="4.5" fill="var(--accent-weak)" stroke="var(--accent)" strokeWidth="1" />
-      {tracks.map((t) => (
+      {tracks.flatMap((t) => (t.pos ? [{ ...t, pos: t.pos }] : [])).map((t) => (
         <g key={t.name}>
           <circle cx={t.pos.x} cy={t.pos.y} r="3.6" fill={t.color} stroke="#fff" strokeWidth="1" />
           <text x={t.pos.y > 110 ? t.pos.x + 14 : t.pos.x + (t.pos.x > 60 ? -5 : 5)} y={t.pos.y + 1.4} fontSize="5" fontWeight="700" fill="var(--text)" textAnchor={t.pos.y <= 110 && t.pos.x > 60 ? "end" : "start"}>

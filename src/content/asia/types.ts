@@ -13,7 +13,7 @@ export type Track = {
   admission: string;
   nearby: string[];     // 近くの見どころ
   color: string;        // 地図・カードの色
-  pos: { x: number; y: number }; // 地図上の位置（0〜100）
+  pos?: { x: number; y: number }; // 地図上の位置（0〜100）。地図を出す国だけ
 };
 
 export type Step = { title: string; body: string };
@@ -38,7 +38,10 @@ export type CountryGuide = {
   slug: string;
   name: string;
   nameEn: string;
-  flag: string;               // 絵文字の旗
+  flag: string;               // 国旗のファイル名（public/flags/<flag>.svg、ISOの2文字）
+  scene?: "mountain" | "city" | "desert"; // 上部イラストの背景
+  sky?: [string, string, string];          // 上部イラストの空の色（上→下）
+  showMap?: boolean;          // 地図を出すか（今は韓国だけ）
   tagline: string;
   intro: string[];
   updated: string;            // 内容を確認した日
