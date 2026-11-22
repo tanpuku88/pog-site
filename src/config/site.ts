@@ -23,6 +23,7 @@ export const SUPERVISOR = {
   catch: "POG大会の主催者目線で、使いやすさとデータの見せ方を監修しています。",
   bio: [
     "仲間内のPOG大会を主催してきた経験から、「馬の登録が面倒」「順位の集計が大変」という悩みを解決するためにこのサイトを立ち上げました。",
+    "「トリプル馬単伝道師」として、YouTube・ブログ・Xで地方競馬（南関東）と中央競馬の予想を発信。南関東4場の全コースを集計した「南関競馬データ攻略」も運営しています。",
     "noteでは、新馬戦の振り返りや血統・指名候補のメモなど、POGに役立つ情報を発信しています。",
   ],
   policy: [
@@ -34,12 +35,10 @@ export const SUPERVISOR = {
 
 /** 監修者が運営しているサイト（横の欄と /supervisor に並ぶ）。増やすときはここに1行足す。 */
 export const OWNER_SITES: { name: string; url: string; desc: string; thumb: string; icon: string; label: string }[] = [
-  {
-    name: "POG2026（note）",
-    url: NOTE_URL,
-    desc: "新馬戦の振り返り・血統メモ・指名候補などPOGのコラム",
-    thumb: "/brand/note-pog2026.svg",
-    icon: "/brand/icon-note.svg",
-    label: "note",
-  },
+  { name: "POG2026（note）", url: NOTE_URL, desc: "新馬戦の振り返り・血統メモ・指名候補などPOGのコラム", thumb: "/brand/note-pog2026.svg", icon: "/brand/icon-note.svg", label: "note" },
+  { name: "たんぷくの当たる無料競馬予想", url: "https://xn--n8j053hxwe15nbnjri1cm7s.com/", desc: "地方重賞・中央重賞を、データと厩舎・調教の声で掘り下げるブログ", thumb: "/brand/thumb-blog.svg", icon: "/brand/icon-blog.svg", label: "ブログ" },
+  { name: "南関競馬データ攻略", url: "https://nankan-course-9899.web.app", desc: "大井・浦和・船橋・川崎の全19コースを枠順・脚質・人気別に集計", thumb: "/brand/thumb-nankan.svg", icon: "/brand/icon-nankan.svg", label: "データ" },
+  { name: "YouTube たんぷく88", url: "https://www.youtube.com/@kikumasamune88", desc: "地方競馬・中央競馬の予想動画を配信", thumb: "/brand/thumb-youtube.svg", icon: "/brand/icon-youtube.svg", label: "動画" },
+  { name: "X @kikumasamune88", url: "https://x.com/kikumasamune88", desc: "予想や最新情報をポスト", thumb: "/brand/thumb-x.svg", icon: "/brand/icon-x.svg", label: "X" },
+  { name: "たんぷく88 公式ハブ", url: "https://tanpuku88-hub.web.app/", desc: "サイト・SNS・グッズへのリンクをまとめた公式ページ", thumb: "/brand/thumb-hub.svg", icon: "/brand/icon-hub.svg", label: "リンク集" },
 ];

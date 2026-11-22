@@ -23,7 +23,7 @@ export function SupervisorBox() {
 /** 運営サイトのカード（サムネイル＋アイコン） */
 export function OwnerSiteCards({ large = false }: { large?: boolean }) {
   return (
-    <div className={large ? "os-list os-large" : "os-list"}>
+    <div className={large ? "os-list os-large" : "os-list os-compact"}>
       {OWNER_SITES.map((s) => (
         <a key={s.url} href={s.url} target="_blank" rel="noreferrer" className="os-card">
           <img src={s.thumb} alt="" className="os-thumb" loading="lazy" />
@@ -49,6 +49,7 @@ export function OwnerSide() {
       <section className="box">
         <h3 className="box-head">{SUPERVISOR.name}の運営サイト</h3>
         <OwnerSiteCards />
+        <Link href="/supervisor" className="box-more">監修者のプロフィール ›</Link>
       </section>
     </>
   );
