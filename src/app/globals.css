@@ -194,7 +194,8 @@ table.list.compact td { padding: 5px 10px; font-size: 13px; }
 .pill.hot { background: var(--win); color: #fff; }
 
 /* 切り替えボタン（人気順 / 賞金順） */
-.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--card); }
+.seg { display: inline-flex; max-width: 100%; border: 1px solid var(--line); border-radius: 6px; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; background: var(--card); }
+.seg::-webkit-scrollbar { display: none; }
 .seg a { white-space: nowrap; padding: 6px 14px; font-size: 13px; text-decoration: none; color: var(--muted); font-weight: 600; }
 .seg a.on { background: var(--accent); color: #fff; }
 
@@ -570,8 +571,10 @@ table.asia-terms caption { text-align: left; font-weight: 700; padding: 10px 12p
 .asia-photos.n1 { grid-template-columns: 1fr; }
 .asia-photos.n2 { grid-template-columns: repeat(2, 1fr); }
 .asia-photo { margin: 0; background: var(--card); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
-.asia-photo img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: var(--accent-weak); }
-.asia-photos.n1 .asia-photo img { aspect-ratio: 21 / 9; }
+/* 写真は枠（4:3）の中に全体が収まるように表示（どの端末でも縦横比が崩れない・切れない） */
+.ph-box { display: block; position: relative; width: 100%; height: 0; padding-top: 75%; overflow: hidden; background: #1b211d; }
+.ph-box img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; max-width: none; object-fit: contain; display: block; }
+.asia-photos.n1 .ph-box { padding-top: 50%; }
 .asia-photo figcaption { font-size: 13px; padding: 6px 10px 8px; line-height: 1.45; }
 .asia-photo figcaption span { display: block; font-size: 11px; color: var(--muted); }
 .asia-note { background: #fff8e1; border: 1px solid #f1d58a; border-radius: 6px; padding: 8px 12px; font-size: 14px; margin: 0 0 12px; color: #5b4a12; }
@@ -596,7 +599,8 @@ table.asia-terms caption { text-align: left; font-weight: 700; padding: 10px 12p
   .asia-routes, .asia-photos, .asia-photos.n2 { grid-template-columns: 1fr; }
   .asia-photos { grid-auto-flow: column; grid-auto-columns: 82%; grid-template-columns: none; overflow-x: auto; scroll-snap-type: x mandatory; }
   .asia-photos.n1 { grid-auto-columns: 100%; }
-  .asia-photo { scroll-snap-align: start; }
+  .asia-photos.n1 .ph-box { padding-top: 75%; }
+  .asia-photo { scroll-snap-align: start; min-width: 0; }
 }
 .asia-others { display: flex; flex-wrap: wrap; gap: 8px; }
 .asia-others a { display: inline-flex; align-items: center; gap: 6px; background: var(--card); border: 1px solid var(--line); border-radius: 99px; padding: 6px 12px; font-size: 14px; color: var(--text); text-decoration: none; }
@@ -654,3 +658,18 @@ table.kj-compare td, table.kj-compare th { white-space: nowrap; }
 .asia-closed-card .asia-photo { margin: -4px 0 4px; }
 .kj-badge.lost { background: #7a5a3a; font-size: 13px; }
 .kj-mini.lost { background: #7a5a3a; }
+
+/* ── スマホ最適化（2026-11） ── */
+@media (max-width: 560px) {
+  /* メニュー：横に隠れないよう 4列×2段で全部見せる */
+  .gnav-in { display: grid; grid-template-columns: repeat(4, 1fr); padding: 0; overflow: visible; }
+  .gnav a { padding: 9px 2px; font-size: 12.5px; text-align: center; border-right: 1px solid rgba(255,255,255,.1); border-bottom: 1px solid rgba(255,255,255,.08); }
+  .gnav a:first-child { border-left: 0; }
+  .gnav a:nth-child(4n) { border-right: 0; }
+  .gnav a.on::after { bottom: 0; }
+  /* 一覧カードのサムネイルを少し大きく */
+  .asia-country-thumb { height: 140px; }
+  /* 押しやすく */
+  .asia-others a { padding: 8px 12px; }
+}
+.sv-mini img, .sv-hero img, .footer .footer-sv img { object-fit: cover; }
