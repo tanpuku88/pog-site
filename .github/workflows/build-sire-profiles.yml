@@ -4,7 +4,7 @@ on:
   # 作業ブランチでこのファイルを変えたときにも動く（main に入る前に一度データを集めるため）
   push:
     branches: ["claude/**"]
-    paths: [".github/workflows/build-sire-profiles.yml"]
+    paths: [".github/workflows/build-sire-profiles.yml", "scripts/build-sire-profiles.ts"]
   workflow_dispatch:
     inputs:
       max_age_days:
@@ -42,4 +42,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add src/data/sire-profiles.json
-          git diff --cached --quiet || (git commit -m "種牡馬の名鑑データを更新" && git push origin HEAD:${{ github.ref_name }})
+          git diff --cached --quiet && exit 0
+          git commit -m "種牡馬の名鑑データを更新"
+          # 途中でブランチに別のコミットが入っていても取り込んでから送る
+          git pull --rebase origin ${{ github.ref_name }}
+          git push origin HEAD:${{ github.ref_name }}
