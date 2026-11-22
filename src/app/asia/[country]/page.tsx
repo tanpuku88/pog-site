@@ -37,6 +37,7 @@ function seoDescription(c: CountryGuide) {
 }
 
 const MENU = [
+  ["official", "公式サイト"],
   ["tracks", "競馬場"],
   ["howto", "遊び方"],
   ["access", "日本からの行き方"],
@@ -104,6 +105,22 @@ export default async function CountryPage({ params }: { params: Promise<{ countr
         {c.intro.map((p, i) => <p key={i}>{p}</p>)}
         <p className="muted">内容は{fmtDate(c.updated)}時点で公式資料などから確認したものです。</p>
       </div>
+
+      {c.official && c.official.length > 0 && (
+        <section id="official" className="asia-official" aria-labelledby="official-title">
+          <h2 id="official-title">公式サイト</h2>
+          <div className="asia-official-list">
+            {c.official.map((o) => (
+              <a key={o.url} href={o.url} target="_blank" rel="noopener noreferrer" className="asia-official-card">
+                <strong>{o.name}</strong>
+                <small>{o.desc}</small>
+                <span className="asia-official-url">{o.url.replace(/^https?:\/\//, "").replace(/\/$/, "")} ↗</span>
+              </a>
+            ))}
+          </div>
+          <p className="muted">開催日・入場料・馬券の発売は変わることがあります。出かける前に公式サイトで最新情報を確認してください。</p>
+        </section>
+      )}
 
       {c.photos && c.photos.length > 0 && (
         <div className={`asia-photos n${Math.min(c.photos.length, 3)}`}>
