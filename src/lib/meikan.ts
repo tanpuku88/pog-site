@@ -35,7 +35,7 @@ export function sireAptitudes(all: Record<string, SireData>): Map<string, SireAp
         ? Math.round(((o.avgDistTurf ?? 0) * o.turfWins + (o.avgDistDirt ?? 0) * o.dirtWins) / (o.turfWins + o.dirtWins))
         : null;
       out.set(name, { turf: adj(t, share), dirt: adj(r, 1 - share), distance: dist || null, source: "offspring" });
-    } else if (d.career && d.career.runs > 0) {
+    } else if (d.career && d.career.runs > 0 && !d.id.startsWith("000a")) {
       const c = d.career;
       const share = c.turfRuns / Math.max(1, c.turfRuns + c.dirtRuns);
       const g1 = c.bigWins.filter((w) => w.grade === 1);
@@ -55,14 +55,15 @@ function sireNick(name: string, d: SireData | undefined, apt: SireApt | undefine
   if (!d) return null;
   const ground = apt && apt.dirt !== null && apt.turf !== null ? (apt.dirt > apt.turf + 15 ? "砂の" : apt.turf > apt.dirt + 15 ? "芝の" : "") : "";
   const dist = distanceLabel(apt?.distance ?? null);
-  const epithet = `${ground}${dist === "短距離" ? "快速王" : dist === "長距離" ? "名ステイヤー" : dist === "マイル" ? "マイラー" : "王者"}`;
+  const noun = dist === "短距離" ? "快速王" : dist === "長距離" ? "名ステイヤー" : dist === "マイル" ? "マイラー" : dist === "中距離" ? "中距離王" : null;
+  const epithet = noun ? `${ground}${noun}` : ground ? `${ground}名手` : "名血";
   const top = d.career?.bigWins[0];
-  if (top && top.grade === 1) return `${top.year}年${top.race}の覇者`;
+  if (top && top.grade === 1) return `${top.year}年${top.race.replace(/競走$/, "")}の覇者`;
   const best = d.offspring?.best;
   if (best && (d.offspring?.gradedWins ?? 0) > 0) return `${best}を出した${epithet}`;
   if (top) return `${top.year}年${top.race}を制した${epithet}`;
-  if (best) return `${best}の父・${epithet}`;
-  if (d.career && d.career.runs > 0) return `${d.career.runs}戦${d.career.wins}勝の叩き上げ${epithet}`;
+  if (best) return noun || ground ? `${best}の父・${epithet}` : `${best}の父`;
+  if (d.career && d.career.runs > 0) return d.career.wins > 0 ? `${d.career.runs}戦${d.career.wins}勝の叩き上げ${epithet}` : `${d.career.runs}戦で去った幻の素質馬`;
   return null;
 }
 
@@ -125,8 +126,13 @@ export function sireStory(d: SireData | null, apt: SireApt | undefined): { trait
   }
   let career: string | null = null;
   const c = d?.career;
-  if (c && c.runs > 0) {
-    const g = c.bigWins.slice(0, 4).map((w) => `${w.year}年${w.race}`);
+  const foreign = d?.id.startsWith("000a") ?? false;
+  if (c && c.runs > 0 && foreign) {
+    // 海外の馬は netkeiba に載っている成績が一部だけなので、戦績の数字は出さない
+    const g = c.bigWins.slice(0, 4).map((w) => `${w.year}年${w.race.replace(/競走$/, "")}`);
+    career = `海外で走った輸入種牡馬。${g.length ? `主な勝ち鞍は${g.join("、")}。` : ""}`;
+  } else if (c && c.runs > 0) {
+    const g = c.bigWins.slice(0, 4).map((w) => `${w.year}年${w.race.replace(/競走$/, "")}`);
     const ground = c.turfRuns >= c.dirtRuns * 2 ? "芝" : c.dirtRuns >= c.turfRuns * 2 ? "ダート" : "芝・ダート";
     career = `現役時代は${c.runs}戦${c.wins}勝（3着以内${c.places}回）。主に${ground}を走り、${c.avgWinDist ? `勝ったレースの平均距離は${c.avgWinDist.toLocaleString()}m。` : ""}${g.length ? `主な勝ち鞍は${g.join("、")}。` : ""}`;
   }

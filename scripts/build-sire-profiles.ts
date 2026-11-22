@@ -30,7 +30,7 @@ async function career(id: string): Promise<SireCareer | null> {
   if (!rs || rs.length === 0) return null;
   const wins = rs.filter((r) => r.finish === "1");
   const big = wins
-    .map((r) => ({ year: Number(r.race_date.slice(0, 4)), race: r.race_name.replace(/\((?:J・)?G(?:I{1,3}|[123])\)/, "").trim(), grade: gradeOf(r.race_name), surface: r.surface, distance: r.distance }))
+    .map((r) => ({ year: Number(r.race_date.slice(0, 4)), race: r.race_name.replace(/\((?:J・)?G(?:I{1,3}|[123])\)/, "").replace(/競走$/, "").trim(), grade: gradeOf(r.race_name), surface: r.surface, distance: r.distance }))
     .filter((w) => w.grade !== null)
     .sort((a, b) => a.grade! - b.grade! || b.year - a.year);
   const winDist = wins.map((r) => r.distance).filter((d): d is number => !!d);
