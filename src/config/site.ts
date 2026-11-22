@@ -19,7 +19,7 @@ export const GOOGLE_SITE_VERIFICATION = "8nEJuH-Vqyqw4K_qzI_VgSIhSLCUZx32DHtQnCe
 export const SUPERVISOR = {
   name: "たんぷく88",
   title: "本サイト監修",
-  avatar: "/brand/tanpuku88.svg",
+  avatar: "/brand/tanpuku88.jpg",
   catch: "POG大会の主催者目線で、使いやすさとデータの見せ方を監修しています。",
   bio: [
     "仲間内のPOG大会を主催してきた経験から、「馬の登録が面倒」「順位の集計が大変」という悩みを解決するためにこのサイトを立ち上げました。",
