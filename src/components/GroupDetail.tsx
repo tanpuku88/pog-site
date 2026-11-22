@@ -47,7 +47,7 @@ export async function GroupDetail({ kind, name }: { kind: Kind; name: string }) 
       <DataTabs current={kind} />
       <p className="crumb" style={{ margin: "0 0 6px" }}><Link href={kind.path}>‹ {kind.label}ランキング</Link></p>
       <h1 style={{ marginBottom: 4 }}>{titleOf(kind, name)}</h1>
-      <p className="muted" style={{ marginTop: 0 }}>{season.crop_year}年生まれ世代のPOGデータ（中央のレースのみ・賞金は万円）</p>
+      <p className="muted" style={{ marginTop: 0 }}>{season.crop_year}年生まれ世代のPOGデータ（中央・地方のレース・賞金は万円）</p>
       {!summary ? (
         <div className="card muted">この{kind.label}の{season.crop_year}年生まれの馬は登録されていません。</div>
       ) : (

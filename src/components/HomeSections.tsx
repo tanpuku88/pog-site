@@ -11,7 +11,7 @@ export async function HomeBoard({ children }: { children?: React.ReactNode }) {
   const season = defaultSeason();
   let board: GenerationBoard | null = null;
   try {
-    board = await loadGenerationBoard(createAdminClient(), season.crop_year, { ...season, include_non_jra: false }, 10);
+    board = await loadGenerationBoard(createAdminClient(), season.crop_year, { ...season, include_non_jra: true }, 10);
   } catch {
     board = null;
   }

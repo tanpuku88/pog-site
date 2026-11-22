@@ -1,8 +1,10 @@
 // 世代の馬を「馬IDの番号順」に調べるための計算。
-// netkeiba の馬IDは「生まれ年4桁 + 1 + 5桁の通し番号」（例: 2024100001）。
+// netkeiba の馬IDは「生まれ年4桁 + 1 + 5桁の通し番号」（例: 2024100001）。外国産馬は 2024110001 から。
 // 一覧ページの年齢の絞り込みが効かないため、番号を1つずつ確かめる。
 
 export const cropIdFirst = (cropYear: number) => `${cropYear}100001`;
+/** 外国産馬（マル外）の番号の始まり（例: 2024110001）。国内産はこれより小さい */
+export const foreignIdFirst = (cropYear: number) => `${cropYear}110001`;
 export const cropIdUpper = (cropYear: number) => `${cropYear}200000`; // これ未満が対象
 
 /** 前回どこまで調べたかから、次に調べるIDの番号を返す */

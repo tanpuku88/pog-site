@@ -32,7 +32,7 @@ export function previousSeason(now = new Date()) {
   return prev;
 }
 
-const rulesOf = (s: ReturnType<typeof defaultSeason>) => ({ ...s, include_non_jra: false });
+const rulesOf = (s: ReturnType<typeof defaultSeason>) => ({ ...s, include_non_jra: true });
 
 /** 一覧ページ用：今の世代の表と、前の世代のまとめ（名前 → 成績） */
 export async function loadGroupRanking(db: SupabaseClient, kind: Kind) {

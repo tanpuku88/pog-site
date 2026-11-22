@@ -54,7 +54,7 @@ export default async function Shinba() {
     <>
       <h1 id="top">今週の新馬戦</h1>
       <p className="muted" style={{ marginTop: -8 }}>
-        JRAの新馬戦に出走する馬の一覧です。出馬表が出る木曜〜土曜の夕方に更新します。指名数はこのサイトの全グループの合計です。
+        中央・地方の新馬戦（門別のフレッシュチャレンジを含む）に出走する馬の一覧です。出馬表が出たら毎日夕方に更新します。指名数はこのサイトの全グループの合計です。
       </p>
       {days.size > 0 && (
         <nav className="race-jump" aria-label="レースへ移動">

@@ -18,7 +18,7 @@ export default async function PopularPage({ searchParams }: { searchParams: Prom
   const season = defaultSeason();
   let board: Awaited<ReturnType<typeof loadGenerationBoard>> | null = null;
   try {
-    board = await loadGenerationBoard(createAdminClient(), season.crop_year, { ...season, include_non_jra: false });
+    board = await loadGenerationBoard(createAdminClient(), season.crop_year, { ...season, include_non_jra: true });
   } catch {
     board = null;
   }
@@ -33,8 +33,8 @@ export default async function PopularPage({ searchParams }: { searchParams: Prom
         <h1>{season.crop_year}年生まれ世代 {boardTitle(sex, sort)}</h1>
         <p className="muted">
           {sort === "prize"
-            ? "取り込み済みの2歳馬すべてを、今シーズンの中央の本賞金・勝ち数の順に並べています（毎日更新）。指名数はこのサイトの全大会の合計です。"
-            : "このサイトのすべての大会の指名を集計しています（毎日更新・中央の本賞金）。前週は7日前の順位との比較です。"}
+            ? "取り込み済みの2歳馬すべてを、今シーズンの本賞金（中央・地方）・勝ち数の順に並べています（毎日更新）。指名数はこのサイトの全大会の合計です。"
+            : "このサイトのすべての大会の指名を集計しています（毎日更新・中央と地方の本賞金）。前週は7日前の順位との比較です。"}
         </p>
       </div>
       {board && <BoardStats board={board} />}
