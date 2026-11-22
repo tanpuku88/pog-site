@@ -51,6 +51,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               <Link href="/owners">馬主</Link>
               <Link href="/breeders">生産牧場</Link>
               <Link href="/horses">馬を探す</Link>
+              <Link href="/asia">アジア競馬ガイド</Link>
               <Link href="/guide">使い方</Link>
             </nav>
             <div className="footer-sv">
