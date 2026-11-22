@@ -5,17 +5,16 @@ import { uae } from "./uae";
 import { saudi } from "./saudi";
 import { qatar } from "./qatar";
 import { bahrain } from "./bahrain";
+import { india } from "./india";
+import { malaysia } from "./malaysia";
+import { philippines } from "./philippines";
+import { turkey } from "./turkey";
 
 /** 公開中の国。新しい国はここに足す */
-export const COUNTRIES: CountryGuide[] = [korea, hongkong, uae, saudi, qatar, bahrain];
+export const COUNTRIES: CountryGuide[] = [korea, hongkong, uae, saudi, qatar, bahrain, india, malaysia, philippines, turkey];
 
 /** 準備中の国（一覧に「準備中」として出す） */
-export const COMING_SOON: CountryStub[] = [
-  { slug: "india", name: "インド", flag: "in", note: "ムンバイ・バンガロールの歴史ある競馬場" },
-  { slug: "malaysia", name: "マレーシア", flag: "my", note: "ペナン・イポーなど" },
-  { slug: "philippines", name: "フィリピン", flag: "ph", note: "マニラ近郊の競馬場" },
-  { slug: "turkey", name: "トルコ", flag: "tr", note: "イスタンブールのヴェリエフェンディ競馬場" },
-];
+export const COMING_SOON: CountryStub[] = [];
 
 export function findCountry(slug: string) {
   return COUNTRIES.find((c) => c.slug === slug);
