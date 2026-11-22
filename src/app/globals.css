@@ -652,3 +652,5 @@ table.kj-compare td, table.kj-compare th { white-space: nowrap; }
 .asia-closed-card h3 { margin: 8px 0 4px; font-size: 16px; display: flex; align-items: center; gap: 6px; }
 .asia-closed-card p { margin: 6px 0; font-size: 14px; }
 .asia-closed-card .asia-photo { margin: -4px 0 4px; }
+.kj-badge.lost { background: #7a5a3a; font-size: 13px; }
+.kj-mini.lost { background: #7a5a3a; }

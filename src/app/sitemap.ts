@@ -4,6 +4,7 @@ import { SITE_URL } from "@/config/site";
 import { defaultSeason } from "@/lib/standings";
 import { COUNTRIES } from "@/content/asia";
 import { TRACKS } from "@/content/keibajo";
+import { LOST_TRACKS } from "@/content/keibajo/lost";
 
 // 1日1回作り直す（馬は毎週増えるので十分）
 export const revalidate = 86400;
@@ -27,6 +28,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/supervisor`, changeFrequency: "monthly", priority: 0.4 },
     { url: `${SITE_URL}/keibajo`, changeFrequency: "monthly", priority: 0.6 },
     ...TRACKS.map((t) => ({ url: `${SITE_URL}/keibajo/${t.slug}`, lastModified: new Date(t.updated), changeFrequency: "monthly" as const, priority: 0.6 })),
+    { url: `${SITE_URL}/keibajo/haishi`, changeFrequency: "monthly", priority: 0.5 },
+    ...LOST_TRACKS.map((t) => ({ url: `${SITE_URL}/keibajo/haishi/${t.slug}`, changeFrequency: "yearly" as const, priority: 0.5 })),
     { url: `${SITE_URL}/asia`, changeFrequency: "monthly", priority: 0.6 },
     ...COUNTRIES.map((c) => ({ url: `${SITE_URL}/asia/${c.slug}`, lastModified: new Date(c.updated), changeFrequency: "monthly" as const, priority: 0.6 })),
   ];

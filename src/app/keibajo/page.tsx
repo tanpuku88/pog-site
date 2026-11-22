@@ -77,6 +77,7 @@ export default function KeibajoTop() {
         <a href="#jra">中央競馬（JRA）</a>
         <a href="#nar">地方競馬</a>
         <a href="#compare">コース比較表</a>
+        <Link href="/keibajo/haishi">なくなった競馬場</Link>
       </nav>
 
       <div className="sec-title" id="jra"><h2>中央競馬（JRA）10場</h2></div>
@@ -118,6 +119,12 @@ export default function KeibajoTop() {
         </table>
       </div>
       <p className="muted">数字はJRA公式サイト・地方競馬情報サイトのコース紹介（2026年11月22日確認）から。地方競馬の直線は「4コーナー出口から」の長さで、（　）内はゴールまでの長さです。写真はWikimedia Commonsのフリーライセンス写真（撮影者とライセンスは各ページに記載）。開催日や料金は変わることがあるので、出かける前に公式サイトも確認してください。</p>
+      <div className="cta-band asia-pog">
+        <div>
+          <strong>なくなった競馬場の記録</strong>
+          <p style={{ margin: "6px 0 0", fontSize: 14 }}>日本ダービーが生まれた目黒、日本初の洋式競馬の根岸、そして福山・荒尾・高崎・宇都宮など。歴史・名馬・跡地の今を残しています。 <Link href="/keibajo/haishi">記録を見る →</Link></p>
+        </div>
+      </div>
       <p style={{ textAlign: "center", marginTop: 16 }}><Link href="/asia" className="btn">アジア競馬ガイドも見る</Link></p>
     </>
   );
