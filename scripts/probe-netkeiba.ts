@@ -24,21 +24,7 @@ function jst(offset: number) {
   return new Date(Date.now() + 9 * 3600_000 + offset * 86400_000).toISOString().slice(0, 10).replaceAll("-", "");
 }
 
-async function probeSale() {
-  // 馬ページのプロフィール表に「セリ取引価格」があるか
-  for (const id of ["2024106790", "2024109020", "2024100287", "2024104479", "2024101683", "2024100075", "2023104523", "2022105485"]) {
-    try {
-      const $ = cheerio.load((await politeFetch(horsePageUrl(id))).html);
-      const rows: string[] = [];
-      $("table.db_prof_table tr").each((_, tr) => { rows.push(`${$(tr).find("th").text().trim()}=${$(tr).find("td").text().replace(/\s+/g, " ").trim()}`); });
-      console.log(`== ${id} ${$(".horse_title h1").first().text().trim()}\n  ${rows.join("\n  ")}`);
-    } catch (e) { console.log(`${id} 失敗 ${(e as Error).message}`); }
-  }
-}
-
 async function main() {
-  await probeSale();
-  if (process.env.PROBE_ALL !== "1") return;
   // 外国産馬（マル外）の馬IDの範囲を確かめる
   console.log("== 外国産馬のID");
   for (const n of [110001, 110002, 110005, 110010, 110015, 110016, 110020, 110030, 110050, 110080, 110100, 110150, 110200, 190001, 109990]) {

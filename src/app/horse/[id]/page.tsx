@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { formatPrice, returnRate } from "@/lib/sales";
 import { notFound } from "next/navigation";
 import { getUser } from "@/lib/supabase/server";
 import { horseDescription, isHorseId, loadPublicHorse } from "@/lib/horse-public";
@@ -65,6 +66,8 @@ export default async function PublicHorsePage({ params }: { params: Promise<{ id
     ["調教師", horse.trainer ? <Link href={`/trainers/${encodeURIComponent(horse.trainer)}`}>{horse.trainer}</Link> : null],
     ["馬主", horse.owner ? <Link href={`/owners/${encodeURIComponent(horse.owner)}`}>{horse.owner}</Link> : null],
     ["生産者", horse.breeder ? <Link href={`/breeders/${encodeURIComponent(horse.breeder)}`}>{horse.breeder}</Link> : null],
+    ["セリ取引価格", horse.sale_price_man ? <>{formatPrice(Number(horse.sale_price_man))}円{horse.sale_name ? `（${horse.sale_year ? `${horse.sale_year}年 ` : ""}${horse.sale_name}）` : ""}{" "}<span className="muted">回収率 {returnRate(rec.prize, Number(horse.sale_price_man))?.toFixed(1)}%</span></> : null],
+    ["募集総額", horse.club_price_man ? <>{formatPrice(Number(horse.club_price_man))}円 <span className="muted">回収率 {returnRate(rec.prize, Number(horse.club_price_man))?.toFixed(1)}%</span></> : null],
   ];
 
   const jsonLd = {
@@ -181,7 +184,7 @@ export default async function PublicHorsePage({ params }: { params: Promise<{ id
       <div className="card flush">
         <table className="list">
           <tbody>
-            {prof.map(([k, v]) => (
+            {prof.filter(([k, v]) => v != null || !["セリ取引価格", "募集総額"].includes(k)).map(([k, v]) => (
               <tr key={k}><th style={{ width: "7em", background: "var(--th)" }}>{k}</th><td>{v ?? <span className="muted">-</span>}</td></tr>
             ))}
           </tbody>

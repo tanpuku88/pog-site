@@ -12,6 +12,7 @@
     "update:entries": "tsx scripts/update-entries.ts",
     "import:crop": "tsx scripts/import-crop.ts",
     "import:runners": "tsx scripts/import-runners.ts",
+    "import:sales": "tsx scripts/import-sales.ts",
     "probe:netkeiba": "tsx scripts/probe-netkeiba.ts"
   },
   "dependencies": {

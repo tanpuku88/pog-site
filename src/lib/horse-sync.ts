@@ -33,6 +33,7 @@ export async function syncHorse(db: SupabaseClient, id: string) {
 
   const { error: e1 } = await db.from("horses").upsert({
     ...profile,
+    sale_checked_at: new Date().toISOString(),
     results_fetched_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   });

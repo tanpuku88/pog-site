@@ -601,3 +601,28 @@ table.asia-terms caption { text-align: left; font-weight: 700; padding: 10px 12p
 .asia-others { display: flex; flex-wrap: wrap; gap: 8px; }
 .asia-others a { display: inline-flex; align-items: center; gap: 6px; background: var(--card); border: 1px solid var(--line); border-radius: 99px; padding: 6px 12px; font-size: 14px; color: var(--text); text-decoration: none; }
 .asia-others a:hover { background: var(--accent-weak); }
+
+/* セリ価格と回収率 */
+.rr-good { color: var(--up); font-weight: 800; }
+.rr-mid { color: var(--text); font-weight: 700; }
+.rr-low { color: var(--muted); font-weight: 600; }
+table.sales-table td, table.sales-group td { white-space: nowrap; }
+table.sales-table td.name-cell, table.sales-group td.g-name { white-space: normal; }
+table.sales-group td .sub { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 170px; }
+table.sales-group td.g-name { max-width: 0; width: 100%; }
+table.sales-group td.g-name .horse-name, table.sales-group td.g-name b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.comment-card { background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--gold); border-radius: 6px; padding: 12px 16px; margin: 12px 0; }
+.comment-card .cc-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-weight: 800; font-size: 14px; }
+.comment-card .cc-icon { width: 28px; height: 28px; border-radius: 50%; background: var(--gold); color: #1b1400; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; flex: none; }
+.comment-card p { margin: 0 0 6px; line-height: 1.8; font-size: 14px; }
+.comment-card .cc-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
+.comment-card .cc-note { font-size: 11px; color: var(--muted); margin: 0; }
+@media (max-width: 560px) {
+  table.sales-table th, table.sales-table td { padding: 6px 4px; }
+  table.sales-table td.name-cell { max-width: 0; width: 100%; }
+  table.sales-table td.name-cell .horse-name { white-space: nowrap; }
+  table.sales-table td.name-cell .ped span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  table.sales-table td.sub { display: none; }
+  table.sales-table th:nth-child(4) { display: none; }
+}
+@media (max-width: 560px) { .data-tabs a { padding: 8px 9px; font-size: 13px; } }

@@ -98,7 +98,7 @@ async function main() {
           console.warn(`  ${id}: 血統ページを読めませんでした ${(e as Error).message}`);
         }
       }
-      buffer.push({ ...profile, birth_year: profile.birth_year ?? cropYear, updated_at: new Date().toISOString() });
+      buffer.push({ ...profile, birth_year: profile.birth_year ?? cropYear, sale_checked_at: new Date().toISOString(), updated_at: new Date().toISOString() });
       if (buffer.length >= BATCH) {
         await flush();
         console.log(`  ID ${id} まで: ${saved}頭を保存`);
