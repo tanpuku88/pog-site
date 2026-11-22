@@ -8,7 +8,8 @@ import { adminDb } from "./db";
 import { politeFetch, horsePageUrl, horsePedUrl, horseResultUrl } from "../src/lib/netkeiba/fetch";
 import { parseRaceResults, parseSireId, parseSireOffspring } from "../src/lib/netkeiba/parse";
 import { defaultSeason } from "../src/lib/standings";
-import type { SireCareer, SireData } from "../src/lib/sire-data";
+import type { SireCareer, SireData, SireFee } from "../src/lib/sire-data";
+import { parseJbisFee, parseJbisSearch } from "../src/lib/netkeiba/parse";
 
 const OUT = "src/data/sire-profiles.json";
 const TIME_BUDGET_MIN = Number(process.env.TIME_BUDGET_MIN ?? 300);
@@ -47,6 +48,18 @@ async function career(id: string): Promise<SireCareer | null> {
   };
 }
 
+/** JBIS で種付け料と繋養先を調べる（日本で供用されている種牡馬だけ） */
+async function stud(name: string): Promise<SireFee | null> {
+  if (/[(（][^)）]+[)）]$/.test(name)) return null; // 「Frankel (英)」など海外の種牡馬
+  const search = (await politeFetch(`https://www.jbis.or.jp/horse/result/?sid=horse&keyword=${encodeURIComponent(name)}`)).html;
+  for (const id of parseJbisSearch(search, name).slice(0, 3)) {
+    const html = (await politeFetch(`https://www.jbis.or.jp/horse/${id}/`)).html;
+    const fee = parseJbisFee(html, name);
+    if (fee) return { ...fee, jbisId: id };
+  }
+  return null;
+}
+
 async function main() {
   const db = adminDb();
   const cur = defaultSeason().crop_year;
@@ -66,18 +79,23 @@ async function main() {
   }
   const store: Record<string, SireData> = JSON.parse(readFileSync(OUT, "utf8"));
   const fresh = (d?: SireData) => d && Date.now() - Date.parse(d.fetchedAt) < MAX_AGE_DAYS * 86400_000;
-  const todo = [...sires].filter(([name]) => !fresh(store[name])).sort((a, b) => b[1].count - a[1].count);
+  const todo = [...sires].filter(([name]) => !fresh(store[name]) || store[name].stud === undefined).sort((a, b) => b[1].count - a[1].count);
   console.log(`種牡馬 ${sires.size}頭（今回読むのは ${todo.length}頭）`);
   const deadline = Date.now() + TIME_BUDGET_MIN * 60_000;
   let done = 0, failed = 0;
   for (const [name, { child }] of todo) {
     if (Date.now() > deadline) break;
     try {
-      const id = store[name]?.id ?? parseSireId((await politeFetch(horsePedUrl(child))).html);
-      if (!id) throw new Error("父のIDが見つかりません");
-      const offspring = parseSireOffspring((await politeFetch(`https://db.netkeiba.com/horse/sire/${id}/`)).html);
-      const c = await career(id);
-      store[name] = { id, offspring, career: c, fetchedAt: new Date().toISOString() };
+      if (fresh(store[name])) {
+        // 成績は新しいので、種付け料だけ調べる
+        store[name] = { ...store[name], stud: await stud(name) };
+      } else {
+        const id = store[name]?.id ?? parseSireId((await politeFetch(horsePedUrl(child))).html);
+        if (!id) throw new Error("父のIDが見つかりません");
+        const offspring = parseSireOffspring((await politeFetch(`https://db.netkeiba.com/horse/sire/${id}/`)).html);
+        const c = await career(id);
+        store[name] = { id, offspring, career: c, stud: await stud(name), fetchedAt: new Date().toISOString() };
+      }
       done++;
       if (done % 20 === 0) {
         writeFileSync(OUT, JSON.stringify(store, null, 1) + "\n");

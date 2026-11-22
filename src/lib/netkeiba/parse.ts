@@ -371,3 +371,30 @@ export function parseSireId(html: string): string | null {
   }
   return null;
 }
+
+/** JBIS の検索結果から馬のIDを並び順に。name を渡すと、リンクの文字がその名前の馬を先に */
+export function parseJbisSearch(html: string, name?: string): string[] {
+  const $ = cheerio.load(html);
+  const hits: { id: string; exact: boolean }[] = [];
+  $("a[href]").each((_, a) => {
+    const m = ($(a).attr("href") ?? "").match(/^\/horse\/(\d{10})\/$/);
+    if (!m || hits.some((h) => h.id === m[1])) return;
+    hits.push({ id: m[1], exact: !!name && clean($(a).text()) === name });
+  });
+  return [...hits.filter((h) => h.exact), ...hits.filter((h) => !h.exact)].map((h) => h.id);
+}
+
+/** JBIS の馬ページから種付け料と繋養先を読む。名前が違う馬・種付け料の欄がない馬は null */
+export function parseJbisFee(html: string, name: string): { year: number | null; man: number | null; note: string | null; farm: string | null } | null {
+  const $ = cheerio.load(html);
+  const title = clean($("title").text()).split(/[｜|]/)[0].trim();
+  if (title !== name) return null;
+  const text = clean($.root().text());
+  const m = text.match(/種付料\s*(?:(\d{4})年度?[：:]\s*)?(.+?)(?=\s*(?:年度別表彰|年度別累計|SSI|$))/);
+  if (!m) return null;
+  const body = m[2].trim();
+  const yen = body.match(/([\d,]+)\s*万円/);
+  const farm = text.match(/繋養先\s*(\S+)/)?.[1] ?? null;
+  const note = body.replace(/([\d,]+)\s*万円/, "").replace(/[()（）]/g, " ").replace(/\s+/g, " ").trim() || null;
+  return { year: m[1] ? Number(m[1]) : null, man: yen ? Number(yen[1].replace(/,/g, "")) : null, note, farm };
+}

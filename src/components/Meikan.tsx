@@ -37,6 +37,13 @@ export function Meikan({
           {nick && <div className="mk-nick">「{nick}」</div>}
           <div className="mk-name">{name}<small>{label}名鑑</small></div>
         </div>
+        {sd?.stud && (
+          <div className="mk-fee" title={sd.stud.note ?? undefined}>
+            <div className="mk-fee-k">{sd.stud.year ? `${sd.stud.year}年 ` : ""}種付料</div>
+            <div className="mk-fee-v">{sd.stud.man !== null ? <>{sd.stud.man.toLocaleString()}<small>万円</small></> : <span className="mk-fee-p">{sd.stud.note ?? "非公開"}</span>}</div>
+            {sd.stud.farm && <div className="mk-fee-s">{sd.stud.farm}</div>}
+          </div>
+        )}
       </div>
       <div className="mk-body">
         <div className="mk-stats">
@@ -82,7 +89,7 @@ export function Meikan({
               {auto && <p>{auto}</p>}
             </>
           )}
-          <p className="cc-note">{lore || written ? "列伝の最初の文は運営が書いたもの（2026年11月時点）、ほかはnetkeibaの成績データから自動で書いています。" : "netkeibaの成績データから自動で書いています。"}</p>
+          <p className="cc-note">{lore || written ? "列伝の最初の文は運営が書いたもの（2026年11月時点）、ほかはnetkeibaの成績データから自動で書いています。" : "netkeibaの成績データから自動で書いています。"}{sd?.stud ? "種付料はJBISサーチに載っている最新年度の料金です。" : ""}</p>
         </div>
       </div>
     </section>

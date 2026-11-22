@@ -725,3 +725,16 @@ table.list.group-horses thead th a, table.list.group-table thead th a { color: v
   .asia-others a { padding: 8px 12px; }
 }
 .sv-mini img, .sv-hero img, .footer .footer-sv img { object-fit: cover; }
+.meikan .mk-title { flex: 1; min-width: 0; }
+.meikan .mk-fee { flex: none; text-align: right; background: rgba(0,0,0,.25); border: 1px solid rgba(255,217,102,.5); border-radius: 8px; padding: 6px 12px; }
+.meikan .mk-fee-k { font-size: 11px; color: #ffe8a0; letter-spacing: .05em; white-space: nowrap; }
+.meikan .mk-fee-v { font-size: 26px; font-weight: 900; color: #ffd966; line-height: 1.1; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.meikan .mk-fee-v small { font-size: 12px; margin-left: 2px; color: #ffe8a0; }
+.meikan .mk-fee-p { font-size: 14px; }
+.meikan .mk-fee-s { font-size: 10px; color: #d9e4dc; opacity: .85; max-width: 12em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 720px) {
+  .meikan .mk-head { flex-wrap: wrap; }
+  .meikan .mk-fee { width: 100%; display: flex; align-items: baseline; gap: 10px; text-align: left; }
+  .meikan .mk-fee-v { font-size: 24px; }
+  .meikan .mk-fee-s { max-width: none; margin-left: auto; min-width: 0; flex: 1; text-align: right; }
+}
