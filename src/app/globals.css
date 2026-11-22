@@ -468,3 +468,83 @@ html { scroll-behavior: smooth; }
   .sv-hero img { width: 104px; height: 104px; }
   .sv-hero h1 { font-size: 24px; }
 }
+
+/* ===== アジア競馬ガイド ===== */
+.asia-hero { position: relative; overflow: hidden; border-radius: 8px; border-bottom: 3px solid var(--gold); margin: 6px 0 12px; min-height: 320px; display: flex; align-items: flex-start; background: #1d2b5c; }
+.asia-hero-art { position: absolute; inset: 0; width: 100%; height: 100%; }
+.asia-hero-text { position: relative; color: #fff; padding: 22px 24px; max-width: 620px; text-shadow: 0 1px 6px rgba(0,0,0,.55); }
+.asia-hero-text h1 { margin: 0 0 6px; font-size: 30px; line-height: 1.3; }
+.asia-hero-text p { margin: 0; }
+.asia-jump { position: sticky; top: 0; z-index: 5; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 8px 0; margin-bottom: 8px; background: var(--bg); }
+.asia-jump::-webkit-scrollbar { display: none; }
+.asia-jump a { flex: none; padding: 5px 12px; border-radius: 99px; background: var(--card); border: 1px solid var(--line); font-size: 13px; font-weight: 700; text-decoration: none; color: var(--text); }
+.asia-jump a:hover { border-color: var(--accent); color: var(--accent); }
+.asia-intro p { margin: 0 0 8px; }
+.asia-intro p:last-child { margin: 0; }
+[id] { scroll-margin-top: 52px; }
+
+.asia-countries { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; margin-bottom: 12px; }
+.asia-country { display: flex; gap: 12px; align-items: flex-start; background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 6px; padding: 12px 14px; text-decoration: none; color: var(--text); }
+.asia-country:hover { background: var(--accent-weak); }
+.asia-country.soon { border-left-color: var(--line); opacity: .8; }
+.asia-country strong { display: block; font-size: 16px; }
+.asia-country small { display: block; color: var(--muted); font-size: 12px; line-height: 1.45; }
+.asia-flag { font-size: 34px; line-height: 1; }
+
+.asia-tracks { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 12px; align-items: start; }
+.asia-map-card { position: sticky; top: 52px; padding: 10px; }
+.asia-map { width: 100%; height: auto; display: block; }
+.asia-track { border-left: 5px solid var(--accent); }
+.asia-track h3 { margin: 0 0 2px; font-size: 17px; }
+.asia-track h3 small { font-size: 12px; font-weight: 500; color: var(--muted); margin-left: 4px; }
+.asia-track-meta { margin: 0 0 6px; font-size: 13px; color: var(--muted); }
+.asia-track p { margin: 0 0 8px; }
+.asia-track dl { display: grid; grid-template-columns: 7em minmax(0, 1fr); gap: 4px 10px; margin: 0; font-size: 14px; }
+.asia-track dt { font-weight: 700; color: var(--th-text); }
+.asia-track dd { margin: 0; }
+.asia-track dd ul { margin: 0; padding-left: 1.1em; }
+
+table.asia-terms caption { text-align: left; font-weight: 700; padding: 10px 12px 4px; }
+.asia-local { font-family: "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif; font-weight: 700; }
+
+.asia-plans { display: grid; gap: 10px; }
+.asia-plan summary { cursor: pointer; list-style: none; display: grid; grid-template-columns: auto 1fr; gap: 0 10px; align-items: center; }
+.asia-plan summary::-webkit-details-marker { display: none; }
+.asia-plan summary strong { font-size: 17px; }
+.asia-plan summary small { grid-column: 2; color: var(--muted); }
+.asia-plan summary::after { content: "＋ くわしく"; grid-column: 2; font-size: 12px; font-weight: 700; color: var(--accent); }
+.asia-plan[open] summary::after { content: "－ とじる"; }
+.asia-plan-nights { grid-row: span 3; background: var(--head-2); color: #fff; font-weight: 800; font-size: 13px; border-radius: 6px; padding: 10px 8px; text-align: center; min-width: 64px; }
+.asia-day h4 { margin: 12px 0 4px; font-size: 14px; color: var(--accent); }
+.asia-timeline { list-style: none; margin: 0; padding: 0 0 0 12px; border-left: 2px solid var(--gold); }
+.asia-timeline li { display: grid; grid-template-columns: 6.5em minmax(0, 1fr); gap: 8px; padding: 4px 0; position: relative; font-size: 14px; }
+.asia-timeline li::before { content: ""; position: absolute; left: -18px; top: 11px; width: 10px; height: 10px; border-radius: 50%; background: var(--gold); border: 2px solid var(--card); }
+.asia-timeline time { font-weight: 700; color: var(--th-text); font-variant-numeric: tabular-nums; }
+.asia-tips { margin: 10px 0 0; padding: 8px 12px 8px 28px; background: var(--gold-weak); border-radius: 6px; font-size: 13px; }
+
+.asia-race { border-top: 3px solid var(--gold); }
+.asia-pog { display: block; }
+.asia-pog ul { margin: 6px 0 0; padding-left: 1.2em; font-size: 14px; }
+
+.asia-foods { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; }
+.asia-food { display: flex; gap: 12px; align-items: flex-start; margin: 0; }
+.food-icon { width: 56px; height: 56px; flex: none; }
+.asia-food p { margin: 2px 0 0; font-size: 14px; }
+.asia-food .asia-food-where { font-size: 12px; color: var(--accent); font-weight: 700; }
+
+.asia-check { list-style: none; margin: 0; padding: 0; }
+.asia-check li { position: relative; padding: 5px 0 5px 26px; border-bottom: 1px dashed var(--line); }
+.asia-check li:last-child { border-bottom: 0; }
+.asia-check li::before { content: "✓"; position: absolute; left: 4px; color: var(--accent); font-weight: 900; }
+.asia-sources ul { margin: 0 0 8px; padding-left: 1.2em; font-size: 14px; }
+
+@media (max-width: 760px) {
+  .asia-tracks { grid-template-columns: 1fr; }
+  .asia-map-card { position: static; max-width: 260px; margin: 0 auto; }
+  .asia-hero { min-height: 260px; }
+  .asia-hero-text { padding: 16px; }
+  .asia-hero-text h1 { font-size: 24px; }
+  .asia-foods { grid-template-columns: 1fr; }
+  .asia-track dl { grid-template-columns: 1fr; gap: 0; }
+  .asia-track dt { margin-top: 4px; }
+}

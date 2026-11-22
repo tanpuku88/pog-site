@@ -8,6 +8,7 @@ const ITEMS = [
   { href: "/shinba", label: "新馬戦", match: (p: string) => p.startsWith("/shinba") },
   { href: "/data", label: "POGデータ", match: (p: string) => ["/data", "/sires", "/trainers", "/owners", "/breeders"].some((x) => p.startsWith(x)) },
   { href: "/horses", label: "馬を探す", match: (p: string) => p.startsWith("/horses") || p.startsWith("/horse/") },
+  { href: "/asia", label: "アジア競馬", match: (p: string) => p.startsWith("/asia") },
   { href: "/guide", label: "使い方", match: (p: string) => p.startsWith("/guide") },
 ];
 
