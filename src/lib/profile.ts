@@ -24,6 +24,8 @@ export type Profile = {
   winRate: number | null;       // 勝率（1着数 ÷ 出走回数、%）
   scores: Record<StatKey, number | null>; // 1〜100。データが足りなければ null
   distance: number | null;      // 得意な距離の目安（m）
+  nick?: string;                // 二つ名（一覧の中で重ならないもの）
+  aptSource?: "offspring" | "career" | null; // 種牡馬の芝・ダート・距離をどこから出したか
 };
 
 const pct = (a: number, b: number) => (b > 0 ? (a / b) * 100 : null);
@@ -88,6 +90,16 @@ function ranker(values: number[]) {
   };
 }
 
+/** 前の世代の芝・ダート・距離の数字を足す（適性は世代をまたいで見たほうが確か） */
+export function addSurfaceHistory(cur: Map<string, Metrics>, prev: Map<string, Metrics>) {
+  for (const [k, g] of cur) {
+    const p = prev.get(k);
+    if (!p) continue;
+    g.turfRuns += p.turfRuns; g.turfWins += p.turfWins; g.dirtRuns += p.dirtRuns; g.dirtWins += p.dirtWins;
+    if (g.placeDist === null) g.placeDist = p.placeDist;
+  }
+}
+
 /** 名前ごとの能力値を出す。少なすぎる数字では順位を付けない */
 export function scoreProfiles(metrics: Map<string, Metrics>): Map<string, Profile> {
   const all = [...metrics.values()];
@@ -95,11 +107,11 @@ export function scoreProfiles(metrics: Map<string, Metrics>): Map<string, Profil
     const r = ranker(all.filter(ok).map(val));
     return (g: Metrics) => (ok(g) ? r(val(g)) : null);
   };
-  const early = make((g) => g.horses >= 5, (g) => g.starters / g.horses + g.earlyWins / Math.max(1, g.horses));
-  const consistency = make((g) => g.starters >= 5, (g) => g.winners / g.starters);
-  const power = make((g) => g.starters >= 5, (g) => g.points / g.starters + (g.top?.points ?? 0) / 10);
-  const turf = make((g) => g.turfRuns >= 8, (g) => g.turfWins / g.turfRuns + (g.turfRuns / Math.max(1, g.runs)) * 0.1);
-  const dirt = make((g) => g.dirtRuns >= 8, (g) => g.dirtWins / g.dirtRuns + (g.dirtRuns / Math.max(1, g.runs)) * 0.1);
+  const early = make((g) => g.horses >= 3, (g) => g.starters / g.horses + g.earlyWins / Math.max(1, g.horses));
+  const consistency = make((g) => g.starters >= 3, (g) => g.winners / g.starters);
+  const power = make((g) => g.starters >= 3, (g) => g.points / g.starters + (g.top?.points ?? 0) / 10);
+  const turf = make((g) => g.turfRuns >= 5, (g) => g.turfWins / g.turfRuns + (g.turfRuns / Math.max(1, g.runs)) * 0.1);
+  const dirt = make((g) => g.dirtRuns >= 5, (g) => g.dirtWins / g.dirtRuns + (g.dirtRuns / Math.max(1, g.runs)) * 0.1);
   const out = new Map<string, Profile>();
   for (const g of all) {
     out.set(g.name, {

@@ -203,3 +203,24 @@ describe("馬場と距離", () => {
     expect(parseCourse("")).toEqual({ surface: null, distance: null });
   });
 });
+
+describe("種牡馬の産駒成績", () => {
+  it("累計行を読む", async () => {
+    const { parseSireOffspring } = await import("../src/lib/netkeiba/parse");
+    const html = `<table><tr><th>年度</th><th>順位</th></tr><tr><th>出走</th></tr>
+      <tr><td>累計</td><td></td><td>443</td><td>186</td><td>3,334</td><td>404</td><td>279</td><td>32</td><td>749</td><td>91</td><td>2,306</td><td>281</td><td>2,387</td><td>295</td><td>855</td><td>88</td><td>42.0%</td><td>1.91</td><td>1,201,152.4</td><td>1,823.7</td><td>1,697.7</td><td>イクイノックス</td></tr></table>`;
+    expect(parseSireOffspring(html)).toMatchObject({ starters: 443, winners: 186, runs: 3334, wins: 404, gradedWins: 32, turfRuns: 2387, turfWins: 295, dirtRuns: 855, dirtWins: 88, winnerRate: 42, ei: 1.91, avgDistTurf: 1824, avgDistDirt: 1698, best: "イクイノックス" });
+  });
+});
+
+describe("JBIS の種付け料", () => {
+  it("金額・条件・繋養先を読む", async () => {
+    const { parseJbisFee, parseJbisSearch } = await import("../src/lib/netkeiba/parse");
+    const html = `<html><head><title>キタサンブラック｜JBISサーチ（JBIS-Search）</title></head><body>
+      <p>戦績 国内：20戦12勝 総賞金 187684.3万円 繋養先 社台スタリオンステーション 勇払郡 安平町 種付料 2026年度：受胎確認後2500万円(フリーリターン特約付) 年度別表彰記録 2016年度</p></body></html>`;
+    expect(parseJbisFee(html, "キタサンブラック")).toEqual({ year: 2026, man: 2500, note: "受胎確認後 フリーリターン特約付", farm: "社台スタリオンステーション" });
+    expect(parseJbisFee(html, "キタサンフラッグ")).toBeNull();
+    expect(parseJbisFee(html.replace(/種付料.*?年度別表彰/, "年度別表彰"), "キタサンブラック")).toBeNull();
+    expect(parseJbisSearch(`<a href="/horse/0000228602/">キタサンフラッグ</a><a href="/horse/0001155349/">キタサンブラック</a><a href="/horse/0001155349/pedigree/">p</a>`, "キタサンブラック")).toEqual(["0001155349", "0000228602"]);
+  });
+});

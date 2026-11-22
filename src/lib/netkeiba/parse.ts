@@ -333,3 +333,68 @@ export function parseCourse(s: string): { surface: string | null; distance: numb
   const m = clean(s).match(/(芝|ダ|障)\D*?(\d{3,4})/);
   return m ? { surface: m[1], distance: Number(m[2]) } : { surface: null, distance: null };
 }
+
+export type SireOffspring = {
+  starters: number; winners: number; runs: number; wins: number;
+  gradedRuns: number; gradedWins: number;
+  turfRuns: number; turfWins: number; dirtRuns: number; dirtWins: number;
+  winnerRate: number | null; ei: number | null; prize: number | null;
+  avgDistTurf: number | null; avgDistDirt: number | null; best: string | null;
+};
+
+/** 種牡馬の産駒成績ページ（/horse/sire/{id}/）の「累計」行（中央）を読む */
+export function parseSireOffspring(html: string): SireOffspring | null {
+  const $ = cheerio.load(html);
+  const table = $("table").first();
+  const row = table.find("tr").filter((_, tr) => clean($(tr).find("td,th").first().text()) === "累計").first();
+  if (row.length === 0) return null;
+  const c = row.find("td,th").map((_, x) => clean($(x).text())).get();
+  if (c.length < 21) return null;
+  const n = (i: number) => { const v = Number((c[i] ?? "").replace(/[,%]/g, "")); return Number.isFinite(v) ? v : 0; };
+  const orNullNum = (v: number) => (v > 0 ? v : null);
+  return {
+    starters: n(2), winners: n(3), runs: n(4), wins: n(5), gradedRuns: n(6), gradedWins: n(7),
+    turfRuns: n(12), turfWins: n(13), dirtRuns: n(14), dirtWins: n(15),
+    winnerRate: n(2) > 0 ? n(16) : null, ei: orNullNum(n(17)), prize: orNullNum(n(18)),
+    avgDistTurf: orNullNum(Math.round(n(19))), avgDistDirt: orNullNum(Math.round(n(20))), best: orNull(c[21] ?? ""),
+  };
+}
+
+/** 血統ページの血統表から父のIDを読む */
+export function parseSireId(html: string): string | null {
+  const $ = cheerio.load(html);
+  const rows = $("table.blood_table").first().find("tr").toArray();
+  for (const tr of rows) {
+    const a = $(tr).find("td").first().find("a[href*='/horse/']").first();
+    const id = horseIdFromHref(a.attr("href"));
+    if (id) return id;
+  }
+  return null;
+}
+
+/** JBIS の検索結果から馬のIDを並び順に。name を渡すと、リンクの文字がその名前の馬を先に */
+export function parseJbisSearch(html: string, name?: string): string[] {
+  const $ = cheerio.load(html);
+  const hits: { id: string; exact: boolean }[] = [];
+  $("a[href]").each((_, a) => {
+    const m = ($(a).attr("href") ?? "").match(/^\/horse\/(\d{10})\/$/);
+    if (!m || hits.some((h) => h.id === m[1])) return;
+    hits.push({ id: m[1], exact: !!name && clean($(a).text()) === name });
+  });
+  return [...hits.filter((h) => h.exact), ...hits.filter((h) => !h.exact)].map((h) => h.id);
+}
+
+/** JBIS の馬ページから種付け料と繋養先を読む。名前が違う馬・種付け料の欄がない馬は null */
+export function parseJbisFee(html: string, name: string): { year: number | null; man: number | null; note: string | null; farm: string | null } | null {
+  const $ = cheerio.load(html);
+  const title = clean($("title").text()).split(/[｜|]/)[0].trim();
+  if (title !== name) return null;
+  const text = clean($.root().text());
+  const m = text.match(/種付料\s*(?:(\d{4})年度?[：:]\s*)?(.+?)(?=\s*(?:年度別表彰|年度別累計|SSI|$))/);
+  if (!m) return null;
+  const body = m[2].trim();
+  const yen = body.match(/([\d,]+)\s*万円/);
+  const farm = text.match(/繋養先\s*(\S+)/)?.[1] ?? null;
+  const note = body.replace(/([\d,]+)\s*万円/, "").replace(/[()（）]/g, " ").replace(/\s+/g, " ").trim() || null;
+  return { year: m[1] ? Number(m[1]) : null, man: yen ? Number(yen[1].replace(/,/g, "")) : null, note, farm };
+}

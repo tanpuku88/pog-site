@@ -14,6 +14,7 @@
     "import:runners": "tsx scripts/import-runners.ts",
     "import:sales": "tsx scripts/import-sales.ts",
     "import:course": "tsx scripts/import-course.ts",
+    "build:sires": "tsx scripts/build-sire-profiles.ts",
     "probe:netkeiba": "tsx scripts/probe-netkeiba.ts"
   },
   "dependencies": {
