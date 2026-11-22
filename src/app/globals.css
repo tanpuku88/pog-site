@@ -598,3 +598,6 @@ table.asia-terms caption { text-align: left; font-weight: 700; padding: 10px 12p
   .asia-photos.n1 { grid-auto-columns: 100%; }
   .asia-photo { scroll-snap-align: start; }
 }
+.asia-others { display: flex; flex-wrap: wrap; gap: 8px; }
+.asia-others a { display: inline-flex; align-items: center; gap: 6px; background: var(--card); border: 1px solid var(--line); border-radius: 99px; padding: 6px 12px; font-size: 14px; color: var(--text); text-decoration: none; }
+.asia-others a:hover { background: var(--accent-weak); }

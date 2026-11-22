@@ -2,16 +2,42 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { COUNTRIES, COMING_SOON } from "@/content/asia";
 import { Flag, RaceHero } from "@/components/asia/Art";
+import { SITE_NAME, SITE_URL } from "@/config/site";
+
+const TITLE = "アジア競馬ガイド｜韓国・香港・ドバイなど10か国の競馬場と旅行プラン";
+const DESC = `${COUNTRIES.map((c) => c.name).join("・")}の競馬を旅行で楽しむガイド。東京・広島からの行き方、馬券の買い方、モデル旅行プラン、大レース、ご当地グルメまで。`;
+const OG = COUNTRIES[0].photos?.[0];
 
 export const metadata: Metadata = {
-  title: "アジア競馬ガイド｜旅行プラン・馬券の買い方・競馬場グルメ",
-  description: "韓国など、アジアの競馬を旅行で楽しむためのガイド。競馬場への行き方、馬券の買い方、モデルプラン、文化や地元グルメまで。",
+  title: TITLE,
+  description: DESC,
+  keywords: ["アジア 競馬", "海外競馬 旅行", "韓国 競馬", "香港 競馬", "ドバイ 競馬", "海外 競馬場 行き方"],
   alternates: { canonical: "/asia" },
+  openGraph: { title: TITLE, description: DESC, url: "/asia", type: "website", siteName: SITE_NAME, locale: "ja_JP", images: OG ? [{ url: OG.src, alt: OG.alt }] : undefined },
+  twitter: { card: OG ? "summary_large_image" : "summary", title: TITLE, description: DESC, images: OG ? [OG.src] : undefined },
 };
+
+const JSON_LD = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "トップ", item: `${SITE_URL}/` },
+      { "@type": "ListItem", position: 2, name: "アジア競馬ガイド", item: `${SITE_URL}/asia` },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "アジア競馬ガイド",
+    itemListElement: COUNTRIES.map((c, i) => ({ "@type": "ListItem", position: i + 1, name: `${c.name}競馬ガイド`, url: `${SITE_URL}/asia/${c.slug}` })),
+  },
+];
 
 export default function AsiaTop() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD).replace(/</g, "\\u003c") }} />
       <section className="asia-hero">
         <RaceHero className="asia-hero-art" />
         <div className="asia-hero-text">
