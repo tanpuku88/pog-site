@@ -4,6 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { loadGenerationBoard, rankBoard } from "@/lib/popular";
 import { defaultSeason } from "@/lib/standings";
 import { PopularTable, BoardFilters, BoardStats, RisingBox, SireBox, parseBoardParams, boardTitle, ExternalRankingNote } from "@/components/PopularTable";
+import { OwnerSide } from "@/components/OwnerSites";
 
 const crop = defaultSeason().crop_year;
 
@@ -56,6 +57,7 @@ export default async function PopularPage({ searchParams }: { searchParams: Prom
           <aside className="side">
             <RisingBox board={board} />
             <SireBox board={board} />
+            <OwnerSide />
           </aside>
         )}
       </div>
