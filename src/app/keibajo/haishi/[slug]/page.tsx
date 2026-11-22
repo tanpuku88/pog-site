@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     keywords: [t.name, `${t.name} 跡地`, `${t.name} 廃止`, `${t.name} 名馬`],
     alternates: { canonical: `/keibajo/haishi/${t.slug}` },
     openGraph: { title, description: desc(t), url: `/keibajo/haishi/${t.slug}`, type: "article", siteName: SITE_NAME, locale: "ja_JP", images: ph ? [{ url: ph.src, alt: ph.alt }] : undefined },
-    twitter: { card: ph ? "summary_large_image" : "summary", title, description: desc(t) },
+    twitter: { card: ph ? "summary_large_image" : "summary", title, description: desc(t), images: ph ? [ph.src] : undefined },
   };
 }
 
@@ -86,7 +86,7 @@ export default async function LostPage({ params }: { params: Promise<{ slug: str
               <img src={ph.src} alt={ph.alt} loading="lazy" decoding="async" />
               <figcaption>
                 {ph.alt}
-                <span>写真：<a href={ph.page} target="_blank" rel="noopener noreferrer">{ph.credit}</a>（{ph.license}）</span>
+                <span>写真：<a href={ph.page} target="_blank" rel="noopener noreferrer">{ph.credit}</a>（{ph.license}／Wikimedia Commons）</span>
               </figcaption>
             </figure>
           ))}
@@ -143,7 +143,7 @@ export default async function LostPage({ params }: { params: Promise<{ slug: str
       <div className="sec-title"><h2>出典・参考（確認日）</h2></div>
       <div className="card asia-sources">
         <ul>{t.sources.map((s) => <li key={s.url}><a href={s.url} target="_blank" rel="noopener noreferrer">{s.label}</a> <span className="muted">（{s.date}）</span></li>)}</ul>
-        <p className="muted" style={{ marginBottom: 0 }}>文章は出典をもとにこのサイトの言葉でまとめたものです。イラストはこのサイトのオリジナルです。</p>
+        <p className="muted" style={{ marginBottom: 0 }}>文章は出典をもとにこのサイトの言葉でまとめたものです。イラストはこのサイトのオリジナルです。写真はWikimedia Commonsで撮影者とライセンスを確認したもので、昔の写真はパブリックドメイン、空中写真は国土交通省の空中写真（出典を書けば使えるもの）です。</p>
       </div>
 
       <div className="sec-title"><h2>ほかの、なくなった競馬場</h2></div>
