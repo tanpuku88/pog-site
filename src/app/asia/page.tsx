@@ -83,7 +83,7 @@ export default function AsiaTop() {
             {t.photo && (
               <figure className="asia-photo">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={t.photo.src} alt={t.photo.alt} loading="lazy" decoding="async" />
+                <span className="ph-box"><img src={t.photo.src} alt={t.photo.alt} loading="lazy" decoding="async" /></span>
                 <figcaption>{t.photo.alt}<span>写真：<a href={t.photo.page} target="_blank" rel="noopener noreferrer">{t.photo.credit}</a>（{t.photo.license}／Wikimedia Commons）</span></figcaption>
               </figure>
             )}

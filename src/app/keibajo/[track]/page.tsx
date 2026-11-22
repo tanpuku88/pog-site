@@ -120,7 +120,7 @@ export default async function TrackPage({ params }: { params: Promise<{ track: s
           {t.photos.map((ph) => (
             <figure key={ph.src} className="asia-photo">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={ph.src} alt={ph.alt} loading="lazy" decoding="async" />
+              <span className="ph-box"><img src={ph.src} alt={ph.alt} loading="lazy" decoding="async" /></span>
               <figcaption>
                 {ph.alt}
                 <span>写真：<a href={ph.page} target="_blank" rel="noopener noreferrer">{ph.credit}</a>（{ph.license}／Wikimedia Commons）</span>
