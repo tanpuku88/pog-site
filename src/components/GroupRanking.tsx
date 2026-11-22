@@ -8,6 +8,7 @@ type R = Awaited<ReturnType<typeof loadGroupRanking>>["rows"][number];
 const SORTS = {
   points: { label: "賞金順", key: (r: R) => r.points },
   winners: { label: "勝ち上がり頭数", key: (r: R) => r.winners },
+  winrate: { label: "勝率", key: (r: R) => (r.runs >= 10 ? r.winRate : -1) },
   rate: { label: "勝ち上がり率", key: (r: R) => (r.starters >= 3 ? r.winnerRate ?? 0 : -1) },
   horses: { label: "2歳馬の数", key: (r: R) => r.horses },
   picks: { label: "指名数", key: (r: R) => r.picks },
@@ -29,13 +30,14 @@ export async function GroupRanking({ kind, sort }: { kind: Kind; sort?: string }
       <h1 style={{ marginBottom: 4 }}>{season.crop_year}年生まれ世代 {kind.label}ランキング</h1>
       <p className="muted" style={{ marginTop: 0 }}>
         {kind.lead}をPOG向けにまとめました（このサイトに登録されている{horseCount.toLocaleString()}頭・中央・地方のレース・賞金は万円）。
-        勝ち上がり率は「1勝以上した頭数 ÷ 出走した頭数」です。
+        勝率は「1着の回数 ÷ 出走回数」、勝ち上がり率は「1勝以上した頭数 ÷ 出走した頭数」です。
       </p>
       <div className="seg seg-wrap" style={{ marginBottom: 10 }}>
         {(Object.keys(SORTS) as GroupSort[]).map((k) => (
           <Link key={k} href={k === "points" ? kind.path : `${kind.path}?sort=${k}`} className={k === sortKey ? "on" : ""}>{SORTS[k].label}</Link>
         ))}
       </div>
+      {sortKey === "winrate" && <p className="muted" style={{ margin: "0 0 8px" }}>勝率順は、のべ10回以上出走した{kind.label}だけを上に並べています。</p>}
       {sortKey === "rate" && <p className="muted" style={{ margin: "0 0 8px" }}>勝ち上がり率順は、出走3頭以上の{kind.label}だけを上に並べています。</p>}
       {rows.length === 0 ? (
         <div className="card muted">まだデータがありません。世代の馬の取り込みが終わると表示されます。</div>
@@ -48,6 +50,7 @@ export async function GroupRanking({ kind, sort }: { kind: Kind; sort?: string }
                 <th>{kind.label}</th>
                 <th className="num">2歳<br />馬</th>
                 <th className="num">勝ち<br />上がり</th>
+                <th className="num">勝率</th>
                 <th className="num">本賞金</th>
                 <th className="hide-sm">グラフ</th>
                 <th className="c hide-sm">戦績</th>
@@ -62,7 +65,7 @@ export async function GroupRanking({ kind, sort }: { kind: Kind; sort?: string }
                 const old = prevRows.get(r.sire);
                 const oldRate = old ? winnerRate(old) : null;
                 return (
-                  <tr key={r.sire}>
+                  <tr key={r.sire} className={r.rank <= 3 && sortKey === "points" ? `top3 top-${r.rank}` : undefined}>
                     <td className="c">
                       <span className={`rk rk-${r.rank}`}>{r.rank}</span>
                       {r.change > 0 && <div className="chg-up">↑{r.change}</div>}
@@ -73,7 +76,8 @@ export async function GroupRanking({ kind, sort }: { kind: Kind; sort?: string }
                       {r.top && <div className="sub show-sm-inline">代表 {r.top.name}</div>}
                     </td>
                     <td className="num">{r.horses}<div className="sub">出走{r.starters}</div></td>
-                    <td className="num">{r.winners}頭<div className="sub">{r.winnerRate !== null ? `${r.winnerRate.toFixed(0)}%` : "-"}</div></td>
+                    <td className="num">{r.winners}頭<div className="sub">{r.winnerRate !== null ? `率${r.winnerRate.toFixed(0)}%` : "-"}</div></td>
+                    <td className="num">{r.runs > 0 ? <span className={`rate-pill${r.winRate >= 15 ? " hot" : ""}`}>{r.winRate.toFixed(1)}%</span> : <span className="muted">-</span>}<div className="sub">{r.runs > 0 ? `${r.runs}戦` : ""}</div></td>
                     <td className="num big">{r.points > 0 ? formatMan(r.points) : <span className="muted">0</span>}</td>
                     <td className="graph hide-sm">
                       <span className="bar-base" style={{ width: `${((r.points - r.lastWeek) / maxPoints) * 100}%` }} />

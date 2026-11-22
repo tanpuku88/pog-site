@@ -74,8 +74,8 @@ export async function loadCropData(db: SupabaseClient, cropYear: number, rules: 
     if (only) q = q.eq(only.field, only.value);
     return q.order("id").range(a, b);
   });
-  type R = ResultRow & { race_name: string };
-  const resultCols = "horse_id, race_date, prize_man, is_jra, finish, race_name";
+  type R = ResultRow & { race_name: string; surface?: string | null; distance?: number | null };
+  const resultCols = "horse_id, race_date, prize_man, is_jra, finish, race_name, surface, distance";
   let pickRows: { horse_id: string }[];
   let results: R[];
   if (only) {
@@ -113,7 +113,10 @@ export async function loadCropData(db: SupabaseClient, cropYear: number, rules: 
 
 // ---- 詳しい表（戦績・勝率・収得賞金・先週・AEI・順位の変動） ----
 
-export type SireRace = { horse_id: string; race_date: string; race_name: string; finish: string | null; prize_man: number; is_jra: boolean };
+export type SireRace = {
+  horse_id: string; race_date: string; race_name: string; finish: string | null; prize_man: number; is_jra: boolean;
+  surface?: string | null; distance?: number | null;
+};
 
 export type SireStats = SireRow & {
   runs: number;                               // 出走回数

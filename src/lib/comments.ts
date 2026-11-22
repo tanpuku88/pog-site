@@ -79,8 +79,8 @@ export function dataComment(field: GroupField, label: string, s: CommentStats): 
     parts.push(`今年の2歳は${s.horses}頭が登録されていますが、まだ中央でデビューした馬はいません。デビュー前から目をつけておくと、後で自慢できるかもしれません。`);
   } else if (rate !== null && s.avgRate !== null && s.starters >= 5) {
     const diff = rate - s.avgRate;
-    if (diff >= 8) parts.push(`今年はデビューした${s.starters}頭のうち${s.winners}頭が勝ち上がり。率${rate.toFixed(0)}%は全体（${s.avgRate.toFixed(0)}%）をはっきり上回っていて、今いちばん「乗っている」${label}のひとつです。`);
-    else if (diff >= 0) parts.push(`デビュー${s.starters}頭で勝ち上がり${s.winners}頭、率${rate.toFixed(0)}%。全体（${s.avgRate.toFixed(0)}%）並み以上で、手堅く結果を出しています。`);
+    if (diff >= 8) parts.push(`今年はデビューした${s.starters}頭のうち${s.winners}頭が勝ち上がり。勝ち上がり率${rate.toFixed(0)}%は全体（${s.avgRate.toFixed(0)}%）をはっきり上回っていて、今いちばん「乗っている」${label}のひとつです。`);
+    else if (diff >= 0) parts.push(`デビュー${s.starters}頭で勝ち上がり${s.winners}頭、勝ち上がり率${rate.toFixed(0)}%。全体（${s.avgRate.toFixed(0)}%）並み以上で、手堅く結果を出しています。`);
     else if (diff >= -8) parts.push(`デビュー${s.starters}頭で勝ち上がり${s.winners}頭（${rate.toFixed(0)}%）。数字はまだ平均にわずかに届きませんが、これから使われる馬も多く巻き返しは十分ありそうです。`);
     else parts.push(`デビュー${s.starters}頭で勝ち上がりは${s.winners}頭（${rate.toFixed(0)}%）と、今年はやや苦戦気味。そのぶん人気が落ちている今が、逆に狙い目かもしれません。`);
   } else {
