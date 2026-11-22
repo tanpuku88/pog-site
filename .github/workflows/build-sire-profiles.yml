@@ -1,6 +1,10 @@
 name: 種牡馬の名鑑データを集める
 
 on:
+  # 作業ブランチでこのファイルを変えたときにも動く（main に入る前に一度データを集めるため）
+  push:
+    branches: ["claude/**"]
+    paths: [".github/workflows/build-sire-profiles.yml"]
   workflow_dispatch:
     inputs:
       max_age_days:
@@ -27,7 +31,7 @@ jobs:
       - run: npm ci
       - run: npm run build:sires
         env:
-          MAX_AGE_DAYS: ${{ inputs.max_age_days }}
+          MAX_AGE_DAYS: ${{ inputs.max_age_days || '30' }}
           # ほかの取り込みと重なってもnetkeibaに負担をかけないよう間隔を広めに
           NETKEIBA_INTERVAL_MS: "5000"
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
