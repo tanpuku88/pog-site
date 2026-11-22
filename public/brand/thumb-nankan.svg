@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 336" width="640" height="336">
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0e5560"/><stop offset="1" stop-color="#04222a"/></linearGradient>
+  <linearGradient id="gd" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f6d66b"/><stop offset="1" stop-color="#c8960f"/></linearGradient></defs>
+  <rect width="640" height="336" fill="url(#bg)"/>
+  <circle cx="560" cy="-30" r="190" fill="#ffffff" opacity=".05"/>
+  <g transform="translate(436 70)"><g fill="#3fc1c9"><rect x="0" y="90" width="26" height="60" rx="3"/><rect x="38" y="60" width="26" height="90" rx="3"/><rect x="76" y="30" width="26" height="120" rx="3"/></g><rect x="114" y="0" width="26" height="150" rx="3" fill="url(#gd)"/><line x1="-8" y1="152" x2="150" y2="152" stroke="#fff" stroke-width="3" opacity=".5"/></g>
+  <text x="40" y="74" font-family="Arial, sans-serif" font-weight="700" font-size="18" fill="#f6d66b" letter-spacing="3">DATA · 南関東4場</text>
+  <text x="38" y="140" font-family="Hiragino Sans, Noto Sans JP, Yu Gothic, sans-serif" font-weight="900" font-size="40" fill="#ffffff">南関競馬データ攻略</text>
+  <text x="40" y="186" font-family="Hiragino Sans, Noto Sans JP, Yu Gothic, sans-serif" font-weight="700" font-size="24" fill="#e8eef0">大井・浦和・船橋・川崎</text>
+  <rect x="40" y="206" width="112" height="4" rx="2" fill="url(#gd)"/>
+  <text x="40" y="300" font-family="Arial, sans-serif" font-weight="700" font-size="16" fill="#ffffff" opacity=".55" letter-spacing="2">by TANPUKU88</text>
+</svg>

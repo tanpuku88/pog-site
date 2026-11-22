@@ -548,3 +548,13 @@ table.asia-terms caption { text-align: left; font-weight: 700; padding: 10px 12p
   .asia-track dl { grid-template-columns: 1fr; gap: 0; }
   .asia-track dt { margin-top: 4px; }
 }
+/* 横の欄では小さなサムネイルを横に並べる */
+.os-compact { gap: 8px; }
+.os-compact .os-card { display: flex; align-items: stretch; }
+.os-compact .os-thumb { width: 104px; flex: none; aspect-ratio: auto; height: auto; min-height: 58px; }
+.os-compact .os-body { flex: 1; min-width: 0; padding: 6px 8px; gap: 6px; }
+.os-compact .os-icon { width: 24px; height: 24px; border-radius: 6px; }
+.os-compact .os-text strong { font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.os-compact .os-text small { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.os-compact .os-tag { display: none; }
+@media (max-width: 860px) { .os-compact { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); } }

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 336" width="640" height="336">
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#173a6b"/><stop offset="1" stop-color="#08162b"/></linearGradient>
+  <linearGradient id="gd" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f6d66b"/><stop offset="1" stop-color="#c8960f"/></linearGradient></defs>
+  <rect width="640" height="336" fill="url(#bg)"/>
+  <circle cx="560" cy="-30" r="190" fill="#ffffff" opacity=".05"/>
+  <g transform="translate(450 60)"><path d="M30 0 H120 V50 C120 85 98 100 75 104 C52 100 30 85 30 50 Z" fill="url(#gd)"/><path d="M30 14 C0 14 0 56 34 60 M120 14 C150 14 150 56 116 60" fill="none" stroke="url(#gd)" stroke-width="9"/><rect x="66" y="104" width="18" height="22" fill="#c8960f"/><rect x="42" y="126" width="66" height="14" rx="3" fill="url(#gd)"/><text x="75" y="64" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="34" fill="#173a6b">◎</text></g>
+  <text x="40" y="74" font-family="Arial, sans-serif" font-weight="700" font-size="18" fill="#f6d66b" letter-spacing="3">BLOG · 予想</text>
+  <text x="38" y="140" font-family="Hiragino Sans, Noto Sans JP, Yu Gothic, sans-serif" font-weight="900" font-size="40" fill="#ffffff">当たる無料競馬予想</text>
+  <text x="40" y="186" font-family="Hiragino Sans, Noto Sans JP, Yu Gothic, sans-serif" font-weight="700" font-size="24" fill="#e8eef0">地方重賞・中央重賞をデータで</text>
+  <rect x="40" y="206" width="112" height="4" rx="2" fill="url(#gd)"/>
+  <text x="40" y="300" font-family="Arial, sans-serif" font-weight="700" font-size="16" fill="#ffffff" opacity=".55" letter-spacing="2">by TANPUKU88</text>
+</svg>
