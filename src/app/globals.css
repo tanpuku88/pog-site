@@ -562,3 +562,39 @@ table.asia-terms caption { text-align: left; font-weight: 700; padding: 10px 12p
 .os-compact .os-text small { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .os-compact .os-tag { display: none; }
 @media (max-width: 860px) { .os-compact { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); } }
+
+/* アジア競馬ガイド：写真と日本からの行き方 */
+.asia-country.has-photo { flex-wrap: wrap; padding-top: 0; overflow: hidden; }
+.asia-country-thumb { flex: 0 0 calc(100% + 28px); margin: 0 -14px 0 -14px; height: 120px; width: calc(100% + 28px); object-fit: cover; background: var(--accent-weak); display: block; }
+.asia-photos { display: grid; gap: 10px; margin: 14px 0; grid-template-columns: repeat(3, 1fr); }
+.asia-photos.n1 { grid-template-columns: 1fr; }
+.asia-photos.n2 { grid-template-columns: repeat(2, 1fr); }
+.asia-photo { margin: 0; background: var(--card); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.asia-photo img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: var(--accent-weak); }
+.asia-photos.n1 .asia-photo img { aspect-ratio: 21 / 9; }
+.asia-photo figcaption { font-size: 13px; padding: 6px 10px 8px; line-height: 1.45; }
+.asia-photo figcaption span { display: block; font-size: 11px; color: var(--muted); }
+.asia-note { background: #fff8e1; border: 1px solid #f1d58a; border-radius: 6px; padding: 8px 12px; font-size: 14px; margin: 0 0 12px; color: #5b4a12; }
+.asia-routes { display: grid; gap: 12px; grid-template-columns: repeat(2, 1fr); }
+.asia-route { border-top: 4px solid #1f6fb2; }
+.asia-route.from-hiroshima { border-top-color: #c0392b; }
+.asia-route h3 { margin: 2px 0 4px; font-size: 17px; }
+.asia-route-from { display: inline-block; margin: 0; font-size: 12px; font-weight: 700; color: #fff; background: #1f6fb2; border-radius: 99px; padding: 1px 10px; }
+.from-hiroshima .asia-route-from { background: #c0392b; }
+.asia-route-steps { list-style: none; padding: 0; margin: 10px 0 0; }
+.asia-route-steps li { display: flex; gap: 10px; align-items: flex-start; padding: 7px 0; border-top: 1px dashed var(--line); font-size: 14px; line-height: 1.5; }
+.asia-route-steps time { display: block; font-weight: 700; font-size: 13px; color: var(--text); }
+.asia-mode { flex: 0 0 52px; text-align: center; font-size: 11px; font-weight: 700; border-radius: 4px; padding: 3px 0; color: #fff; background: #607d8b; }
+.asia-mode.m-plane { background: #1f6fb2; }
+.asia-mode.m-train { background: #2e7d32; }
+.asia-mode.m-subway { background: #6a4c93; }
+.asia-mode.m-bus { background: #e07b00; }
+.asia-mode.m-taxi { background: #455a64; }
+.asia-mode.m-walk { background: #8d6e63; }
+.asia-route-links { font-size: 12px; margin: 10px 0 0; color: var(--muted); }
+@media (max-width: 760px) {
+  .asia-routes, .asia-photos, .asia-photos.n2 { grid-template-columns: 1fr; }
+  .asia-photos { grid-auto-flow: column; grid-auto-columns: 82%; grid-template-columns: none; overflow-x: auto; scroll-snap-type: x mandatory; }
+  .asia-photos.n1 { grid-auto-columns: 100%; }
+  .asia-photo { scroll-snap-align: start; }
+}

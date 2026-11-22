@@ -34,6 +34,18 @@ export type BigRace = { name: string; when: string; where: string; body: string 
 
 export type Term = { jp: string; local: string; read: string; note?: string };
 
+/** 日本からの行き方（時刻は例） */
+export type RouteStep = { time?: string; mode: "train" | "bus" | "plane" | "subway" | "taxi" | "walk" | "ship"; text: string };
+export type JapanRoute = {
+  from: "東京" | "広島";
+  title: string;
+  summary: string;          // 所要時間・費用の目安など
+  steps: RouteStep[];
+  links?: { label: string; url: string }[]; // 公式の時刻表など
+};
+
+export type Photo = { src: string; alt: string; credit: string; license: string; page: string };
+
 export type CountryGuide = {
   slug: string;
   name: string;
@@ -57,6 +69,9 @@ export type CountryGuide = {
   foods: Food[];
   manners: string[];
   sources: Source[];
+  fromJapan?: JapanRoute[];
+  fromJapanNote?: string;
+  photos?: Photo[];
 };
 
 export type CountryStub = { slug: string; name: string; flag: string; note: string };
