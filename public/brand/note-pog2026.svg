@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 336" width="640" height="336">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#124430"/>
+      <stop offset="1" stop-color="#06190f"/>
+    </linearGradient>
+    <linearGradient id="gd" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#f6d66b"/>
+      <stop offset="1" stop-color="#c8960f"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="336" fill="url(#sky)"/>
+  <!-- 芝コースのライン -->
+  <path d="M-20 300 C180 230 420 230 660 290" fill="none" stroke="#2c8a5a" stroke-width="44" opacity=".55"/>
+  <path d="M-20 300 C180 230 420 230 660 290" fill="none" stroke="#ffffff" stroke-width="2" stroke-dasharray="14 10" opacity=".45"/>
+  <!-- ノート -->
+  <g transform="translate(398 46) rotate(6)">
+    <rect width="178" height="214" rx="10" fill="#fbf8ef"/>
+    <rect width="20" height="214" rx="6" fill="#d4a514"/>
+    <g stroke="#cfd8d2" stroke-width="2">
+      <line x1="38" y1="52" x2="160" y2="52"/><line x1="38" y1="82" x2="160" y2="82"/>
+      <line x1="38" y1="112" x2="160" y2="112"/><line x1="38" y1="142" x2="160" y2="142"/>
+      <line x1="38" y1="172" x2="160" y2="172"/>
+    </g>
+    <text x="40" y="76" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="22" fill="#17703c">1着</text>
+    <text x="40" y="106" font-family="Arial, sans-serif" font-weight="700" font-size="17" fill="#3c4a42">◎ 新馬戦</text>
+    <text x="40" y="136" font-family="Arial, sans-serif" font-weight="700" font-size="17" fill="#3c4a42">○ 血統メモ</text>
+    <text x="40" y="166" font-family="Arial, sans-serif" font-weight="700" font-size="17" fill="#3c4a42">▲ 指名候補</text>
+  </g>
+  <!-- ペン -->
+  <g transform="translate(428 300) rotate(-9)">
+    <rect width="150" height="16" rx="4" fill="url(#gd)"/>
+    <polygon points="150,0 172,8 150,16" fill="#fbf8ef"/>
+    <polygon points="164,5 172,8 164,11" fill="#0b2e20"/>
+  </g>
+  <text x="40" y="74" font-family="Arial, sans-serif" font-weight="700" font-size="18" fill="#f6d66b" letter-spacing="3">COLUMN · NOTE</text>
+  <text x="38" y="142" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="66" fill="#ffffff" letter-spacing="-1">POG2026</text>
+  <text x="40" y="186" font-family="Hiragino Sans, Noto Sans JP, Yu Gothic, sans-serif" font-weight="800" font-size="26" fill="#e8f1eb">新馬・指名馬の解説ノート</text>
+  <rect x="40" y="206" width="112" height="4" rx="2" fill="url(#gd)"/>
+</svg>

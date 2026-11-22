@@ -3,7 +3,7 @@ import Link from "next/link";
 import "./globals.css";
 import GlobalNav from "@/components/GlobalNav";
 import { getUser } from "@/lib/supabase/server";
-import { GOOGLE_SITE_VERIFICATION, SITE_NAME, SITE_URL } from "@/config/site";
+import { GOOGLE_SITE_VERIFICATION, OWNER_SITES, SITE_NAME, SITE_URL, SUPERVISOR } from "@/config/site";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -53,6 +53,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               <Link href="/horses">馬を探す</Link>
               <Link href="/guide">使い方</Link>
             </nav>
+            <div className="footer-sv">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <Link href="/supervisor"><img src={SUPERVISOR.avatar} alt="" width={24} height={24} />監修：{SUPERVISOR.name}</Link>
+              {OWNER_SITES.map((s) => (
+                <a key={s.url} href={s.url} target="_blank" rel="noreferrer">{s.name} ↗</a>
+              ))}
+            </div>
             <p>成績データは毎晩自動で更新しています。賞金は中央競馬の本賞金（万円）です。</p>
             <p className="copy">© {SITE_NAME}</p>
           </div>

@@ -5,6 +5,7 @@ import { defaultSeason } from "@/lib/standings";
 import { loadFeeds } from "@/lib/feeds";
 import { COLUMN_FEEDS, NOTE_URL } from "@/config/site";
 import { PopularTable, RisingBox, SireBox } from "./PopularTable";
+import { OwnerSide } from "./OwnerSites";
 
 /** トップページ：人気馬TOP10（本文）と急上昇・人気の種牡馬（横の欄） */
 export async function HomeBoard({ children }: { children?: React.ReactNode }) {
@@ -30,6 +31,7 @@ export async function HomeBoard({ children }: { children?: React.ReactNode }) {
         {children}
       </div>
       <aside className="side">
+        <OwnerSide />
         {board && <RisingBox board={board} />}
         {board && <SireBox board={board} limit={5} />}
         <section className="box">

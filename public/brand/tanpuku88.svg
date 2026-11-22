@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1f6b47"/>
+      <stop offset="1" stop-color="#0b2e20"/>
+    </linearGradient>
+    <linearGradient id="gd" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6d66b"/>
+      <stop offset="1" stop-color="#c8960f"/>
+    </linearGradient>
+  </defs>
+  <circle cx="100" cy="100" r="100" fill="url(#bg)"/>
+  <circle cx="100" cy="100" r="92" fill="none" stroke="url(#gd)" stroke-width="3"/>
+  <!-- 蹄鉄 -->
+  <path d="M52 150 C40 120 40 78 62 58 C76 45 90 41 100 41 C110 41 124 45 138 58 C160 78 160 120 148 150"
+        fill="none" stroke="url(#gd)" stroke-width="15" stroke-linecap="round"/>
+  <g fill="#0b2e20">
+    <circle cx="52" cy="118" r="3.2"/><circle cx="57" cy="88" r="3.2"/><circle cx="72" cy="64" r="3.2"/>
+    <circle cx="148" cy="118" r="3.2"/><circle cx="143" cy="88" r="3.2"/><circle cx="128" cy="64" r="3.2"/>
+  </g>
+  <text x="100" y="128" text-anchor="middle" font-family="Arial Black, Arial, Helvetica, sans-serif" font-weight="900" font-size="58" fill="#ffffff" letter-spacing="-2">88</text>
+  <text x="100" y="160" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="15" fill="#f6d66b" letter-spacing="4">TANPUKU</text>
+</svg>

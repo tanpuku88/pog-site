@@ -2,6 +2,7 @@ import { requireGroup } from "@/lib/group-data";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { loadGenerationBoard, rankBoard } from "@/lib/popular";
 import { PopularTable, BoardFilters, BoardStats, RisingBox, SireBox, parseBoardParams, boardTitle, ExternalRankingNote } from "@/components/PopularTable";
+import { OwnerSide } from "@/components/OwnerSites";
 import QuickPick from "./QuickPick";
 
 export default async function Popular({ params, searchParams }: {
@@ -43,6 +44,7 @@ export default async function Popular({ params, searchParams }: {
         <aside className="side">
           <RisingBox board={board} groupId={id} />
           <SireBox board={board} />
+          <OwnerSide />
         </aside>
       </div>
     </>
