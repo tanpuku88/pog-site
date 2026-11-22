@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { COUNTRIES, COMING_SOON } from "@/content/asia";
+import { CLOSED } from "@/content/asia/closed";
 import { Flag, RaceHero } from "@/components/asia/Art";
 import { SITE_NAME, SITE_URL } from "@/config/site";
 
-const TITLE = "アジア競馬ガイド｜韓国・香港・ドバイなど10か国の競馬場と旅行プラン";
-const DESC = `${COUNTRIES.map((c) => c.name).join("・")}の競馬を旅行で楽しむガイド。東京・広島からの行き方、馬券の買い方、モデル旅行プラン、大レース、ご当地グルメまで。`;
+const TITLE = `アジア競馬ガイド｜韓国・香港・モンゴル・ドバイなど${COUNTRIES.length}か国の競馬と旅行プラン`;
+const DESC = `${COUNTRIES.slice(0, 8).map((c) => c.name).join("・")}など${COUNTRIES.length}か国の競馬を旅行で楽しむガイド。東京・広島からの行き方、馬券の買い方、モデル旅行プラン、大レース、ご当地グルメまで。`;
 const OG = COUNTRIES[0].photos?.[0];
 
 export const metadata: Metadata = {
@@ -73,6 +74,27 @@ export default function AsiaTop() {
           </div>
         ))}
       </div>
+
+      <div className="sec-title" id="closed"><h2>コラム：閉場したアジアの競馬場</h2></div>
+      <p>アジアでは、ここ数年で歴史ある競馬場がいくつも幕を下ろしました。旅先で跡地を訪ねるときの参考に、記録を残しておきます。</p>
+      <div className="asia-closed">
+        {CLOSED.map((t) => (
+          <article key={t.name} className="card asia-closed-card">
+            {t.photo && (
+              <figure className="asia-photo">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={t.photo.src} alt={t.photo.alt} loading="lazy" decoding="async" />
+                <figcaption>{t.photo.alt}<span>写真：<a href={t.photo.page} target="_blank" rel="noopener noreferrer">{t.photo.credit}</a>（{t.photo.license}／Wikimedia Commons）</span></figcaption>
+              </figure>
+            )}
+            <h3><Flag code={t.flag} name={t.name} size={14} /> {t.name}</h3>
+            <p className="pill">{t.years}</p>
+            {t.body.map((b) => <p key={b}>{b}</p>)}
+            <p className="muted" style={{ fontSize: 12 }}>出典：<a href={t.source.url} target="_blank" rel="noopener noreferrer">{t.source.label}</a>（2026年11月22日確認）</p>
+          </article>
+        ))}
+      </div>
+
       <p className="muted">イラストはこのサイトのオリジナル、国旗の画像は flag-icons（MITライセンス）、写真は Wikimedia Commons のフリーライセンス写真（撮影者とライセンスは各国のページに記載）を使っています。開催日や料金は変わることがあるので、出かける前に各国の公式サイトも確認してください。</p>
     </>
   );

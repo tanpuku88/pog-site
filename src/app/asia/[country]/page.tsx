@@ -98,7 +98,7 @@ export default async function CountryPage({ params }: { params: Promise<{ countr
       </section>
 
       <nav className="asia-jump" aria-label="ページ内メニュー">
-        {MENU.map(([id, label]) => <a key={id} href={`#${id}`}>{label}</a>)}
+        {MENU.filter(([id]) => (id !== "official" || !!c.official?.length) && (id !== "access" || !!c.fromJapan?.length)).map(([id, label]) => <a key={id} href={`#${id}`}>{label}</a>)}
       </nav>
 
       <div className="card asia-intro">

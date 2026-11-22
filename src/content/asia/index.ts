@@ -9,12 +9,18 @@ import { india } from "./india";
 import { malaysia } from "./malaysia";
 import { philippines } from "./philippines";
 import { turkey } from "./turkey";
+import { mongolia } from "./mongolia";
+import { kazakhstan } from "./kazakhstan";
+import { kyrgyzstan } from "./kyrgyzstan";
+import { thailand } from "./thailand";
+import { oman } from "./oman";
+import { pakistan } from "./pakistan";
 import { PHOTOS } from "./photos";
 import { ROUTES } from "./routes";
 import { OFFICIAL } from "./official";
 
 /** 公開中の国。新しい国はここに足す */
-export const COUNTRIES: CountryGuide[] = [korea, hongkong, uae, saudi, qatar, bahrain, india, malaysia, philippines, turkey].map((c) => ({
+export const COUNTRIES: CountryGuide[] = [korea, hongkong, thailand, mongolia, kazakhstan, kyrgyzstan, uae, saudi, qatar, bahrain, oman, india, pakistan, malaysia, philippines, turkey].map((c) => ({
   ...c,
   fromJapan: c.fromJapan ?? ROUTES[c.slug],
   photos: c.photos ?? PHOTOS[c.slug],

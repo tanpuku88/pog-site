@@ -9,6 +9,32 @@ const page = (name: string) => `https://commons.wikimedia.org/wiki/File:${name}`
 const p = (path: string, name: string, alt: string, credit: string, license: string): Photo => ({ src: thumb(path, name), alt, credit, license, page: page(name) });
 
 export const PHOTOS: Record<string, Photo[]> = {
+  mongolia: [
+    p("3/3b", "Horse_race_in_Mongolia_Naadam.jpg", "ナーダムの競馬で草原を走る馬と子ども騎手", "Orgio89", "CC BY 3.0"),
+    p("9/96", "Young_Naadam_Horse_Racers_in_Mongolia_-_2010.jpg", "ゴールに飛びこむ若い騎手たち（2010年）", "FischerFotos", "CC BY-SA 4.0"),
+    p("8/83", "Three_Naadam_riders.jpg", "ナーダムの競馬に出る3人の少年", "InvictaHOG", "パブリックドメイン"),
+  ],
+  kazakhstan: [
+    p("0/08", "Kokpar,_Central_asian_national_game.jpg", "カザフスタンの騎馬競技コクパル", "Rustam Uzbekov", "CC BY-SA 4.0"),
+    p("7/7b", "Shymbulak,_Almaty_(P1180205-Pano).jpg", "アルマトイ郊外シンブラクの山並み", "Matti Blume", "CC BY-SA 4.0"),
+  ],
+  kyrgyzstan: [
+    p("2/2a", "Kok-boru,_Cholpon-Ata,_Kyrgyzstan.jpg", "チョルポン・アタでのコクボル", "Helen Owl", "CC BY-SA 4.0"),
+    p("7/74", "Kok-boru_Cholpon-Ata,_Kyrgyzstan,_2018_World_Nomad_Games.jpg", "2018年世界遊牧民競技大会のコクボル", "Helen Owl", "CC BY-SA 4.0"),
+  ],
+  thailand: [
+    p("5/5d", "Rbsc_race.JPG", "王立バンコク・スポーツクラブの競馬", "Nini at Thai Wikipedia", "CC BY-SA 3.0"),
+    p("2/2e", "Bangkok_skyline,_Bangkok,_Thailand.jpg", "バンコク中心部の高層ビルと緑（競馬場のある一帯）", "Vyacheslav Argenberg", "CC BY 4.0"),
+  ],
+  oman: [
+    p("9/9b", "Royal_Cavalry_of_Oman_001.JPG", "オマーン王室騎兵隊（ドイツの馬術イベントで、2011年）", "Usien", "CC BY-SA 3.0"),
+    p("6/6f", "Barka_Fort_(4)_(41446311921).jpg", "競馬場のある町バルカの城", "Hans Birger Nilsen", "CC BY-SA 2.0"),
+    p("a/a1", "Muttrah_Corniche_2018.jpg", "マスカットのマトラ海岸通り", "Albinfo", "CC BY 4.0"),
+  ],
+  pakistan: [
+    p("5/59", "Alamgiri_Gate_of_Lahore_Fort_2024.jpg", "ラホール城のアラムギリ門（2024年）", "ほっきー", "CC0"),
+    p("d/db", "Badshahi_Mosque_(Lahore).jpg", "ラホールのバードシャーヒー・モスク", "Muhammad Umair Mirza", "CC BY-SA 4.0"),
+  ],
   korea: [
     p("2/2a", "Seoul_Racecourse_race_time.jpg", "レース前のソウル競馬場。山を背にしたコース", "U2em", "CC BY-SA 3.0"),
     p("7/7b", "Seoul_Racecourse_November_Dawn.jpg", "11月の夕暮れのソウル競馬場スタンド前", "U2em", "CC BY-SA 3.0"),
@@ -52,4 +78,10 @@ export const PHOTOS: Record<string, Photo[]> = {
   turkey: [
     p("4/47", "Veliefendi_hipodromu_2024.jpg", "上から見たヴェリエフェンディ競馬場（2024年）", "Lucho3434", "CC0"),
   ],
+};
+
+/** 閉場した競馬場のコラム用 */
+export const CLOSED_PHOTOS = {
+  singapore: p("d/de", "Kranji_Racecourse_05-12-2024.jpg", "シンガポールのクランジ競馬場（2024年撮影）", "LN9267", "CC BY-SA 4.0"),
+  macau: p("6/6e", "Macau_Jockey_Club_Racecourse2021.jpg", "タイパ島のマカオ競馬場（2021年）", "Charlie fong", "CC BY-SA 4.0"),
 };
