@@ -1,0 +1,42 @@
+name: 成績の芝・ダート・距離を取り込む
+
+on:
+  workflow_dispatch:
+    inputs:
+      crop_year:
+        description: "生まれ年（空なら今シーズンの2歳世代）"
+        required: false
+        default: ""
+
+concurrency:
+  group: import-course-${{ inputs.crop_year || 'current' }}
+  cancel-in-progress: false
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - id: course
+        run: npm run import:course
+        env:
+          CROP_YEAR: ${{ inputs.crop_year }}
+          # ほかの取り込みと重なってもnetkeibaに負担をかけないよう間隔を広めに
+          NETKEIBA_INTERVAL_MS: "4000"
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      # 時間切れで途中までだったら、続きを自動でもう一度動かす
+      - if: ${{ steps.course.outputs.more == 'true' }}
+        run: gh workflow run import-course.yml --ref main -f crop_year="${{ inputs.crop_year }}"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}

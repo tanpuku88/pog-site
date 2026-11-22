@@ -7,7 +7,8 @@ import { defaultSeason } from "@/lib/standings";
 import { formatMan } from "@/lib/util";
 import { HorseLabel } from "./HorseLabel";
 import { dataComment, writtenComment } from "@/lib/comments";
-import { loadOverallRate } from "@/lib/overall";
+import { loadOverallRate, loadProfiles } from "@/lib/overall";
+import { Meikan } from "./Meikan";
 import { formatPrice, pricedHorses, returnRate } from "@/lib/sales";
 import { DataTabs } from "./DataTabs";
 
@@ -29,7 +30,12 @@ const RELATED: Record<Kind["field"], Kind[]> = {
 };
 
 export async function GroupDetail({ kind, name }: { kind: Kind; name: string }) {
-  const { season, prev, summary, prevSummary, rows, prevTop, horses } = await loadGroupDetail(createAdminClient(), kind, name);
+  const { season, prev, summary, prevSummary, rows, prevTop, horses, races } = await loadGroupDetail(createAdminClient(), kind, name);
+  const profileSet = await loadProfiles(season.crop_year, kind.field).catch(() => null);
+  const profile = profileSet?.profiles[name] ?? null;
+  const runs = races.length, wins = races.filter((r) => r.finish === "1").length;
+  const winRate = runs > 0 ? (wins / runs) * 100 : null;
+  const maxPoints = Math.max(1, ...rows.map((r) => r.t.points));
   const rate = summary ? winnerRate(summary) : null;
   const avgRate = await loadOverallRate(season.crop_year).catch(() => null);
   const tallyMap = new Map(rows.map((r) => [r.h.id, r.t]));
@@ -69,18 +75,13 @@ export async function GroupDetail({ kind, name }: { kind: Kind; name: string }) 
         <div className="card muted">この{kind.label}の{season.crop_year}年生まれの馬は登録されていません。</div>
       ) : (
         <>
-          {(written || auto) && (
-            <section className="comment-card">
-              <div className="cc-head"><span className="cc-icon" aria-hidden>🗣</span>POG目線のひとこと</div>
-              {written?.tags && <div className="cc-tags">{written.tags.map((t) => <span key={t} className="pill">{t}</span>)}</div>}
-              {written && <p>{written.text}</p>}
-              {auto && <p>{auto}</p>}
-              <p className="cc-note">{written ? "上の文は運営の見立て（2026年11月時点）、下の文は今の数字から毎日自動で作っています。" : "今の数字から毎日自動で作っている文章です。"}</p>
-            </section>
-          )}
+          <Meikan field={kind.field} label={kind.label} name={name} title={titleOf(kind, name)}
+            profile={profile ? { ...profile, winRate: winRate ?? profile.winRate } : null}
+            avgWinRate={profileSet?.avgWinRate ?? null} count={profileSet?.count ?? 0} written={written} auto={auto} />
           <div className="stats">
             <div className="stat"><div className="k">2歳{kind.member}</div><div className="v">{summary.horses}<small>頭</small></div><div className="s">牡{colts}・牝{summary.horses - colts}</div></div>
-            <div className="stat"><div className="k">勝ち上がり</div><div className="v">{summary.winners}<small>頭</small></div><div className="s">出走{summary.starters}頭{rate !== null ? `・率${rate.toFixed(1)}%` : ""}</div></div>
+            <div className="stat"><div className="k">勝ち上がり</div><div className="v">{summary.winners}<small>頭</small></div><div className="s">出走{summary.starters}頭{rate !== null ? `・勝ち上がり率${rate.toFixed(1)}%` : ""}</div></div>
+            <div className="stat"><div className="k">勝率</div><div className="v">{winRate !== null ? winRate.toFixed(1) : "-"}<small>%</small></div><div className="s">{runs > 0 ? `${runs}戦${wins}勝` : "まだ出走なし"}</div></div>
             <div className="stat"><div className="k">本賞金の合計</div><div className="v">{formatMan(summary.points)}<small>万円</small></div><div className="s">{summary.top ? `稼ぎ頭 ${summary.top.name}` : "まだ賞金なし"}</div></div>
             <div className="stat"><div className="k">延べ指名数</div><div className="v">{summary.picks}</div><div className="s">このサイトの全大会</div></div>
             {(sold.length > 0 || club.length > 0) && (
@@ -122,13 +123,13 @@ export async function GroupDetail({ kind, name }: { kind: Kind; name: string }) 
               <thead><tr><th>馬名・血統</th><th className="hide-sm">{subCol.label}</th><th className="num">指名</th><th className="num hide-sm">価格</th><th className="num">成績</th><th className="num">賞金</th></tr></thead>
               <tbody>
                 {rows.map(({ h, picks: n, t }) => (
-                  <tr key={h.id}>
+                  <tr key={h.id} className={t.wins > 0 ? "won" : undefined}>
                     <td className="name-cell"><HorseLabel id={h.id} horse={kind.field === "sire" ? { ...h, sire: null } : h} /></td>
                     <td className="hide-sm sub">{h[subCol.field] ? <Link href={groupHref(subCol, h[subCol.field]!)}>{shortName(h[subCol.field]!)}</Link> : ""}</td>
                     <td className="num">{n || <span className="muted">-</span>}</td>
-                    <td className="num hide-sm sub">{h.sale_price_man ? <span title={h.sale_name ?? "セリ"}>{formatPrice(Number(h.sale_price_man))}</span> : h.club_price_man ? <span title="一口クラブの募集総額">募{formatPrice(Number(h.club_price_man))}</span> : "-"}</td>
-                    <td className="num sub">{t.starts === 0 ? "未出走" : `${t.starts}戦${t.wins}勝`}</td>
-                    <td className="num big">{t.points > 0 ? formatMan(t.points) : <span className="muted">-</span>}</td>
+                    <td className="num hide-sm sub">{h.sale_price_man ? <span className="price-chip" title={h.sale_name ?? "セリ"}>{formatPrice(Number(h.sale_price_man))}</span> : h.club_price_man ? <span className="price-chip club" title="一口クラブの募集総額">募{formatPrice(Number(h.club_price_man))}</span> : "-"}</td>
+                    <td className="num">{t.starts === 0 ? <span className="rec-badge debut">未出走</span> : <span className={`rec-badge${t.wins > 0 ? " win" : ""}`}>{t.starts}戦{t.wins}勝</span>}</td>
+                    <td className="num big prize-cell">{t.points > 0 ? <>{formatMan(t.points)}<span className="pz-bar" style={{ width: `${Math.max(6, (t.points / maxPoints) * 70)}%` }} /></> : <span className="muted">-</span>}</td>
                   </tr>
                 ))}
               </tbody>
@@ -153,7 +154,7 @@ export async function GroupDetail({ kind, name }: { kind: Kind; name: string }) 
           </div>
         </>
       )}
-      <p className="ext-note">勝ち上がり率は「1勝以上した頭数 ÷ 出走した頭数」。データはnetkeibaの公開ページから集計しています。</p>
+      <p className="ext-note">勝率は「1着の回数 ÷ 出走回数」、勝ち上がり率は「1勝以上した頭数 ÷ 出走した頭数」。データはnetkeibaの公開ページから集計しています。</p>
     </>
   );
 }

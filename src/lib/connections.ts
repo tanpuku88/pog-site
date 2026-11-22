@@ -66,7 +66,7 @@ export async function loadGroupDetail(db: SupabaseClient, kind: Kind, name: stri
     .filter((x) => x.t.points > 0)
     .sort((a, b) => b.t.points - a.t.points)
     .slice(0, 5);
-  return { season, prev, summary, prevSummary, rows, prevTop, horses: cur.horses };
+  return { season, prev, summary, prevSummary, rows, prevTop, horses: cur.horses, races: cur.races };
 }
 
 /** 所属馬の中で多い順に「父」「厩舎」などを数える（個別ページの「主な○○」用） */

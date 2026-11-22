@@ -1,53 +1,23 @@
 // netkeiba のページの形を調べるための診断スクリプト（データベースには書き込まない）。
 //   npm run probe:netkeiba
 import * as cheerio from "cheerio";
-import { politeFetch, horsePageUrl, narRaceListUrl, narShutubaUrl } from "../src/lib/netkeiba/fetch";
-import { parseHorseProfile, parseNarRaceList, parseShutuba } from "../src/lib/netkeiba/parse";
-
-
-async function profileLine(id: string) {
-  try {
-    const p = await politeFetch(horsePageUrl(id));
-    const prof = parseHorseProfile(id, p.html);
-    const $ = cheerio.load(p.html);
-    let origin = "";
-    $("table.db_prof_table tr").each((_, tr) => {
-      if ($(tr).find("th").text().includes("産地")) origin = $(tr).find("td").text().trim();
-    });
-    return prof ? `${prof.name}（${prof.birth_year} 父${prof.sire} 産地${origin || "?"}）` : "なし";
-  } catch (e) {
-    return `失敗 ${(e as Error).message}`;
-  }
-}
-
-function jst(offset: number) {
-  return new Date(Date.now() + 9 * 3600_000 + offset * 86400_000).toISOString().slice(0, 10).replaceAll("-", "");
-}
+import { politeFetch, horsePageUrl, horseResultUrl } from "../src/lib/netkeiba/fetch";
+import { parseRaceResults } from "../src/lib/netkeiba/parse";
 
 async function main() {
-  // 外国産馬（マル外）の馬IDの範囲を確かめる
-  console.log("== 外国産馬のID");
-  for (const n of [110001, 110002, 110005, 110010, 110015, 110016, 110020, 110030, 110050, 110080, 110100, 110150, 110200, 190001, 109990]) {
-    const id = `2024${n}`;
-    console.log(`ID ${id}: ${await profileLine(id)}`);
-  }
-  for (const id of ["2023110001", "2023110050", "2023110100", "2023110150"]) console.log(`ID ${id}: ${await profileLine(id)}`);
-
-  // 地方競馬のレース一覧・出馬表（今日・明日・過去）
-  for (const off of [0, 1, -1, -30, -150]) {
-    const d = jst(off);
-    try {
-      const list = await politeFetch(narRaceListUrl(d));
-      const ids = parseNarRaceList(list.html);
-      const all = [...new Set([...list.html.matchAll(/race_id=(\d{12})/g)].map((m) => m[1].slice(4, 6)))];
-      console.log(`\n== 地方 ${d}: ${ids.length}レース（場コード ${all.join(",")}） 例 ${ids.slice(0, 3).join(",")}`);
-      if (ids[0]) {
-        const sh = await politeFetch(narShutubaUrl(ids[0]));
-        const s = parseShutuba(ids[0], sh.html);
-        console.log(`  出馬表 ${ids[0]}: ${s.venue}${s.race_no}R「${s.race_name}」${s.post_time} 出走${s.horse_ids.length}頭 例${s.horse_ids.slice(0, 3).join(",")}`);
+  // 成績表の「距離」列（芝1600 など）が読めるか確かめる
+  for (const id of ["2019105219", "2021105898", "2022105081"]) {
+    for (const [label, url] of [["馬ページ", horsePageUrl(id)], ["成績ページ", horseResultUrl(id)]] as const) {
+      try {
+        const html = (await politeFetch(url)).html;
+        const $ = cheerio.load(html);
+        const heads = $("table.db_h_race_results thead th, table.db_h_race_results tr:first-child th").map((_, th) => $(th).text().trim()).get();
+        const rs = parseRaceResults(html);
+        console.log(`== ${id} ${label}: 見出し[${heads.join("|")}] 成績${rs?.length ?? "なし"}件`);
+        rs?.slice(0, 3).forEach((r) => console.log(`   ${r.race_date} ${r.race_name} ${r.finish}着 ${r.surface}${r.distance}`));
+      } catch (e) {
+        console.log(`== ${id} ${label}: 失敗 ${(e as Error).message}`);
       }
-    } catch (e) {
-      console.log(`\n== 地方 ${d}: 失敗 ${(e as Error).message}`);
     }
   }
 }

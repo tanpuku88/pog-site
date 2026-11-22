@@ -45,6 +45,10 @@ export type RaceResult = {
   finish: string | null;
   prize_man: number;
   is_jra: boolean;
+  /** 「芝」「ダ」「障」。読めなければ null */
+  surface: string | null;
+  /** 距離（m） */
+  distance: number | null;
 };
 
 const clean = (s: string | undefined | null) => (s ?? "").replace(/\s+/g, " ").trim();
@@ -114,6 +118,7 @@ export function parseRaceResults(html: string): RaceResult[] | null {
   const cName = findCol(idx, "レース名");
   const cFinish = findCol(idx, "着順");
   const cPrize = findCol(idx, "賞金");
+  const cDist = findCol(idx, "距離");
 
   const results: RaceResult[] = [];
   table.find("tr").each((_, tr) => {
@@ -132,6 +137,7 @@ export function parseRaceResults(html: string): RaceResult[] | null {
       finish: cFinish >= 0 ? orNull(clean(tds.eq(cFinish).text())) : null,
       prize_man: cPrize >= 0 ? parsePrize(tds.eq(cPrize).text()) : 0,
       is_jra: isJraVenue(venue),
+      ...parseCourse(cDist >= 0 ? tds.eq(cDist).text() : ""),
     });
   });
   return results;
@@ -320,4 +326,10 @@ export function parseClubPrice(s: string): number | null {
   const unit = parseYenMan(m[1]);
   const n = Number(m[2].replace(/,/g, ""));
   return unit && n ? Math.round(unit * n * 10) / 10 : null;
+}
+
+/** 「芝1600」「ダ1200」「障3000」→ 馬場と距離 */
+export function parseCourse(s: string): { surface: string | null; distance: number | null } {
+  const m = clean(s).match(/(芝|ダ|障)\D*?(\d{3,4})/);
+  return m ? { surface: m[1], distance: Number(m[2]) } : { surface: null, distance: null };
 }

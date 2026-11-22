@@ -45,7 +45,7 @@ describe("馬ページの解析", () => {
     expect(r).toHaveLength(4);
     expect(r[0]).toEqual({
       race_date: "2026-11-08", venue: "東京", race_name: "京王杯2歳S(G2)",
-      race_id: "202605050211", finish: "1", prize_man: 3800, is_jra: true,
+      race_id: "202605050211", finish: "1", prize_man: 3800, is_jra: true, surface: null, distance: null,
     });
     expect(r[1]).toMatchObject({ venue: "大井", is_jra: false, prize_man: 200 });
     expect(r[3]).toMatchObject({ finish: "中止", prize_man: 0 });
@@ -191,5 +191,15 @@ describe("セリ・募集価格", () => {
   it("億・万・円", () => {
     expect(parseYenMan("2億円")).toBe(20000);
     expect(parseYenMan("-")).toBeNull();
+  });
+});
+
+import { parseCourse } from "../src/lib/netkeiba/parse";
+describe("馬場と距離", () => {
+  it("芝・ダ・障", () => {
+    expect(parseCourse("芝1600")).toEqual({ surface: "芝", distance: 1600 });
+    expect(parseCourse(" ダ1200 ")).toEqual({ surface: "ダ", distance: 1200 });
+    expect(parseCourse("障3000")).toEqual({ surface: "障", distance: 3000 });
+    expect(parseCourse("")).toEqual({ surface: null, distance: null });
   });
 });
