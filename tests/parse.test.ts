@@ -203,3 +203,12 @@ describe("馬場と距離", () => {
     expect(parseCourse("")).toEqual({ surface: null, distance: null });
   });
 });
+
+describe("種牡馬の産駒成績", () => {
+  it("累計行を読む", async () => {
+    const { parseSireOffspring } = await import("../src/lib/netkeiba/parse");
+    const html = `<table><tr><th>年度</th><th>順位</th></tr><tr><th>出走</th></tr>
+      <tr><td>累計</td><td></td><td>443</td><td>186</td><td>3,334</td><td>404</td><td>279</td><td>32</td><td>749</td><td>91</td><td>2,306</td><td>281</td><td>2,387</td><td>295</td><td>855</td><td>88</td><td>42.0%</td><td>1.91</td><td>1,201,152.4</td><td>1,823.7</td><td>1,697.7</td><td>イクイノックス</td></tr></table>`;
+    expect(parseSireOffspring(html)).toMatchObject({ starters: 443, winners: 186, runs: 3334, wins: 404, gradedWins: 32, turfRuns: 2387, turfWins: 295, dirtRuns: 855, dirtWins: 88, winnerRate: 42, ei: 1.91, avgDistTurf: 1824, avgDistDirt: 1698, best: "イクイノックス" });
+  });
+});

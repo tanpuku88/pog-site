@@ -333,3 +333,41 @@ export function parseCourse(s: string): { surface: string | null; distance: numb
   const m = clean(s).match(/(芝|ダ|障)\D*?(\d{3,4})/);
   return m ? { surface: m[1], distance: Number(m[2]) } : { surface: null, distance: null };
 }
+
+export type SireOffspring = {
+  starters: number; winners: number; runs: number; wins: number;
+  gradedRuns: number; gradedWins: number;
+  turfRuns: number; turfWins: number; dirtRuns: number; dirtWins: number;
+  winnerRate: number | null; ei: number | null; prize: number | null;
+  avgDistTurf: number | null; avgDistDirt: number | null; best: string | null;
+};
+
+/** 種牡馬の産駒成績ページ（/horse/sire/{id}/）の「累計」行（中央）を読む */
+export function parseSireOffspring(html: string): SireOffspring | null {
+  const $ = cheerio.load(html);
+  const table = $("table").first();
+  const row = table.find("tr").filter((_, tr) => clean($(tr).find("td,th").first().text()) === "累計").first();
+  if (row.length === 0) return null;
+  const c = row.find("td,th").map((_, x) => clean($(x).text())).get();
+  if (c.length < 21) return null;
+  const n = (i: number) => { const v = Number((c[i] ?? "").replace(/[,%]/g, "")); return Number.isFinite(v) ? v : 0; };
+  const orNullNum = (v: number) => (v > 0 ? v : null);
+  return {
+    starters: n(2), winners: n(3), runs: n(4), wins: n(5), gradedRuns: n(6), gradedWins: n(7),
+    turfRuns: n(12), turfWins: n(13), dirtRuns: n(14), dirtWins: n(15),
+    winnerRate: n(2) > 0 ? n(16) : null, ei: orNullNum(n(17)), prize: orNullNum(n(18)),
+    avgDistTurf: orNullNum(Math.round(n(19))), avgDistDirt: orNullNum(Math.round(n(20))), best: orNull(c[21] ?? ""),
+  };
+}
+
+/** 血統ページの血統表から父のIDを読む */
+export function parseSireId(html: string): string | null {
+  const $ = cheerio.load(html);
+  const rows = $("table.blood_table").first().find("tr").toArray();
+  for (const tr of rows) {
+    const a = $(tr).find("td").first().find("a[href*='/horse/']").first();
+    const id = horseIdFromHref(a.attr("href"));
+    if (id) return id;
+  }
+  return null;
+}
