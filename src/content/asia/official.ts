@@ -38,6 +38,12 @@ export const OFFICIAL: Record<string, OfficialSite[]> = {
     { name: "フィリピン競馬委員会（PHILRACOM）", desc: "フィリピン競馬を管理する政府機関", url: "https://philracom.gov.ph/" },
     { name: "メトロマニラ・ターフクラブ", desc: "メトロターフ競馬場の運営会社", url: "https://www.mmtci.com/" },
   ],
+  kyrgyzstan: [
+    { name: "世界遊牧民競技大会（World Nomad Games）", desc: "大会の公式サイト。次回は2028年にロシア・カザンで開催予定", url: "https://worldnomadgames.org/en" },
+  ],
+  thailand: [
+    { name: "王立バンコク・スポーツクラブ（RBSC）", desc: "バンコクの競馬の主催クラブ（2026年11月はサイトがメンテナンス中。LINE @RBSC でも問い合わせ可）", url: "https://www.rbsc.org/" },
+  ],
   turkey: [
     { name: "トルコ・ジョッキークラブ（TJK）", desc: "トルコ競馬の主催者。開催日程・出馬表・結果", url: "https://www.tjk.org/" },
   ],

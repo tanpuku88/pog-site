@@ -151,3 +151,103 @@ ROUTES.india = genericRoutes("インド", "ムンバイ（チャトラパティ�
 ROUTES.malaysia = genericRoutes("マレーシア", "クアラルンプール国際空港", "成田・羽田からクアラルンプールへ直行便（約7時間半・例）。空港からセランゴール・ターフクラブへは車で約40分", "関西空港からの直行便や、台北・香港での乗り継ぎでクアラルンプールへ（例）");
 ROUTES.philippines = genericRoutes("フィリピン", "マニラ（ニノイ・アキノ国際空港）", "成田・羽田からマニラへ直行便（約5時間・例）。マニラから競馬場のあるバタンガス州へは車で約1.5〜2時間", "福岡・関西空港からの直行便や、香港・台北での乗り継ぎでマニラへ（例）");
 ROUTES.turkey = genericRoutes("トルコ", "イスタンブール空港", "成田・羽田からイスタンブールへ直行便（例。ターキッシュエアラインズ）。約13時間。空港から競馬場へは車で約45分", "関西空港・羽田からの直行便に乗り継いでイスタンブールへ（例）");
+
+ROUTES.mongolia = [
+  {
+    from: "東京",
+    title: "成田からウランバートルへ直行便",
+    summary: "約6時間。MIATモンゴル航空などが運航（便数は季節で変わります）",
+    steps: [
+      { time: "午後〜夜", mode: "plane", text: "成田空港からウランバートル（チンギス・ハーン国際空港）へ直行便（例）" },
+      { mode: "taxi", text: "空港から市内へ車で約1時間。ナーダム期間は道路が混みます" },
+      { mode: "bus", text: "草原の競馬会場へは、ツアーバスかチャーター車で" },
+    ],
+    links: [NRT, { label: "FlightConnections 成田〜ウランバートルの直行便", url: "https://www.flightconnections.com/flights-from-nrt-to-ubn" }],
+  },
+  {
+    from: "広島",
+    title: "羽田・成田へ出るか、ソウル経由でウランバートルへ",
+    summary: "広島からの直行便はないので乗り継ぎ（例）",
+    steps: [
+      { mode: "plane", text: "広島空港から羽田へ国内線（約1時間20分）。成田へ移動して直行便へ" },
+      { mode: "plane", text: "または広島空港から仁川（ソウル）へ直行便（チェジュ航空・毎日）、仁川でウランバートル行きに乗り継ぎ（例）" },
+    ],
+    links: [HIJ_FLIGHTS, { label: "広島空港 ソウル便の時刻表", url: "https://www.hij.airport.jp/flight/kokusai/korea.html" }],
+  },
+];
+
+ROUTES.kazakhstan = [
+  {
+    from: "東京",
+    title: "成田→アルマトイ直行便（2026年11月30日から）",
+    summary: "エア・アスタナが週2便。成田発は火・金",
+    steps: [
+      { time: "火・金 10:55", mode: "plane", text: "成田発 エア・アスタナ KC172便" },
+      { time: "16:20（現地）", mode: "plane", text: "アルマトイ到着（約9時間25分）" },
+      { mode: "taxi", text: "空港から市内へタクシー・配車アプリで約30分（目安）" },
+      { time: "月・木 21:55", mode: "plane", text: "帰りはアルマトイ発 KC171便で翌朝9:25に成田着" },
+    ],
+    links: [NRT, { label: "Astana Times 直行便の発表", url: "https://astanatimes.com/2026/11/air-astana-to-launch-direct-almaty-tokyo-flights-this-november/" }],
+  },
+  {
+    from: "広島",
+    title: "羽田経由で成田へ、またはソウル経由でアルマトイへ",
+    summary: "広島からの直行便はないので乗り継ぎ（例）",
+    steps: [
+      { mode: "plane", text: "広島空港から羽田へ国内線（約1時間20分）、成田へ移動して直行便へ" },
+      { mode: "train", text: "または前日に新幹線で東京へ出て、成田に近いホテルに泊まると安心" },
+      { mode: "plane", text: "広島空港から仁川へ飛び、乗り継いでアルマトイへ向かう方法も（例）" },
+    ],
+    links: [HIJ_FLIGHTS],
+  },
+];
+
+ROUTES.kyrgyzstan = [
+  {
+    from: "東京",
+    title: "アルマトイやソウル・イスタンブール経由でビシケクへ",
+    summary: "直行便はないので乗り継ぎ。2026年11月30日からは成田〜アルマトイ直行便も使えます",
+    steps: [
+      { mode: "plane", text: "成田からアルマトイへ直行便（火・金）、アルマトイからビシケクへ乗り継ぎ（例）" },
+      { mode: "taxi", text: "ビシケクからチョルポン・アタへは車で約4時間（目安）" },
+    ],
+    links: [NRT],
+  },
+  {
+    from: "広島",
+    title: "ソウル経由、または羽田・成田へ出て乗り継ぎ",
+    summary: "広島空港から仁川へ直行便（毎日）があるので、ソウル乗り継ぎが一案（例）",
+    steps: [
+      { mode: "plane", text: "広島空港から仁川へ（チェジュ航空）" },
+      { mode: "plane", text: "仁川などで乗り継いでビシケクへ（例）" },
+    ],
+    links: [HIJ_FLIGHTS],
+  },
+];
+
+ROUTES.thailand = [
+  {
+    from: "東京",
+    title: "羽田・成田からバンコクへ直行便",
+    summary: "約7時間。毎日たくさんの便があります",
+    steps: [
+      { mode: "plane", text: "羽田・成田からスワンナプーム空港へ（例）" },
+      { mode: "train", text: "エアポート・レイル・リンクで市内へ、BTSに乗り換えてラーチャダムリ駅へ" },
+      { mode: "walk", text: "ラーチャダムリ駅から王立バンコク・スポーツクラブまで歩いてすぐ" },
+    ],
+    links: [HND, NRT],
+  },
+  {
+    from: "広島",
+    title: "関西空港・福岡空港の直行便か、ソウル・台北経由で",
+    summary: "広島空港からバンコクへの直行便はないので乗り継ぎ（例）",
+    steps: [
+      { mode: "train", text: "新幹線で新大阪（約1時間20分）、特急はるかで関西空港へ。または新幹線で博多へ出て福岡空港から" },
+      { mode: "plane", text: "広島空港から仁川・台北・香港へ直行便で出て乗り継ぐ方法も" },
+    ],
+    links: [HIJ_FLIGHTS, { label: "関西空港 フライト情報", url: "https://www.kansai-airport.or.jp/" }],
+  },
+];
+
+ROUTES.oman = genericRoutes("オマーン", "マスカット国際空港", "日本からの直行便はないため、ドバイ・ドーハなどで乗り継ぎ（例）。空港から競馬場のあるバルカへは車で約1時間（目安）", "中東の空港で乗り継いでマスカットへ（例）");
+ROUTES.pakistan = genericRoutes("パキスタン", "ラホール（アッラーマ・イクバール国際空港）", "日本からの直行便はないため、バンコク・中東の空港などで乗り継ぎ（例）。出発前に外務省の危険情報を確認", "中東やバンコクの空港で乗り継いでラホールへ（例）");
