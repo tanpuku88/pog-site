@@ -3,6 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { COUNTRIES, findCountry } from "@/content/asia";
 import { Flag, FoodIcon, RaceHero, TrackMap } from "@/components/asia/Art";
+import type { CountryGuide } from "@/content/asia/types";
+import { SITE_NAME, SITE_URL, SUPERVISOR } from "@/config/site";
 
 export const dynamicParams = false;
 
@@ -14,13 +16,24 @@ export async function generateMetadata({ params }: { params: Promise<{ country: 
   const { country } = await params;
   const c = findCountry(country);
   if (!c) return {};
+  const title = `${c.name}競馬ガイド｜${c.tracks[0].name}への行き方・馬券の買い方・旅行プラン`;
+  const description = seoDescription(c);
   const ph = c.photos?.[0];
+  const images = ph ? [{ url: ph.src, alt: ph.alt }] : undefined;
   return {
-    ...(ph ? { openGraph: { images: [{ url: ph.src, alt: ph.alt }] } } : {}),
-    title: `${c.name}競馬ガイド｜行き方・馬券の買い方・旅行プラン・グルメ`,
-    description: `${c.name}の競馬を旅行で楽しむガイド。${c.tagline}。競馬場への行き方、馬券の買い方、モデルプラン、大レース、文化と地元グルメまで。`,
+    title,
+    description,
+    keywords: [`${c.name} 競馬`, `${c.name} 競馬場`, ...c.tracks.map((t) => t.name), `${c.name} 競馬 旅行`, `${c.name} 競馬 行き方`, `${c.name} 馬券 買い方`],
     alternates: { canonical: `/asia/${c.slug}` },
+    openGraph: { title, description, url: `/asia/${c.slug}`, type: "article", siteName: SITE_NAME, locale: "ja_JP", modifiedTime: c.updated, images },
+    twitter: { card: ph ? "summary_large_image" : "summary", title, description, images: ph ? [ph.src] : undefined },
   };
+}
+
+function seoDescription(c: CountryGuide) {
+  const tracks = c.tracks.map((t) => t.name).join("・");
+  const access = c.fromJapan?.length ? "東京・広島からの行き方、" : "";
+  return `${c.name}の競馬を旅行で楽しむガイド。${c.tagline}。${tracks}への${access}馬券の買い方、モデル旅行プラン、大レース、文化とご当地グルメまで。`.slice(0, 160);
 }
 
 const MENU = [
@@ -43,8 +56,36 @@ export default async function CountryPage({ params }: { params: Promise<{ countr
   const c = findCountry(country);
   if (!c) notFound();
 
+  const url = `${SITE_URL}/asia/${c.slug}`;
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "トップ", item: `${SITE_URL}/` },
+        { "@type": "ListItem", position: 2, name: "アジア競馬ガイド", item: `${SITE_URL}/asia` },
+        { "@type": "ListItem", position: 3, name: `${c.name}競馬ガイド`, item: url },
+      ],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: `${c.name}競馬ガイド｜行き方・馬券の買い方・旅行プラン`,
+      description: seoDescription(c),
+      inLanguage: "ja",
+      mainEntityOfPage: url,
+      dateModified: c.updated,
+      image: c.photos?.map((p) => p.src),
+      author: { "@type": "Person", name: SUPERVISOR.name, url: `${SITE_URL}/supervisor` },
+      publisher: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
+      about: c.tracks.map((t) => ({ "@type": "Place", name: t.name, alternateName: t.local, address: { "@type": "PostalAddress", addressLocality: t.city, addressCountry: c.flag.toUpperCase() } })),
+    },
+  ];
+  const others = COUNTRIES.filter((o) => o.slug !== c.slug);
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       <p className="crumb"><Link href="/asia">アジア競馬ガイド</Link> ＞ {c.name}</p>
       <section className="asia-hero">
         <RaceHero className="asia-hero-art" scene={c.scene} sky={c.sky} />
@@ -224,7 +265,13 @@ export default async function CountryPage({ params }: { params: Promise<{ countr
         <p className="muted" style={{ marginBottom: 0 }}>イラストはこのサイトのオリジナルです。写真はWikimedia Commonsのフリーライセンス写真で、撮影者とライセンスを各写真の下に載せています。料金・時間は目安で、変わることがあります。馬券は無理のない範囲で楽しみましょう。</p>
       </div>
 
-      <p style={{ textAlign: "center", marginTop: 24 }}><Link href="/asia" className="btn">ほかの国を見る</Link></p>
+      <div className="sec-title"><h2>ほかの国の競馬ガイド</h2></div>
+      <nav className="asia-others" aria-label="ほかの国の競馬ガイド">
+        {others.map((o) => (
+          <Link key={o.slug} href={`/asia/${o.slug}`}><Flag code={o.flag} name={o.name} size={14} /> {o.name}の競馬</Link>
+        ))}
+      </nav>
+      <p style={{ textAlign: "center", marginTop: 24 }}><Link href="/asia" className="btn">アジア競馬ガイドのトップへ</Link></p>
     </>
   );
 }

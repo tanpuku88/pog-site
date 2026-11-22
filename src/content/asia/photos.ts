@@ -35,6 +35,11 @@ export const PHOTOS: Record<string, Photo[]> = {
   india: [
     p("5/5f", "Bombay18.jpg", "マハラクシュミ競馬場のスタンドとムンバイの高層ビル", "Aam422", "パブリックドメイン"),
   ],
+  malaysia: [
+    p("1/15", "Selangor_Turf_Club_Racing_Package.jpg", "セランゴール・ターフクラブのコースを見下ろす観覧席", "STurfClub", "CC BY-SA 4.0"),
+    p("8/87", "Kuala_Lumpur_Malaysia_Skyline-01.jpg", "クアラルンプールの街並み", "CEphoto, Uwe Aranas", "CC BY-SA 3.0"),
+    p("d/d0", "Nasi_lemak_on_banana_leaf.jpg", "バナナの葉にのせたナシレマ", "Jpatokal", "CC BY-SA 4.0"),
+  ],
   philippines: [
     p("0/0e", "MMTCIjf8322_01.JPG", "メトロターフ競馬場のコースと山並み", "Ramon FVelasquez", "CC BY-SA 3.0"),
   ],
