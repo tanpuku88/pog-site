@@ -373,13 +373,16 @@ export function parseSireId(html: string): string | null {
 }
 
 /** JBIS の検索結果から馬のIDを並び順に。name を渡すと、リンクの文字がその名前の馬を先に */
+/** JBIS は外国産馬の名前に「(USA)」などを付けるので、比べるときは外す */
+const jbisName = (s: string) => s.replace(/\s*[(（][A-Za-z]{2,4}[)）]\s*$/, "").trim();
+
 export function parseJbisSearch(html: string, name?: string): string[] {
   const $ = cheerio.load(html);
   const hits: { id: string; exact: boolean }[] = [];
   $("a[href]").each((_, a) => {
     const m = ($(a).attr("href") ?? "").match(/^\/horse\/(\d{10})\/$/);
     if (!m || hits.some((h) => h.id === m[1])) return;
-    hits.push({ id: m[1], exact: !!name && clean($(a).text()) === name });
+    hits.push({ id: m[1], exact: !!name && jbisName(clean($(a).text())) === name });
   });
   return [...hits.filter((h) => h.exact), ...hits.filter((h) => !h.exact)].map((h) => h.id);
 }
@@ -388,7 +391,7 @@ export function parseJbisSearch(html: string, name?: string): string[] {
 export function parseJbisFee(html: string, name: string): { year: number | null; man: number | null; note: string | null; farm: string | null } | null {
   const $ = cheerio.load(html);
   const title = clean($("title").text()).split(/[｜|]/)[0].trim();
-  if (title !== name) return null;
+  if (jbisName(title) !== name) return null;
   const text = clean($.root().text());
   const m = text.match(/種付料\s*(?:(\d{4})年度?[：:]\s*)?(.+?)(?=\s*(?:年度別表彰|年度別累計|SSI|$))/);
   if (!m) return null;
