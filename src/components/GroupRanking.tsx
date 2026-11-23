@@ -104,7 +104,6 @@ export async function GroupRanking({ kind, sort }: { kind: Kind; sort?: string }
       )}
       <p className="ext-note">
         {prev.crop_year}年世代は{prev.season_start.slice(0, 4)}年6月〜{prev.season_end.slice(0, 4)}年ダービーまでの成績（中央で出走した馬）です。
-        データはnetkeibaの公開ページから集計しています。
       </p>
     </>
   );

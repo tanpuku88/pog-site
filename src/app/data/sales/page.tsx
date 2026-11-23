@@ -105,7 +105,7 @@ export default async function SalesPage({ searchParams }: { searchParams: Promis
         <div className="stat"><div className="k">もう元を取った馬</div><div className="v">{paidBack}<small>頭</small></div><div className="s">回収率100%以上</div></div>
       </div>
       {checked < horses.length && (
-        <p className="ext-note">いま全馬の価格を順番に確認しています（netkeibaに負担をかけないよう少しずつ）。確認が進むと数字が増えていきます。</p>
+        <p className="ext-note">いま全馬の価格を順番に確認しています。確認が進むと数字が増えていきます。</p>
       )}
 
       {rows.length === 0 ? (
@@ -127,10 +127,7 @@ export default async function SalesPage({ searchParams }: { searchParams: Promis
         </div>
       )}
       <p className="ext-note">
-        出典：価格は netkeiba の各馬のプロフィール（「セリ取引価格」「募集情報」）。セリの公式結果は
-        <a href="https://www.jrha.or.jp/" target="_blank" rel="noreferrer">日本競走馬協会（セレクトセール）</a>・
-        <a href="https://www.hba.or.jp/" target="_blank" rel="noreferrer">日高軽種馬農協（HBA）</a>
-        で確認できます。募集総額は「1口の価格 × 口数」で計算しています。
+        募集総額は「1口の価格 × 口数」で計算しています。
       </p>
     </>
   );

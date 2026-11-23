@@ -154,7 +154,7 @@ export async function GroupDetail({ kind, name }: { kind: Kind; name: string }) 
           </div>
         </>
       )}
-      <p className="ext-note">勝率は「1着の回数 ÷ 出走回数」、勝ち上がり率は「1勝以上した頭数 ÷ 出走した頭数」。データはnetkeibaの公開ページから集計しています。</p>
+      <p className="ext-note">勝率は「1着の回数 ÷ 出走回数」、勝ち上がり率は「1勝以上した頭数 ÷ 出走した頭数」。</p>
     </>
   );
 }

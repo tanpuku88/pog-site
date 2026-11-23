@@ -89,7 +89,6 @@ export function Meikan({
               {auto && <p>{auto}</p>}
             </>
           )}
-          <p className="cc-note">{lore || written ? "列伝の最初の文は運営が書いたもの（2026年11月時点）、ほかはnetkeibaの成績データから自動で書いています。" : "netkeibaの成績データから自動で書いています。"}{sd?.stud ? "種付料はJBISサーチに載っている最新年度の料金です。" : ""}</p>
         </div>
       </div>
     </section>
