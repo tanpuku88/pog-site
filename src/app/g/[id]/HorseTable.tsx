@@ -1,13 +1,14 @@
 import type { Horse, ResultWithRace } from "@/lib/group-data";
 import type { HorseScore } from "@/lib/standings";
 import { formatMan } from "@/lib/util";
-import { HorseLabel, Finish } from "@/components/HorseLabel";
+import { HorseLabel, Finish, MarkBadges } from "@/components/HorseLabel";
+import type { HorseMarks } from "@/lib/horse-marks";
 import { finishCounts, earnedPrize, splitTrainer } from "@/lib/horse-summary";
 import Link from "next/link";
 
 /** 指名馬の一覧表（1頭1行。空き枠も表示する） */
 export function HorseSummaryTable({
-  groupId, scores, horseMap, results, includeNonJra, slots,
+  groupId, scores, horseMap, results, includeNonJra, slots, marks,
 }: {
   groupId: string;
   scores: HorseScore[];
@@ -15,6 +16,7 @@ export function HorseSummaryTable({
   results: ResultWithRace[];
   includeNonJra: boolean;
   slots: number;
+  marks?: HorseMarks;
 }) {
   const thisYear = new Date().getFullYear();
   const empty = Math.max(0, slots - scores.length);
@@ -39,7 +41,7 @@ export function HorseSummaryTable({
             return (
               <tr key={s.horse_id}>
                 <td className="c muted">{i + 1}</td>
-                <td><Link className="horse-name" href={`/g/${groupId}/h/${s.horse_id}`}>{h?.name ?? s.horse_id}</Link></td>
+                <td><Link className="horse-name" href={`/g/${groupId}/h/${s.horse_id}`}>{h?.name ?? s.horse_id}</Link><MarkBadges id={s.horse_id} trainer={h?.trainer} marks={marks} /></td>
                 <td className="c nowrap">{h?.sex && <span className={`sex sex-${h.sex}`}>{h.sex}{age ?? ""}</span>}</td>
                 <td className="c nowrap">{s.starts === 0 ? <span className="muted">未出走</span> : `[${w1}-${w2}-${w3}-${wx}]`}</td>
                 <td className="num"><strong>{formatMan(s.points)}</strong></td>
@@ -68,7 +70,7 @@ export function HorseSummaryTable({
 
 /** 指名馬ごとの成績一覧 */
 export function HorseTable({
-  groupId, scores, horseMap, results, includeNonJra, actions, slots,
+  groupId, scores, horseMap, results, includeNonJra, actions, slots, marks,
 }: {
   groupId: string;
   scores: HorseScore[];
@@ -77,11 +79,12 @@ export function HorseTable({
   includeNonJra: boolean;
   actions?: (horseId: string) => React.ReactNode;
   slots?: number;
+  marks?: HorseMarks;
 }) {
   if (scores.length === 0 && !slots) return <div className="card muted">まだ指名馬がいません。</div>;
   return (
     <>
-      <HorseSummaryTable groupId={groupId} scores={scores} horseMap={horseMap} results={results} includeNonJra={includeNonJra} slots={slots ?? scores.length} />
+      <HorseSummaryTable groupId={groupId} scores={scores} horseMap={horseMap} results={results} includeNonJra={includeNonJra} slots={slots ?? scores.length} marks={marks} />
       {scores.length > 0 && <div className="sec-title"><h2>レースごとの成績</h2></div>}
       {scores.map((s) => {
         const h = horseMap.get(s.horse_id);
@@ -90,7 +93,7 @@ export function HorseTable({
           <div className="horse-card" key={s.horse_id}>
             <div className="hc-head">
               <div>
-                <HorseLabel id={s.horse_id} horse={h} groupId={groupId} showTrainer />
+                <HorseLabel id={s.horse_id} horse={h} groupId={groupId} showTrainer marks={marks} />
               </div>
               <div className="hc-pts">
                 <strong>{formatMan(s.points)}</strong><span className="muted"> 万円</span>

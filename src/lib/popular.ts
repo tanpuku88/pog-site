@@ -132,7 +132,7 @@ export function popularSires(rows: BaseRow[], limit = 10) {
   ).slice(0, limit);
 }
 
-async function allPicks(db: SupabaseClient): Promise<PickRow[]> {
+export async function allPicks(db: SupabaseClient): Promise<PickRow[]> {
   const out: PickRow[] = [];
   for (let from = 0; ; from += PAGE) {
     const { data, error } = await db
