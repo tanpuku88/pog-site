@@ -63,7 +63,7 @@ export default async function DataHub() {
           );
         })}
       </div>
-      <p className="ext-note">中央・地方のレース・賞金は万円。勝ち上がり率は「1勝以上した頭数 ÷ 出走した頭数」。データはnetkeibaの公開ページから集計しています。</p>
+      <p className="ext-note">中央・地方のレース・賞金は万円。勝ち上がり率は「1勝以上した頭数 ÷ 出走した頭数」。</p>
     </>
   );
 }
