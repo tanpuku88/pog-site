@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description: "POG大会を無料で作れるサイト。招待リンクで仲間を呼び、馬名を数文字入れるだけで指名。2歳馬の血統・成績・指名数、種牡馬ランキング、新馬戦情報も。",
   applicationName: SITE_NAME,
   openGraph: { siteName: SITE_NAME, locale: "ja_JP", type: "website" },
-  twitter: { card: "summary" },
+  twitter: { card: "summary_large_image" },
   ...(GOOGLE_SITE_VERIFICATION ? { verification: { google: GOOGLE_SITE_VERIFICATION } } : {}),
 };
 
@@ -22,7 +22,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <header className="topbar">
           <div className="topbar-in">
-            <Link href="/" className="logo"><span className="logo-mark" aria-hidden>P</span>POG<small>ペーパーオーナーゲーム</small></Link>
+            <Link href="/" className="logo">{/* eslint-disable-next-line @next/next/no-img-element */}<img className="logo-mark" src="/brand/pog88.png" alt="" width={30} height={30} />POG<small>ペーパーオーナーゲーム</small></Link>
             <nav className="account">
               {user ? (
                 <>
