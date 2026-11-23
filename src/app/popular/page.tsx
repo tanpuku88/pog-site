@@ -3,7 +3,9 @@ import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { loadGenerationBoard, rankBoard } from "@/lib/popular";
 import { defaultSeason } from "@/lib/standings";
-import { PopularTable, BoardFilters, BoardStats, RisingBox, SireBox, parseBoardParams, boardTitle, ExternalRankingNote } from "@/components/PopularTable";
+import { PopularTable, BoardFilters, BoardStats, RisingBox, SireBox, parseBoardParams, boardTitle, ExternalRankingNote, boardPopularIds } from "@/components/PopularTable";
+import { MarkLegend } from "@/components/HorseLabel";
+import { loadMyPickIds } from "@/lib/horse-marks-server";
 import { OwnerSide } from "@/components/OwnerSites";
 
 const crop = defaultSeason().crop_year;
@@ -26,6 +28,7 @@ export default async function PopularPage({ searchParams }: { searchParams: Prom
   const defaultSort = board?.defaultSort ?? "prize";
   const { sex, sort } = parseBoardParams(sp, defaultSort);
   const rows = board ? rankBoard(board.rows, { sex, sort, limit: 30 }) : [];
+  const marks = { popular: board ? boardPopularIds(board) : new Set<string>(), mine: await loadMyPickIds() };
 
   return (
     <>
@@ -45,7 +48,10 @@ export default async function PopularPage({ searchParams }: { searchParams: Prom
           {rows.length === 0 ? (
             <div className="card muted">{sort === "prize" ? "まだ賞金を獲得した馬がいません。" : "まだ指名された馬がいません。大会を作って最初の指名をしてみましょう。"}</div>
           ) : (
-            <PopularTable rows={rows} sort={sort} groupCount={board?.groupCount ?? 0} />
+            <>
+              <MarkLegend />
+              <PopularTable rows={rows} sort={sort} groupCount={board?.groupCount ?? 0} marks={marks} />
+            </>
           )}
           <ExternalRankingNote />
           <div className="cta-band">
@@ -55,7 +61,7 @@ export default async function PopularPage({ searchParams }: { searchParams: Prom
         </div>
         {board && (
           <aside className="side">
-            <RisingBox board={board} />
+            <RisingBox board={board} marks={marks} />
             <SireBox board={board} />
             <OwnerSide />
           </aside>
