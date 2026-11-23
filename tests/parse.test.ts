@@ -222,5 +222,9 @@ describe("JBIS の種付け料", () => {
     expect(parseJbisFee(html, "キタサンフラッグ")).toBeNull();
     expect(parseJbisFee(html.replace(/種付料.*?年度別表彰/, "年度別表彰"), "キタサンブラック")).toBeNull();
     expect(parseJbisSearch(`<a href="/horse/0000228602/">キタサンフラッグ</a><a href="/horse/0001155349/">キタサンブラック</a><a href="/horse/0001155349/pedigree/">p</a>`, "キタサンブラック")).toEqual(["0001155349", "0000228602"]);
+    // 外国産馬は JBIS で「(USA)」などが付く
+    const usa = html.replace("キタサンブラック｜", "ドレフォン(USA)｜");
+    expect(parseJbisFee(usa, "ドレフォン")?.man).toBe(2500);
+    expect(parseJbisSearch(`<a href="/horse/1/">x</a><a href="/horse/0001206211/">ドレフォン(USA)</a>`.replace("/horse/1/", "/horse/0000000001/"), "ドレフォン")[0]).toBe("0001206211");
   });
 });
