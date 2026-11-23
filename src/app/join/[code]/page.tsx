@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: { params: Promise<{ code: str
   const description = g
     ? `${g.owner_name}さんからの招待です。${g.crop_year}年生まれ世代・1人${g.picks_per_member}頭。リンクを開いて登録すると、そのまま参加できます。`
     : "リンクを開いて登録すると、そのまま大会に参加できます。";
-  return { title, description, robots: { index: false }, openGraph: { title, description }, twitter: { card: "summary", title, description } };
+  return { title, description, robots: { index: false }, openGraph: { title, description }, twitter: { card: "summary_large_image", title, description } };
 }
 
 export default async function Join({ params }: { params: Promise<{ code: string }> }) {
