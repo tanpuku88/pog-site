@@ -82,7 +82,7 @@ async function main() {
   const todo = [...sires].filter(([name]) => !fresh(store[name]) || store[name].stud === undefined).sort((a, b) => b[1].count - a[1].count);
   console.log(`種牡馬 ${sires.size}頭（今回読むのは ${todo.length}頭）`);
   const deadline = Date.now() + TIME_BUDGET_MIN * 60_000;
-  let done = 0, failed = 0;
+  let done = 0, failed = 0, streak = 0;
   for (const [name, { child }] of todo) {
     if (Date.now() > deadline) break;
     try {
@@ -97,6 +97,7 @@ async function main() {
         store[name] = { id, offspring, career: c, stud: await stud(name), fetchedAt: new Date().toISOString() };
       }
       done++;
+      streak = 0;
       if (done % 20 === 0) {
         writeFileSync(OUT, JSON.stringify(store, null, 1) + "\n");
         console.log(`  ${done}頭`);
@@ -104,13 +105,18 @@ async function main() {
     } catch (e) {
       failed++;
       console.warn(`  ${name}: ${(e as Error).message}`);
+      // 相手のサーバーが混んでいる（500/503が続く）ときは、無理に続けずにやめる
+      if (++streak >= 8) {
+        console.warn("失敗が続いたので、今回はここでやめます");
+        break;
+      }
     }
   }
   // 名前順に並べて保存（差分を読みやすく）
   const sorted = Object.fromEntries(Object.entries(store).sort(([a], [b]) => a.localeCompare(b, "ja")));
   writeFileSync(OUT, JSON.stringify(sorted, null, 1) + "\n");
   console.log(`完了: ${done}頭を保存、失敗${failed}頭`);
-  if (done + failed > 20 && failed > (done + failed) / 2) process.exit(1);
+  if (streak >= 8 || (done + failed > 20 && failed > (done + failed) / 2)) process.exit(1);
 }
 
 main().catch((e) => {
