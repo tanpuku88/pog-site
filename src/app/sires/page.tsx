@@ -4,7 +4,9 @@ import { sireTable, loadCropData } from "@/lib/sires";
 import { defaultSeason } from "@/lib/standings";
 import { formatMan, todayJst } from "@/lib/util";
 import { DataTabs } from "@/components/DataTabs";
-import { KINDS } from "@/lib/connections";
+import { cropOfArea, KINDS } from "@/lib/connections";
+import { AreaTabs } from "@/components/AreaTabs";
+import { AREA_LABEL, areaHref, parseArea } from "@/lib/area";
 
 export const metadata = { title: "種牡馬ランキング | POG" };
 export const revalidate = 3600;
@@ -20,12 +22,13 @@ const SORTS = {
 } as const;
 type SortKey = keyof typeof SORTS;
 
-export default async function Sires({ searchParams }: { searchParams: Promise<{ sort?: string }> }) {
-  const { sort } = await searchParams;
+export default async function Sires({ searchParams }: { searchParams: Promise<{ sort?: string; area?: string }> }) {
+  const { sort, area: areaParam } = await searchParams;
+  const area = parseArea(areaParam);
   const sortKey: SortKey = sort && sort in SORTS ? (sort as SortKey) : "points";
   const season = defaultSeason();
   const rules = { ...season, include_non_jra: true };
-  const { horses, picks, tally, races } = await loadCropData(createAdminClient(), season.crop_year, rules);
+  const { horses, picks, tally, races } = cropOfArea(await loadCropData(createAdminClient(), season.crop_year, rules), area);
   const key = SORTS[sortKey].key;
   const all = sireTable(horses, picks, tally, races, todayJst());
   const rows = [...all].sort((a, b) => key(b) - key(a) || a.rank - b.rank).slice(0, 100);
@@ -35,18 +38,19 @@ export default async function Sires({ searchParams }: { searchParams: Promise<{ 
   return (
     <>
       <DataTabs current={KINDS.sire} />
-      <h1>{season.crop_year}年生まれ世代 種牡馬ランキング</h1>
+      <h1>{season.crop_year}年生まれ世代 {AREA_LABEL[area]}の種牡馬ランキング</h1>
+      <AreaTabs path="/sires" current={area} extra={{ sort: sortKey === "points" ? undefined : sortKey }} />
       <div className="sire-meta">
         <span>集計期間：{season.season_start.slice(2, 4)}年MD 〜 {season.season_end.slice(2, 4)}年ダービー</span>
         <span className="muted">更新：{updated}</span>
       </div>
       <p className="muted" style={{ marginTop: 0 }}>
-        このサイトに登録されている{horses.length.toLocaleString()}頭を父ごとに集計（中央・地方のレース・賞金は万円）。
-        AEIは「1頭あたりの賞金」が全体平均の何倍か、収得賞金は成績から計算した目安です。
+        {AREA_LABEL[area]}所属の{horses.length.toLocaleString()}頭を父ごとに集計（賞金は万円）。中央と地方は賞金の規模が違うので、別々に並べています。
+        AEIは「1頭あたりの賞金」が同じ{AREA_LABEL[area]}の平均の何倍か、収得賞金は成績から計算した目安です。
       </p>
       <div className="seg" style={{ marginBottom: 10 }}>
         {(Object.keys(SORTS) as SortKey[]).map((k) => (
-          <Link key={k} href={k === "points" ? "/sires" : `/sires?sort=${k}`} className={k === sortKey ? "on" : ""}>{SORTS[k].label}</Link>
+          <Link key={k} href={areaHref("/sires", area, { sort: k === "points" ? undefined : k })} className={k === sortKey ? "on" : ""}>{SORTS[k].label}</Link>
         ))}
       </div>
       {rows.length === 0 ? (
@@ -72,7 +76,7 @@ export default async function Sires({ searchParams }: { searchParams: Promise<{ 
                       {r.change > 0 && <span className="chg-up">↑{r.change}</span>}
                       {r.change < 0 && <span className="chg-down">↓{-r.change}</span>}
                     </td>
-                    <td><Link className="horse-name" href={`/sires/${encodeURIComponent(r.sire)}`}>{r.sire}</Link></td>
+                    <td><Link className="horse-name" href={areaHref(`/sires/${encodeURIComponent(r.sire)}`, area)}>{r.sire}</Link></td>
                     <td className="graph">
                       <span className="bar-base" style={{ width: `${(now / maxPoints) * 100}%` }} />
                       <span className="bar-week" style={{ width: `${(r.lastWeek / maxPoints) * 100}%` }} />

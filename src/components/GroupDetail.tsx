@@ -11,6 +11,8 @@ import { loadOverallRate, loadProfiles } from "@/lib/overall";
 import { Meikan } from "./Meikan";
 import { formatPrice, pricedHorses, returnRate } from "@/lib/sales";
 import { DataTabs } from "./DataTabs";
+import { AreaTabs } from "./AreaTabs";
+import { AREA_LABEL, areaHref, type Area } from "@/lib/area";
 
 
 export function groupMetadata(kind: Kind, name: string): Metadata {
@@ -29,15 +31,16 @@ const RELATED: Record<Kind["field"], Kind[]> = {
   breeder: [KINDS.sire, KINDS.owner, KINDS.trainer],
 };
 
-export async function GroupDetail({ kind, name }: { kind: Kind; name: string }) {
-  const { season, prev, summary, prevSummary, rows, prevTop, horses, races } = await loadGroupDetail(createAdminClient(), kind, name);
-  const profileSet = await loadProfiles(season.crop_year, kind.field).catch(() => null);
+export async function GroupDetail({ kind, name, area: areaParam }: { kind: Kind; name: string; area?: Area }) {
+  const { season, prev, summary, prevSummary, rows, prevTop, horses, races, area, counts } = await loadGroupDetail(createAdminClient(), kind, name, areaParam);
+  const profileSet = await loadProfiles(season.crop_year, kind.field, area).catch(() => null);
+  const both = counts.jra > 0 && counts.nar > 0;
   const profile = profileSet?.profiles[name] ?? null;
   const runs = races.length, wins = races.filter((r) => r.finish === "1").length;
   const winRate = runs > 0 ? (wins / runs) * 100 : null;
   const maxPoints = Math.max(1, ...rows.map((r) => r.t.points));
   const rate = summary ? winnerRate(summary) : null;
-  const avgRate = await loadOverallRate(season.crop_year).catch(() => null);
+  const avgRate = await loadOverallRate(season.crop_year, area).catch(() => null);
   const tallyMap = new Map(rows.map((r) => [r.h.id, r.t]));
   const sold = pricedHorses(horses, tallyMap, "sale");
   const club = pricedHorses(horses, tallyMap, "club");
@@ -68,16 +71,17 @@ export async function GroupDetail({ kind, name }: { kind: Kind; name: string }) 
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       <DataTabs current={kind} />
-      <p className="crumb" style={{ margin: "0 0 6px" }}><Link href={kind.path}>‹ {kind.label}ランキング</Link></p>
+      <p className="crumb" style={{ margin: "0 0 6px" }}><Link href={areaHref(kind.path, area)}>‹ {AREA_LABEL[area]}の{kind.label}ランキング</Link></p>
       <h1 style={{ marginBottom: 4 }}>{titleOf(kind, name)}</h1>
-      <p className="muted" style={{ marginTop: 0 }}>{season.crop_year}年生まれ世代のPOGデータ（中央・地方のレース・賞金は万円）</p>
+      <p className="muted" style={{ marginTop: 0 }}>{season.crop_year}年生まれ世代のPOGデータ（{AREA_LABEL[area]}所属の{kind.member}・賞金は万円）</p>
+      {both && <AreaTabs path={groupHref(kind, name)} current={area} counts={counts} />}
       {!summary ? (
         <div className="card muted">この{kind.label}の{season.crop_year}年生まれの馬は登録されていません。</div>
       ) : (
         <>
           <Meikan field={kind.field} label={kind.label} name={name} title={titleOf(kind, name)}
             profile={profile ? { ...profile, winRate: winRate ?? profile.winRate } : null}
-            avgWinRate={profileSet?.avgWinRate ?? null} count={profileSet?.count ?? 0} written={written} auto={auto} />
+            avgWinRate={profileSet?.avgWinRate ?? null} count={profileSet?.count ?? 0} written={written} auto={auto} area={area} />
           <div className="stats">
             <div className="stat"><div className="k">2歳{kind.member}</div><div className="v">{summary.horses}<small>頭</small></div><div className="s">牡{colts}・牝{summary.horses - colts}</div></div>
             <div className="stat"><div className="k">勝ち上がり</div><div className="v">{summary.winners}<small>頭</small></div><div className="s">出走{summary.starters}頭{rate !== null ? `・勝ち上がり率${rate.toFixed(1)}%` : ""}</div></div>

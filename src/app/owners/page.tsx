@@ -9,7 +9,7 @@ export const metadata = {
   alternates: { canonical: "/owners" },
 };
 
-export default async function Page({ searchParams }: { searchParams: Promise<{ sort?: string }> }) {
-  const { sort } = await searchParams;
-  return <GroupRanking kind={KINDS.owner} sort={sort} />;
+export default async function Page({ searchParams }: { searchParams: Promise<{ sort?: string; area?: string }> }) {
+  const { sort, area } = await searchParams;
+  return <GroupRanking kind={KINDS.owner} sort={sort} area={area} />;
 }
