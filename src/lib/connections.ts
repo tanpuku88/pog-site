@@ -3,6 +3,14 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { aggregateSires, loadCropData, sireTable, type GroupField, type SireRow } from "./sires";
 import { defaultSeason } from "./standings";
 import { todayJst } from "./util";
+import { filterArea, type Area } from "./area";
+
+/** 世代のデータを中央所属・地方所属の片方だけに絞る（指名・成績も絞った馬の分だけに） */
+export function cropOfArea<T extends { horses: { id: string; trainer: string | null }[]; races: { horse_id: string }[] }>(d: T, area: Area): T {
+  const horses = filterArea(d.horses, area);
+  const ids = new Set(horses.map((h) => h.id));
+  return { ...d, horses, races: d.races.filter((r) => ids.has(r.horse_id)) };
+}
 
 export type Kind = {
   field: GroupField;
@@ -35,27 +43,31 @@ export function previousSeason(now = new Date()) {
 const rulesOf = (s: ReturnType<typeof defaultSeason>) => ({ ...s, include_non_jra: true });
 
 /** 一覧ページ用：今の世代の表と、前の世代のまとめ（名前 → 成績） */
-export async function loadGroupRanking(db: SupabaseClient, kind: Kind) {
+export async function loadGroupRanking(db: SupabaseClient, kind: Kind, area: Area = "jra") {
   const season = defaultSeason();
   const prev = previousSeason();
-  const [cur, old] = await Promise.all([
+  const [cur, old] = (await Promise.all([
     loadCropData(db, season.crop_year, rulesOf(season)),
     loadCropData(db, prev.crop_year, rulesOf(prev)),
-  ]);
+  ])).map((d) => cropOfArea(d, area));
   const rows = sireTable(cur.horses, cur.picks, cur.tally, cur.races, todayJst(), kind.field);
   const prevRows = new Map(aggregateSires(old.horses, old.picks, old.tally, kind.field).map((r) => [r.sire, r]));
   return { season, prev, rows, prevRows, horseCount: cur.horses.length, prevHorseCount: old.horses.length };
 }
 
 /** 個別ページ用：その名前の馬だけを、今の世代と前の世代で読む */
-export async function loadGroupDetail(db: SupabaseClient, kind: Kind, name: string) {
+export async function loadGroupDetail(db: SupabaseClient, kind: Kind, name: string, area?: Area) {
   const season = defaultSeason();
   const prev = previousSeason();
   const only = { field: kind.field, value: name };
-  const [cur, old] = await Promise.all([
+  const [all, allOld] = await Promise.all([
     loadCropData(db, season.crop_year, rulesOf(season), only),
     loadCropData(db, prev.crop_year, rulesOf(prev), only),
   ]);
+  // 中央・地方の両方に馬がいるか（種牡馬・馬主・牧場）。指定がなければ馬の多いほうを出す
+  const counts = { jra: filterArea(all.horses, "jra").length, nar: filterArea(all.horses, "nar").length };
+  const chosen: Area = area ?? (counts.nar > counts.jra ? "nar" : "jra");
+  const cur = cropOfArea(all, chosen), old = cropOfArea(allOld, chosen);
   const summary: SireRow | undefined = aggregateSires(cur.horses, cur.picks, cur.tally, kind.field)[0];
   const prevSummary: SireRow | undefined = aggregateSires(old.horses, old.picks, old.tally, kind.field)[0];
   const rows = cur.horses
@@ -66,7 +78,7 @@ export async function loadGroupDetail(db: SupabaseClient, kind: Kind, name: stri
     .filter((x) => x.t.points > 0)
     .sort((a, b) => b.t.points - a.t.points)
     .slice(0, 5);
-  return { season, prev, summary, prevSummary, rows, prevTop, horses: cur.horses, races: cur.races };
+  return { season, prev, summary, prevSummary, rows, prevTop, horses: cur.horses, races: cur.races, area: chosen, counts };
 }
 
 /** 所属馬の中で多い順に「父」「厩舎」などを数える（個別ページの「主な○○」用） */

@@ -1,25 +1,18 @@
 // 名鑑カード：二つ名・能力値・紹介文・POG目線のひとこと
 import type { GroupField } from "@/lib/sires";
-import { distanceLabel, grade, nickname, profileLines, STAT_LABELS, type Profile, type StatKey } from "@/lib/profile";
+import { distanceLabel, grade, nickname, profileLines, STAT_HELP, STAT_KEYS, STAT_LABELS, statValue, type Profile } from "@/lib/profile";
+import { AREA_LABEL, type Area } from "@/lib/area";
 import { LORE } from "@/lib/lore";
 import { commentKey } from "@/lib/comments";
 import { sireStory } from "@/lib/meikan";
 import { sireData } from "@/lib/sire-data";
 
-const KEYS: StatKey[] = ["early", "consistency", "power", "turf", "dirt"];
-const HINT: Record<StatKey, string> = {
-  early: "デビューの早さ・夏の勝ち星",
-  consistency: "勝ち上がり率",
-  power: "1頭あたりの賞金・大物度",
-  turf: "芝での勝率（種牡馬は過去の全産駒）",
-  dirt: "ダートでの勝率（種牡馬は過去の全産駒）",
-};
 const EMBLEM: Record<GroupField, string> = { sire: "🐎", trainer: "🏇", owner: "🎩", breeder: "🌾" };
 
 export function Meikan({
-  field, label, name, title, profile, avgWinRate, count, written, auto,
+  field, label, name, title, profile, avgWinRate, count, written, auto, area = "jra",
 }: {
-  field: GroupField; label: string; name: string; title: string;
+  field: GroupField; label: string; name: string; title: string; area?: Area;
   profile: Profile | null; avgWinRate: number | null; count: number;
   written: { text: string; tags?: string[] } | null; auto: string;
 }) {
@@ -47,14 +40,18 @@ export function Meikan({
       </div>
       <div className="mk-body">
         <div className="mk-stats">
-          {KEYS.map((k) => {
+          {STAT_KEYS[area].map((k) => {
             const v = profile?.scores[k] ?? null;
             const g = grade(v);
+            // 種牡馬の芝・ダートを過去の全産駒・現役時代から出したときは、今年の数字は添えない
+            const fromHistory = field === "sire" && (k === "turf" || k === "dirt") && profile?.aptSource;
+            const raw = profile && !fromHistory ? statValue(k, profile.m) : fromHistory ? (profile?.aptSource === "offspring" ? "過去の全産駒から" : "現役時代から") : null;
             return (
-              <div className="mk-row" key={k} title={HINT[k]}>
+              <div className="mk-row" key={k} title={STAT_HELP[k]}>
                 <span className="mk-k">{STAT_LABELS[k]}</span>
                 <span className="mk-bar"><span className={`mk-fill g-${g}`} style={{ width: `${v ?? 0}%` }} /></span>
                 <span className={`mk-g g-${g}`}>{g}</span>
+                {raw && <span className="mk-raw">{raw}</span>}
               </div>
             );
           })}
@@ -62,7 +59,15 @@ export function Meikan({
             <span className="mk-chip">勝率 <b>{profile?.winRate != null ? `${profile.winRate.toFixed(1)}%` : "-"}</b></span>
             <span className="mk-chip">得意距離 <b>{dist ?? "-"}</b></span>
           </div>
-          <p className="mk-note">能力値は今年の2歳世代での{label}{count > 0 ? `${count}件` : ""}の中の順位（S〜E）。{field === "sire" && profile?.aptSource === "offspring" ? "芝・ダート・距離は過去の全産駒の成績から。" : field === "sire" && profile?.aptSource === "career" ? "芝・ダート・距離は現役時代の成績から。" : ""}「-」はまだデータが少ない項目です。</p>
+          <p className="mk-note">能力値は今年の2歳世代の{AREA_LABEL[area]}所属馬で比べた、{label}{count > 0 ? `${count}件` : ""}の中の順位（S〜E）。「-」はまだデータが少ない項目です。</p>
+          <details className="mk-help">
+            <summary>各項目の見かた</summary>
+            <dl>
+              {STAT_KEYS[area].map((k) => (
+                <div key={k}><dt>{STAT_LABELS[k]}</dt><dd>{STAT_HELP[k]}{field === "sire" && (k === "turf" || k === "dirt") ? "（種牡馬は過去の全産駒、産駒が少なければ現役時代の成績から）" : ""}</dd></div>
+              ))}
+            </dl>
+          </details>
         </div>
         <div className="mk-text">
           {written?.tags && <div className="cc-tags">{written.tags.map((t) => <span key={t} className="pill">{t}</span>)}</div>}

@@ -1,23 +1,53 @@
 // 種牡馬・厩舎・馬主・生産牧場の「名鑑」。今の世代の成績から能力値（1〜100）を出し、
 // 二つ名と紹介文を組み立てる。能力値は同じ種類（種牡馬なら種牡馬どうし）の中での順位から付ける。
 import type { GroupField, SireHorse, SireRace } from "./sires";
+import type { Area } from "./area";
 
 type Tally = Map<string, { points: number; starts: number; wins: number }>;
 
 export type Metrics = {
   name: string;
   horses: number; starters: number; winners: number;
-  runs: number; wins: number; points: number;
+  runs: number; wins: number; places: number; points: number;
   turfRuns: number; turfWins: number; dirtRuns: number; dirtWins: number;
   placeDist: number | null;   // 3着以内に来たレースの平均距離
   earlyWins: number;          // 9月までの勝利数（仕上がりの早さ）
   top: { id: string; name: string; points: number } | null;
 };
 
-export type StatKey = "early" | "consistency" | "power" | "turf" | "dirt";
+export type StatKey = "early" | "consistency" | "power" | "turf" | "dirt" | "place" | "tough";
 export const STAT_LABELS: Record<StatKey, string> = {
-  early: "仕上がり", consistency: "安定感", power: "爆発力", turf: "芝", dirt: "ダート",
+  early: "仕上がり", consistency: "勝ち上がり", power: "稼ぐ力", turf: "芝", dirt: "ダート", place: "堅実さ", tough: "タフさ",
 };
+/** 各項目が何を見ているか（画面にそのまま出す） */
+export const STAT_HELP: Record<StatKey, string> = {
+  early: "2歳馬のうちデビューした割合と、6〜9月の勝ち星の多さ",
+  consistency: "勝ち上がり率（出走した馬のうち1勝以上した割合）",
+  power: "出走した馬1頭あたりの本賞金。高いほど大きいレースで稼いでいる",
+  turf: "芝のレースでの勝率",
+  dirt: "ダートのレースでの勝率",
+  place: "3着以内に来た割合（出走回数あたり）",
+  tough: "出走した馬1頭あたりの出走回数。多いほど休まず使えている",
+};
+/** 中央と地方で見る項目を変える（地方はほとんどダートなので、芝・ダートの代わりに堅実さ・タフさ） */
+export const STAT_KEYS: Record<Area, StatKey[]> = {
+  jra: ["early", "consistency", "power", "turf", "dirt"],
+  nar: ["early", "consistency", "power", "place", "tough"],
+};
+
+/** 能力値の元になった実際の数字（「1頭あたり320万円」など） */
+export function statValue(k: StatKey, g: Metrics): string | null {
+  const r = (a: number, b: number) => (b > 0 ? `${((a / b) * 100).toFixed(1)}%` : null);
+  switch (k) {
+    case "early": return g.horses > 0 ? `デビュー${g.starters}/${g.horses}頭・夏${g.earlyWins}勝` : null;
+    case "consistency": return g.starters > 0 ? `${g.winners}/${g.starters}頭（${r(g.winners, g.starters)}）` : null;
+    case "power": return g.starters > 0 ? `1頭あたり${Math.round(g.points / g.starters).toLocaleString()}万円` : null;
+    case "turf": return g.turfRuns > 0 ? `勝率${r(g.turfWins, g.turfRuns)}（${g.turfRuns}戦）` : null;
+    case "dirt": return g.dirtRuns > 0 ? `勝率${r(g.dirtWins, g.dirtRuns)}（${g.dirtRuns}戦）` : null;
+    case "place": return g.runs > 0 ? `${r(g.places, g.runs)}（${g.runs}戦）` : null;
+    case "tough": return g.starters > 0 ? `1頭あたり${(g.runs / g.starters).toFixed(1)}戦` : null;
+  }
+}
 
 export type Profile = {
   m: Metrics;
@@ -35,7 +65,7 @@ export function computeMetrics(horses: SireHorse[], tally: Tally, races: SireRac
   const m = new Map<string, Metrics>();
   const keyOf = new Map<string, string>();
   const empty = (name: string): Metrics => ({
-    name, horses: 0, starters: 0, winners: 0, runs: 0, wins: 0, points: 0,
+    name, horses: 0, starters: 0, winners: 0, runs: 0, wins: 0, places: 0, points: 0,
     turfRuns: 0, turfWins: 0, dirtRuns: 0, dirtWins: 0, placeDist: null, earlyWins: 0, top: null,
   });
   for (const h of horses) {
@@ -62,6 +92,7 @@ export function computeMetrics(horses: SireHorse[], tally: Tally, races: SireRac
     const place = ["1", "2", "3"].includes(r.finish ?? "");
     g.runs++;
     if (win) g.wins++;
+    if (place) g.places++;
     if (r.surface === "芝") { g.turfRuns++; if (win) g.turfWins++; }
     if (r.surface === "ダ") { g.dirtRuns++; if (win) g.dirtWins++; }
     if (win && Number(r.race_date.slice(5, 7)) <= 9 && Number(r.race_date.slice(5, 7)) >= 6) g.earlyWins++;
@@ -109,7 +140,9 @@ export function scoreProfiles(metrics: Map<string, Metrics>): Map<string, Profil
   };
   const early = make((g) => g.horses >= 3, (g) => g.starters / g.horses + g.earlyWins / Math.max(1, g.horses));
   const consistency = make((g) => g.starters >= 3, (g) => g.winners / g.starters);
-  const power = make((g) => g.starters >= 3, (g) => g.points / g.starters + (g.top?.points ?? 0) / 10);
+  const power = make((g) => g.starters >= 3, (g) => g.points / g.starters);
+  const place = make((g) => g.runs >= 10, (g) => g.places / g.runs);
+  const tough = make((g) => g.starters >= 3, (g) => g.runs / g.starters);
   const turf = make((g) => g.turfRuns >= 5, (g) => g.turfWins / g.turfRuns + (g.turfRuns / Math.max(1, g.runs)) * 0.1);
   const dirt = make((g) => g.dirtRuns >= 5, (g) => g.dirtWins / g.dirtRuns + (g.dirtRuns / Math.max(1, g.runs)) * 0.1);
   const out = new Map<string, Profile>();
@@ -117,7 +150,7 @@ export function scoreProfiles(metrics: Map<string, Metrics>): Map<string, Profil
     out.set(g.name, {
       m: g,
       winRate: pct(g.wins, g.runs),
-      scores: { early: early(g), consistency: consistency(g), power: power(g), turf: turf(g), dirt: dirt(g) },
+      scores: { early: early(g), consistency: consistency(g), power: power(g), turf: turf(g), dirt: dirt(g), place: place(g), tough: tough(g) },
       distance: g.placeDist,
     });
   }

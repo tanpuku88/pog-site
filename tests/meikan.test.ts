@@ -4,8 +4,8 @@ import type { Profile } from "../src/lib/profile";
 import type { SireData } from "../src/lib/sire-data";
 
 const prof = (name: string, points = 0, top: string | null = null): Profile => ({
-  m: { name, horses: 5, starters: 3, winners: 1, runs: 6, wins: 1, points, turfRuns: 0, turfWins: 0, dirtRuns: 0, dirtWins: 0, placeDist: null, earlyWins: 0, top: top ? { id: "1", name: top, points } : null },
-  winRate: 16, scores: { early: 50, consistency: 50, power: 50, turf: null, dirt: null }, distance: null,
+  m: { name, horses: 5, starters: 3, winners: 1, runs: 6, wins: 1, places: 2, points, turfRuns: 0, turfWins: 0, dirtRuns: 0, dirtWins: 0, placeDist: null, earlyWins: 0, top: top ? { id: "1", name: top, points } : null },
+  winRate: 16, scores: { early: 50, consistency: 50, power: 50, turf: null, dirt: null, place: null, tough: null }, distance: null,
 });
 const sd = (over: Partial<SireData>): SireData => ({ id: "x", offspring: null, career: null, fetchedAt: "2026-11-22T00:00:00Z", ...over });
 

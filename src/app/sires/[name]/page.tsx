@@ -9,7 +9,8 @@ export async function generateMetadata({ params }: { params: Promise<{ name: str
   return groupMetadata(KINDS.sire, decodeURIComponent(name));
 }
 
-export default async function Page({ params }: { params: Promise<{ name: string }> }) {
+export default async function Page({ params, searchParams }: { params: Promise<{ name: string }>; searchParams: Promise<{ area?: string }> }) {
   const { name } = await params;
-  return <GroupDetail kind={KINDS.sire} name={decodeURIComponent(name)} />;
+  const { area } = await searchParams;
+  return <GroupDetail kind={KINDS.sire} name={decodeURIComponent(name)} area={area === "nar" ? "nar" : area === "jra" ? "jra" : undefined} />;
 }
