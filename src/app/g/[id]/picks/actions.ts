@@ -5,6 +5,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { syncHorse, searchNetkeiba } from "@/lib/horse-sync";
 import { extractHorseId } from "@/lib/netkeiba/fetch";
 import { normalizeQuery } from "@/lib/kana";
+import { loadPopularIds } from "@/lib/horse-marks-server";
 
 export type Candidate = {
   id: string;
@@ -15,6 +16,8 @@ export type Candidate = {
   dam: string | null;
   trainer: string | null;
   takenBy: string | null; // 指名済みならその人の名前
+  mine?: boolean; // 自分がこの大会で指名済み
+  popular?: boolean; // 人気馬（全大会の指名数上位）
 };
 
 async function context(groupId: string) {
@@ -30,8 +33,10 @@ async function withTaken(
   supabase: Awaited<ReturnType<typeof context>>["supabase"],
   groupId: string,
   horses: Omit<Candidate, "takenBy">[],
+  userId?: string,
 ): Promise<Candidate[]> {
   if (horses.length === 0) return [];
+  const popular = await loadPopularIds();
   const { data: picks } = await supabase
     .from("picks").select("horse_id, user_id").eq("group_id", groupId).in("horse_id", horses.map((h) => h.id));
   const userIds = [...new Set((picks ?? []).map((p) => p.user_id))];
@@ -40,7 +45,8 @@ async function withTaken(
     : { data: [] };
   const name = new Map((profiles ?? []).map((p) => [p.id, p.display_name]));
   const taken = new Map((picks ?? []).map((p) => [p.horse_id, name.get(p.user_id) ?? "他の参加者"]));
-  return horses.map((h) => ({ ...h, takenBy: taken.get(h.id) ?? null }));
+  const mine = new Set((picks ?? []).filter((p) => p.user_id === userId).map((p) => p.horse_id));
+  return horses.map((h) => ({ ...h, takenBy: taken.get(h.id) ?? null, mine: mine.has(h.id), popular: popular.has(h.id) }));
 }
 
 const COLS = "id, name, sex, birth_year, sire, dam, trainer";
@@ -49,7 +55,7 @@ const COLS = "id, name, sex, birth_year, sire, dam, trainer";
 export async function searchLocal(groupId: string, q: string): Promise<Candidate[]> {
   const word = normalizeQuery(q).replace(/[%_,()]/g, "");
   if (word.length < 2) return [];
-  const { supabase, group } = await context(groupId);
+  const { supabase, group, user } = await context(groupId);
   const { data } = await supabase
     .from("horses")
     .select(COLS)
@@ -57,19 +63,19 @@ export async function searchLocal(groupId: string, q: string): Promise<Candidate
     .or(`name.ilike.%${word}%,sire.ilike.%${word}%,dam.ilike.%${word}%`)
     .order("name")
     .limit(40);
-  return withTaken(supabase, groupId, data ?? []);
+  return withTaken(supabase, groupId, data ?? [], user.id);
 }
 
 /** netkeiba で馬名検索して候補を増やす（ボタンを押したときだけ） */
 export async function searchOnNetkeiba(groupId: string, q: string): Promise<Candidate[]> {
   const word = normalizeQuery(q);
   if (word.length < 2) return [];
-  const { supabase, group } = await context(groupId);
+  const { supabase, group, user } = await context(groupId);
   const hits = await searchNetkeiba(createAdminClient(), word);
   const sameCrop = hits.filter((h) => h.birth_year === null || h.birth_year === group.crop_year);
   return withTaken(supabase, groupId, sameCrop.map((h) => ({
     id: h.id, name: h.name, sex: h.sex, birth_year: h.birth_year, sire: h.sire, dam: h.dam, trainer: h.trainer,
-  })));
+  })), user.id);
 }
 
 export type PickResult = { ok: boolean; message: string };

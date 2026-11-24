@@ -4,6 +4,8 @@ import {
   searchLocal, searchOnNetkeiba, addPick, addPickByUrl, addPicksBulk,
   type Candidate, type PickResult,
 } from "./actions";
+import { Mark } from "@/components/HorseLabel";
+import { isLocalHorse } from "@/lib/horse-marks";
 
 type Mode = "search" | "url" | "bulk";
 
@@ -76,11 +78,15 @@ function SearchPane({ groupId, onPick, pending }: {
         {hits.map((h) => (
           <div className="hit" key={h.id}>
             <div>
-              <strong>{h.name}</strong> <span className="muted">{h.sex ?? ""}</span>
+              <strong>{h.name}</strong>
+              {h.sex && <span className={`sex sex-${h.sex}`}>{h.sex}</span>}
+              {isLocalHorse(h.trainer) && <Mark kind="local" />}
+              {h.mine ? <Mark kind="mine" /> : h.takenBy && <Mark kind="taken" />}
+              {h.popular && <Mark kind="popular" />}
               <div className="sub">{[h.sire && `父 ${h.sire}`, h.dam && `母 ${h.dam}`, h.trainer].filter(Boolean).join(" ・ ")}</div>
             </div>
             {h.takenBy
-              ? <span className="muted" style={{ whiteSpace: "nowrap" }}>{h.takenBy}が指名済み</span>
+              ? <span className="muted" style={{ whiteSpace: "nowrap" }}>{h.mine ? "あなたが指名済み" : `${h.takenBy}が指名済み`}</span>
               : <button disabled={pending} onClick={() => onPick(h.id, () => search(q))}>指名</button>}
           </div>
         ))}

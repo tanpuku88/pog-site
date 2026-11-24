@@ -4,7 +4,8 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { countPicks } from "@/lib/popular";
 import { shutubaUrl } from "@/lib/netkeiba/fetch";
 import { todayJst } from "@/lib/util";
-import { HorseLabel } from "@/components/HorseLabel";
+import { HorseLabel, MarkLegend } from "@/components/HorseLabel";
+import { loadHorseMarks } from "@/lib/horse-marks-server";
 import { Columns } from "@/components/HomeSections";
 
 export const metadata = { title: "今週の新馬戦 | POG" };
@@ -42,6 +43,8 @@ export default async function Shinba() {
     }
   }
 
+  const marks = ids.length ? await loadHorseMarks() : undefined;
+
   // 日付 → レース にまとめる
   const days = new Map<string, Map<string, Entry[]>>();
   for (const e of entries) {
@@ -76,6 +79,7 @@ export default async function Shinba() {
           })}
         </nav>
       )}
+      {days.size > 0 && <MarkLegend />}
       {days.size === 0 && <div className="card muted">今週の新馬戦の出走馬はまだ出ていません。出馬表が確定する木曜の夕方以降に表示されます。</div>}
       {[...days].map(([date, races]) => {
         const d = new Date(`${date}T00:00:00Z`);
@@ -103,8 +107,7 @@ export default async function Shinba() {
                           return (
                             <tr key={e.horse_id}>
                               <td>
-                                <HorseLabel id={e.horse_id} horse={h} />
-                                {n >= 3 && <span className="pill hot" style={{ marginLeft: 6 }}>注目</span>}
+                                <HorseLabel id={e.horse_id} horse={h} marks={marks} />
                               </td>
                               <td className="hide-sm sub">{h?.trainer ?? ""}</td>
                               <td className="num">{n > 0 ? <span className="big">{n}</span> : <span className="muted">-</span>}</td>

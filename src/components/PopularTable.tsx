@@ -4,6 +4,7 @@ import type { PopularRow, BoardSex, BoardSort, GenerationBoard } from "@/lib/pop
 import { popularSires, risingHorses } from "@/lib/popular";
 import { formatMan } from "@/lib/util";
 import { HorseLabel, Rank } from "./HorseLabel";
+import { popularIds, type HorseMarks } from "@/lib/horse-marks";
 
 /** 前週の順位との比較 */
 export function RankChange({ rank, prev }: { rank: number; prev: number | null }) {
@@ -14,7 +15,7 @@ export function RankChange({ rank, prev }: { rank: number; prev: number | null }
 }
 
 /** 人気馬ランキングの表（トップ・公開ページ・大会の中で共通） */
-export function PopularTable({ rows, sort = "picks", groupCount, groupId, actions, compact = false }: {
+export function PopularTable({ rows, sort = "picks", groupCount, groupId, actions, compact = false, marks }: {
   rows: PopularRow[];
   sort?: BoardSort;
   groupCount: number;
@@ -22,6 +23,8 @@ export function PopularTable({ rows, sort = "picks", groupCount, groupId, action
   /** 馬ごとに名前の下へ出すボタンなど */
   actions?: Record<string, ReactNode>;
   compact?: boolean;
+  /** 馬名の横のアイコン（指名・済・人気） */
+  marks?: HorseMarks;
 }) {
   const maxPicks = Math.max(1, ...rows.map((r) => r.picks));
   const showChange = sort === "picks";
@@ -49,7 +52,7 @@ export function PopularTable({ rows, sort = "picks", groupCount, groupId, action
               </td>
               {showChange && <td className="c hide-sm"><RankChange rank={r.rank} prev={r.prevRank} /></td>}
               <td className="name-cell">
-                <HorseLabel id={r.horse.id} horse={r.horse} groupId={groupId} showTrainer={!compact} />
+                <HorseLabel id={r.horse.id} horse={r.horse} groupId={groupId} showTrainer={!compact} marks={marks} />
                 {actions?.[r.horse.id] && <div style={{ marginTop: 3 }}>{actions[r.horse.id]}</div>}
               </td>
               <td className="num picks-cell">
@@ -113,7 +116,7 @@ export function BoardStats({ board }: { board: GenerationBoard }) {
 }
 
 /** 横の欄：今週の急上昇 */
-export function RisingBox({ board, groupId }: { board: GenerationBoard; groupId?: string }) {
+export function RisingBox({ board, groupId, marks }: { board: GenerationBoard; groupId?: string; marks?: HorseMarks }) {
   const rows = risingHorses(board.rows, 5);
   return (
     <section className="box">
@@ -123,7 +126,7 @@ export function RisingBox({ board, groupId }: { board: GenerationBoard; groupId?
           {rows.map((r, i) => (
             <li key={r.horse.id}>
               <span className="mr-no">{i + 1}</span>
-              <span className="mr-main"><HorseLabel id={r.horse.id} horse={r.horse} groupId={groupId} showPed={false} /><span className="mr-sub">父 {r.horse.sire ?? "-"}</span></span>
+              <span className="mr-main"><HorseLabel id={r.horse.id} horse={r.horse} groupId={groupId} showPed={false} marks={marks} /><span className="mr-sub">父 {r.horse.sire ?? "-"}</span></span>
               <span className="mr-val chg-up">+{r.weekPicks}</span>
             </li>
           ))}
@@ -172,4 +175,9 @@ export function ExternalRankingNote() {
 export function boardTitle(sex: BoardSex, sort: BoardSort) {
   const s = sex === "牡" ? "牡馬 " : sex === "牝" ? "牝馬 " : "";
   return sort === "prize" ? `${s}注目馬30傑（賞金順）` : `${s}注目馬30傑（指名数順）`;
+}
+
+/** 世代の人気馬（指名数の上位）。表のアイコン用 */
+export function boardPopularIds(board: GenerationBoard): Set<string> {
+  return popularIds(new Map(board.rows.map((r) => [r.horse.id, r.picks])));
 }

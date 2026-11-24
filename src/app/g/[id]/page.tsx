@@ -6,12 +6,14 @@ import InviteShare from "@/components/InviteShare";
 import ShareCard from "@/components/ShareCard";
 import { shareText } from "@/lib/share";
 import { formatMan } from "@/lib/util";
-import { HorseLabel, Finish, Rank } from "@/components/HorseLabel";
+import { HorseLabel, Finish, Rank, MarkLegend } from "@/components/HorseLabel";
+import { groupBoardMarks } from "@/lib/horse-marks-server";
 
 export default async function Ranking({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ joined?: string }> }) {
   const { id } = await params;
   const { joined } = await searchParams;
   const { standings, names, user, horseMap, results, picks, group } = await loadGroupBoard(id);
+  const marks = await groupBoardMarks(picks as { user_id: string; horse_id: string }[], user.id);
   const myPicks = picks.filter((p) => p.user_id === user.id).length;
   const inviteUrl = standings.length < 3 ? `${await siteOrigin()}/join/${group.invite_code}` : null;
   const lastFetched = [...horseMap.values()]
@@ -120,6 +122,8 @@ export default async function Ranking({ params, searchParams }: { params: Promis
       {feed.length === 0 ? (
         <div className="card muted">まだレース結果がありません。指名馬がレースに出ると、ここに結果が並びます。</div>
       ) : (
+        <>
+        <MarkLegend sex={false} />
         <div className="card flush scroll">
           <table className="list compact">
             <thead>
@@ -130,7 +134,7 @@ export default async function Ranking({ params, searchParams }: { params: Promis
                 <tr key={`${r.horse_id}${r.race_date}${r.race_name}`}>
                   <td className="feed-date">{r.race_date.slice(5).replace("-", "/")}</td>
                   <td>
-                    <HorseLabel id={r.horse_id} horse={horseMap.get(r.horse_id)} groupId={id} showPed={false} />
+                    <HorseLabel id={r.horse_id} horse={horseMap.get(r.horse_id)} groupId={id} showPed={false} marks={marks} />
                     {firstWin.get(r.horse_id) === r.race_date && <span className="pill hot" style={{ marginLeft: 6 }}>勝ち上がり</span>}
                   </td>
                   <td>{r.venue} {r.race_name}</td>
@@ -142,6 +146,7 @@ export default async function Ranking({ params, searchParams }: { params: Promis
             </tbody>
           </table>
         </div>
+        </>
       )}
 
       <p className="muted">
