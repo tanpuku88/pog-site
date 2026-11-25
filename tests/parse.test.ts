@@ -46,6 +46,7 @@ describe("馬ページの解析", () => {
     expect(r[0]).toEqual({
       race_date: "2026-11-08", venue: "東京", race_name: "京王杯2歳S(G2)",
       race_id: "202605050211", finish: "1", prize_man: 3800, is_jra: true, surface: null, distance: null,
+      jockey: "騎手A",
     });
     expect(r[1]).toMatchObject({ venue: "大井", is_jra: false, prize_man: 200 });
     expect(r[3]).toMatchObject({ finish: "中止", prize_man: 0 });
@@ -91,8 +92,20 @@ describe("出馬表の解析", () => {
       <tr><td><a href="https://db.netkeiba.com/horse/2024100002/">B</a></td></tr></table>`;
     expect(parseShutuba("202605050211", html)).toEqual({
       race_id: "202605050211", race_name: "京王杯2歳S", venue: "東京", race_no: 11,
-      post_time: "15:25", horse_ids: ["2024100001", "2024100002"],
+      post_time: "15:25", horse_ids: ["2024100001", "2024100002"], jockeys: {},
     });
+  });
+
+  it("出馬表の行から騎手を読む（未定の馬は入らない）", () => {
+    const html = `<div class="RaceName">2歳新馬</div><div class="RaceData01">10:10発走 / 芝1600m</div>
+      <table class="Shutuba_Table">
+      <tr><td>1</td><td><a href="https://db.netkeiba.com/horse/2024100001">A</a></td><td>牡2</td><td>55</td><td><a href="https://db.netkeiba.com/jockey/00001/">騎手A</a></td></tr>
+      <tr><td>2</td><td><a href="https://db.netkeiba.com/horse/2024100002/">B</a></td><td>牝2</td><td>55</td><td><a href="https://db.netkeiba.com/jockey/00002/">騎手B▲</a></td></tr>
+      <tr><td>3</td><td><a href="https://db.netkeiba.com/horse/2024100003/">C</a></td><td>牡2</td><td>55</td><td></td></tr>
+      </table>`;
+    const s = parseShutuba("202605050211", html);
+    expect(s.jockeys).toEqual({ "2024100001": "騎手A", "2024100002": "騎手B" });
+    expect(s.horse_ids).toEqual(["2024100001", "2024100002", "2024100003"]);
   });
 });
 

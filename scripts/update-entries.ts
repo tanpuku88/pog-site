@@ -46,12 +46,13 @@ async function main() {
         continue;
       }
       const shinba = isShinba(s.race_name);
-      if (shinba) shinbaRunners.push(...s.horse_ids.map((id) => ({ id, row: { race_id: raceId, race_date: date, venue: s.venue, race_no: s.race_no, race_name: s.race_name, post_time: s.post_time } })));
+      if (shinba) shinbaRunners.push(...s.horse_ids.map((id) => ({ id, row: { race_id: raceId, race_date: date, venue: s.venue, race_no: s.race_no, race_name: s.race_name, post_time: s.post_time, jockey: s.jockeys[id] ?? null } })));
       for (const horseId of s.horse_ids) {
         if (!picked.has(horseId) || shinba) continue;
         rows.push({
           horse_id: horseId, race_id: raceId, race_date: date, venue: s.venue,
           race_no: s.race_no, race_name: s.race_name, post_time: s.post_time,
+          jockey: s.jockeys[horseId] ?? null,
         });
         console.log(`  ${s.venue}${s.race_no}R ${s.race_name}: ${horseId}`);
       }
