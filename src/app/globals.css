@@ -326,6 +326,25 @@ table.rank-table .picks-cell .big { font-size: 17px; }
 .column-card img { width: 96px; height: 72px; object-fit: cover; flex: none; }
 .column-body { padding: 8px 10px; display: flex; flex-direction: column; gap: 2px; font-size: 14px; line-height: 1.45; }
 .column-src { font-size: 11px; color: var(--muted); }
+/* 注目コラム（トップ） */
+.pickup { background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--gold); border-radius: 6px; padding: 14px 16px 16px; margin: 16px 0 4px; }
+.pickup-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.pickup-head h2 { margin: 0; font-size: 18px; line-height: 1.35; }
+.pickup-avatar { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; flex: none; border: 2px solid var(--gold); }
+.pickup-kicker { margin: 0; font-size: 11px; font-weight: 800; color: var(--bronze); letter-spacing: .05em; }
+.pickup-catch { margin: 2px 0 0; font-size: 12px; color: var(--muted); }
+.pickup-more { margin-left: auto; flex: none; font-size: 13px; white-space: nowrap; }
+.pickup-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.pickup-card { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; text-decoration: none; color: var(--text); background: var(--card); }
+.pickup-card:hover strong { text-decoration: underline; }
+.pickup-card img { width: 100%; aspect-ratio: 1280 / 670; object-fit: cover; display: block; }
+.pickup-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 4px; font-size: 14px; line-height: 1.5; flex: 1; }
+.pickup-go { margin-top: auto; font-size: 13px; font-weight: 700; color: var(--accent); }
+@media (max-width: 640px) {
+  .pickup-grid { grid-template-columns: 1fr; }
+  .pickup-head { flex-wrap: wrap; }
+  .pickup-head h2 { font-size: 16px; }
+}
 
 /* 使い方 */
 .steps { counter-reset: step; list-style: none; padding: 0; margin: 0; }

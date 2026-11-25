@@ -3,7 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { loadGenerationBoard, type GenerationBoard } from "@/lib/popular";
 import { defaultSeason } from "@/lib/standings";
 import { loadFeeds } from "@/lib/feeds";
-import { COLUMN_FEEDS, NOTE_URL } from "@/config/site";
+import { COLUMN_FEEDS, NOTE_URL, PICKUP_NOTE } from "@/config/site";
 import { PopularTable, RisingBox, SireBox } from "./PopularTable";
 import { OwnerSide } from "./OwnerSites";
 
@@ -72,6 +72,40 @@ export async function Columns() {
         ))}
       </div>
     </>
+  );
+}
+
+/** トップページ：注目コラム（火下遊さんのnote新着2本を大きく表示） */
+export async function PickupNote() {
+  const p = PICKUP_NOTE;
+  let items = (await loadFeeds([{ label: p.fullName, url: p.rss }], p.count)).filter((i) => i.url.startsWith(p.url));
+  if (items.length < p.count) items = p.fallback.map((f) => ({ ...f, source: p.fullName }));
+  return (
+    <section className="pickup">
+      <div className="pickup-head">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={p.avatar} alt="" className="pickup-avatar" />
+        <div>
+          <p className="pickup-kicker">注目コラム ・ note</p>
+          <h2>{p.name}の新馬戦予想「2027年ダービーへの道」</h2>
+          <p className="pickup-catch">{p.catch}</p>
+        </div>
+        <a href={p.url} target="_blank" rel="noreferrer" className="pickup-more">記事一覧 ›</a>
+      </div>
+      <div className="pickup-grid">
+        {items.slice(0, p.count).map((i) => (
+          <a key={i.url} href={i.url} target="_blank" rel="noreferrer" className="pickup-card">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            {i.image && <img src={i.image} alt="" loading="lazy" />}
+            <span className="pickup-body">
+              <span className="column-src">{p.fullName}{i.date && ` ・ ${new Date(i.date).toLocaleDateString("ja-JP", { timeZone: "Asia/Tokyo" })}`}</span>
+              <strong>{i.title}</strong>
+              <span className="pickup-go">noteで読む ›</span>
+            </span>
+          </a>
+        ))}
+      </div>
+    </section>
   );
 }
 
