@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import GlobalNav from "@/components/GlobalNav";
 import { getUser } from "@/lib/supabase/server";
@@ -67,6 +68,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <p className="copy">© {SITE_NAME}</p>
           </div>
         </footer>
+        <Analytics />
       </body>
     </html>
   );
