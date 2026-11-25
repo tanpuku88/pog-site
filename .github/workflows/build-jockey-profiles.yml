@@ -1,0 +1,52 @@
+name: 騎手のデビュー戦成績を集める
+
+on:
+  # 毎日 1:00 JST（16:00 UTC）。成績更新（21:30）・出走馬の取り込み（23:00）のあとに動かす
+  schedule:
+    - cron: "0 16 * * *"
+  workflow_dispatch:
+    inputs:
+      time_budget_min:
+        description: "集計に使う最大の時間（分）"
+        required: false
+        default: "240"
+
+concurrency:
+  group: build-jockey-profiles
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build:jockeys
+        env:
+          TIME_BUDGET_MIN: ${{ inputs.time_budget_min || '240' }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      # 集めたデータを main にコミットする（騎手が1人も取れなかったときは上書きしない）
+      - run: |
+          count=$(node -e 'console.log(Object.keys(require("./src/data/jockey-profiles.json").jockeys ?? {}).length)')
+          if [ "$count" = "0" ]; then
+            echo "騎手データが空なのでコミットしません"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data/jockey-profiles.json
+          git diff --cached --quiet && exit 0
+          git commit -m "騎手のデビュー戦成績データを更新"
+          # 途中で main に別のコミットが入っていても取り込んでから送る
+          git pull --rebase origin main
+          git push origin HEAD:main
