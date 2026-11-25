@@ -7,6 +7,11 @@ import { todayJst } from "@/lib/util";
 import { HorseLabel, MarkLegend } from "@/components/HorseLabel";
 import { loadHorseMarks } from "@/lib/horse-marks-server";
 import { Columns } from "@/components/HomeSections";
+import { sireData } from "@/lib/sire-data";
+import { loadCropData } from "@/lib/sires";
+import { computeMetrics, scoreProfiles } from "@/lib/profile";
+import { defaultSeason } from "@/lib/standings";
+import { rankShinbaRace, scoreShinbaHorse, shinbaHighlights, type ShinbaScore } from "@/lib/shinba-picks";
 
 export const metadata = { title: "今週の新馬戦 | POG" };
 
@@ -45,6 +50,36 @@ export default async function Shinba() {
 
   const marks = ids.length ? await loadHorseMarks() : undefined;
 
+  // 狙い目スコア（第1段階：騎手なし）。父・母父は種牡馬データ（全産駒）から、
+  // 厩舎は今の世代の集計から能力値を出す。厩舎側が取れなくても血統だけで計算する。
+  let trainerScores = new Map<string, { early: number | null; consistency: number | null }>();
+  if (ids.length) {
+    try {
+      const season = defaultSeason();
+      const crop = await loadCropData(createAdminClient(), season.crop_year, { ...season, include_non_jra: true });
+      const profiles = scoreProfiles(computeMetrics(crop.horses, crop.tally, crop.races, "trainer"));
+      trainerScores = new Map([...profiles].map(([name, p]) => [name, { early: p.scores.early, consistency: p.scores.consistency }]));
+    } catch {
+      trainerScores = new Map();
+    }
+  }
+  const winnerRateOf = (name: string | null | undefined) => {
+    if (!name) return null;
+    const o = sireData(name)?.offspring;
+    return o && o.runs >= 30 && o.winnerRate !== null ? o.winnerRate : null;
+  };
+  const scoreOf = new Map<string, ShinbaScore>();
+  for (const id of ids) {
+    const h = horseMap.get(id);
+    if (!h) continue;
+    const t = h.trainer ? trainerScores.get(h.trainer) : undefined;
+    scoreOf.set(id, scoreShinbaHorse({
+      sireWinnerRate: winnerRateOf(h.sire), sireName: h.sire,
+      damsireWinnerRate: winnerRateOf(h.damsire), damsireName: h.damsire,
+      trainerEarly: t?.early ?? null, trainerConsistency: t?.consistency ?? null, trainerName: h.trainer,
+    }));
+  }
+
   // 日付 → レース にまとめる
   const days = new Map<string, Map<string, Entry[]>>();
   for (const e of entries) {
@@ -53,12 +88,42 @@ export default async function Shinba() {
     days.set(e.race_date, races);
   }
 
+  // レースごとに狙い目を付け、全レースの上位をまとめる
+  const pickIds = new Set<string>();
+  const rankedRaces = [...days.values()].flatMap((races) =>
+    [...races.values()].map((list) => rankShinbaRace(list, (e) => scoreOf.get(e.horse_id) ?? { score: null, reasons: [] })),
+  );
+  for (const r of rankedRaces.flat()) if (r.isPick) pickIds.add(r.item.horse_id);
+  const highlights = shinbaHighlights(rankedRaces, 5);
+
   return (
     <>
       <h1 id="top">今週の新馬戦</h1>
       <p className="muted" style={{ marginTop: -8 }}>
         中央・地方の新馬戦（門別のフレッシュチャレンジを含む）に出走する馬の一覧です。出馬表が出たら毎日夕方に更新します。指名数はこのサイトの全グループの合計です。
       </p>
+      <p className="muted" style={{ marginTop: -8 }}>
+        「狙い目」は父・母父の勝ち上がり率と厩舎の仕上がり・勝ち上がり傾向から出したスコア（100点満点）です。騎手はまだ見ていません。
+      </p>
+      {highlights.length > 0 && (
+        <div className="card" style={{ marginBottom: 12 }}>
+          <strong>今週の狙い目</strong>
+          <ul style={{ margin: "8px 0 0", paddingLeft: 18 }}>
+            {highlights.map((r) => {
+              const h = horseMap.get(r.item.horse_id);
+              const d = new Date(`${r.item.race_date}T00:00:00Z`);
+              return (
+                <li key={r.item.horse_id} style={{ marginBottom: 4 }}>
+                  <span className="muted">{d.getUTCMonth() + 1}/{d.getUTCDate()} {r.item.venue}{r.item.race_no}R　</span>
+                  <Link className="horse-name" href={`/horse/${r.item.horse_id}`}>{h?.name ?? r.item.horse_id}</Link>
+                  <span className="big">　スコア{r.score.score}</span>
+                  {r.score.reasons.length > 0 && <div className="muted" style={{ fontSize: 12 }}>{r.score.reasons.join("。")}。</div>}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
       {days.size > 0 && (
         <nav className="race-jump" aria-label="レースへ移動">
           {[...days].map(([date, races]) => {
@@ -99,7 +164,7 @@ export default async function Shinba() {
                   </div>
                   <div className="scroll">
                     <table className="list compact">
-                      <thead><tr><th>馬名・血統</th><th className="hide-sm">厩舎</th><th className="num">指名数</th></tr></thead>
+                      <thead><tr><th>馬名・血統</th><th className="hide-sm">厩舎</th><th>狙い目</th><th className="num">指名数</th></tr></thead>
                       <tbody>
                         {list.map((e) => {
                           const h = horseMap.get(e.horse_id);
@@ -110,6 +175,19 @@ export default async function Shinba() {
                                 <HorseLabel id={e.horse_id} horse={h} marks={marks} />
                               </td>
                               <td className="hide-sm sub">{h?.trainer ?? ""}</td>
+                              <td>
+                                {(() => {
+                                  const s = scoreOf.get(e.horse_id);
+                                  if (!s || s.score === null) return <span className="muted">-</span>;
+                                  return (
+                                    <>
+                                      {pickIds.has(e.horse_id) && <span className="big">🎯狙い目　</span>}
+                                      <span>{s.score}点</span>
+                                      {s.reasons.length > 0 && <div className="muted" style={{ fontSize: 12 }}>{s.reasons.join("。")}。</div>}
+                                    </>
+                                  );
+                                })()}
+                              </td>
                               <td className="num">{n > 0 ? <span className="big">{n}</span> : <span className="muted">-</span>}</td>
                             </tr>
                           );
