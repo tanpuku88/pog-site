@@ -35,9 +35,11 @@ jobs:
           TIME_BUDGET_MIN: ${{ inputs.time_budget_min || '240' }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-      # 集めたデータを main にコミットする（騎手が1人も取れなかったときは上書きしない）
+      # 集めたデータ（読みかけの位置も含む）を main にコミットする。
+      # 1回で全頭（約8,000頭）は読み切れないので、次の晩はコミットした位置の続きから読む。
+      # 騎手が1人も取れなかったときは上書きしない
       - run: |
-          count=$(node -e 'console.log(Object.keys(require("./src/data/jockey-profiles.json").jockeys ?? {}).length)')
+          count=$(node -e 'const f=require("./src/data/jockey-profiles.json");console.log(Object.keys(f.progress?.jockeys ?? f.jockeys ?? {}).length)')
           if [ "$count" = "0" ]; then
             echo "騎手データが空なのでコミットしません"
             exit 0
