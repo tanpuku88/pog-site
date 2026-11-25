@@ -50,3 +50,31 @@ describe("場外ガイドのデータ", () => {
     }
   });
 });
+
+describe("場外ガイド第2弾（周辺グルメ・文化）", () => {
+  it("主要15施設に周辺グルメと見どころが入っている", () => {
+    const targets = ["offt-korakuen", "wins-korakuen", "offt-shiodome", "wins-shiodome", "wins-asakusa", "wins-kinshicho", "dash-shinsaibashi", "wins-dotonbori", "wins-umeda", "wins-kobe", "sanarl-osu", "baoo-hakata", "excel-hakata", "wins-yokohama", "joyhorse-yokohama"];
+    for (const slug of targets) {
+      const f = facilityBySlug(slug)!;
+      expect(f, slug).toBeTruthy();
+      expect(f.foods?.length, slug).toBeGreaterThanOrEqual(2);
+      expect(f.spots?.length, slug).toBeGreaterThanOrEqual(2);
+      for (const food of f.foods!) expect(food.body.length).toBeGreaterThan(20);
+    }
+  });
+});
+
+describe("場外ガイド第2弾（写真）", () => {
+  it("写真はWikimedia Commonsの直リンクで、クレジットとライセンスが入っている", () => {
+    const withPhotos = FACILITIES.filter((f) => f.photos && f.photos.length > 0);
+    expect(withPhotos.length).toBeGreaterThanOrEqual(10);
+    for (const f of withPhotos) {
+      for (const p of f.photos!) {
+        expect(p.src).toContain("upload.wikimedia.org");
+        expect(p.credit.length).toBeGreaterThan(0);
+        expect(p.license.length).toBeGreaterThan(0);
+        expect(p.page).toContain("commons.wikimedia.org");
+      }
+    }
+  });
+});
