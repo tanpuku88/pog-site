@@ -52,6 +52,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               <Link href="/breeders">生産牧場</Link>
               <Link href="/horses">馬を探す</Link>
               <Link href="/keibajo">全国競馬場ガイド</Link>
+              <Link href="/jyogai">全国場外馬券売り場ガイド</Link>
               <Link href="/asia">アジア競馬ガイド</Link>
               <Link href="/guide">使い方</Link>
             </nav>
