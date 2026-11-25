@@ -35,16 +35,16 @@ jobs:
           TIME_BUDGET_MIN: ${{ inputs.time_budget_min || '240' }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-      # 集めたデータを main にコミットする（騎手が1人も取れなかったときは上書きしない）
-      - run: |
-          count=$(node -e 'console.log(Object.keys(require("./src/data/jockey-profiles.json").jockeys ?? {}).length)')
-          if [ "$count" = "0" ]; then
-            echo "騎手データが空なのでコミットしません"
-            exit 0
-          fi
+      # 集めたデータと途中経過を main にコミットする。
+      # 途中経過（data/jockey-debuts.json）があるので、次の実行は続きから読む
+      - if: ${{ !cancelled() }}
+        run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add src/data/jockey-profiles.json
+          if [ -f data/jockey-debuts.json ]; then git add data/jockey-debuts.json; fi
+          # 騎手が1人も取れなかったときは集計を上書きしない
+          count=$(node -e 'console.log(Object.keys(require("./src/data/jockey-profiles.json").jockeys ?? {}).length)')
+          if [ "$count" != "0" ]; then git add src/data/jockey-profiles.json; fi
           git diff --cached --quiet && exit 0
           git commit -m "騎手のデビュー戦成績データを更新"
           # 途中で main に別のコミットが入っていても取り込んでから送る
