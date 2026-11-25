@@ -27,7 +27,7 @@ describe("投稿文", () => {
   it("指名リスト", () => {
     const t = myListShareText("身内杯", { rank: 2, points: 1234.5, horses: [{ horse_id: "a", points: 0 }, { horse_id: "b", points: 1234.5 }] }, 8, new Map([["b", { name: "テストホース" }]]));
     expect(t).toContain("「身内杯」");
-    expect(t).toContain("いま2位／8人・1,234.5万円");
+    expect(t).toContain("いま2位／8人・1,235万円");
     expect(t).toContain("稼ぎ頭はテストホース");
     expect(t).toContain("#POG");
   });

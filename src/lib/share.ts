@@ -39,7 +39,7 @@ export function shareText(o: {
   points: number;
   topHorse?: string | null;
 }) {
-  const man = o.points.toLocaleString("ja-JP", { maximumFractionDigits: 1 });
+  const man = Math.round(o.points).toLocaleString("ja-JP");
   if (o.kind === "ranking") {
     return `POG大会「${o.groupName}」の順位表（${o.members}人）\n首位は${o.name ?? "-"}さん・${man}万円！\n#POG #ペーパーオーナーゲーム`;
   }

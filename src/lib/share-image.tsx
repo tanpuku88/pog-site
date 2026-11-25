@@ -5,7 +5,7 @@ import { SITE_URL } from "@/config/site";
 
 // 色はサイトのヘッダー帯（--head / --gold）に合わせる
 const C = { bg: "#0f3324", bg2: "#16482f", text: "#f3f6f2", muted: "#a9bdb0", gold: "#c9a227", silver: "#c3cbd0", bronze: "#d08a4f", line: "rgba(255,255,255,0.14)", row: "rgba(255,255,255,0.06)" };
-const man = (n: number) => n.toLocaleString("ja-JP", { maximumFractionDigits: 1 });
+const man = (n: number) => Math.round(n).toLocaleString("ja-JP");
 const rankColor = (r: number) => (r === 1 ? C.gold : r === 2 ? C.silver : r === 3 ? C.bronze : C.text);
 const cut = (s: string, n: number) => (s.length > n ? `${s.slice(0, n - 1)}…` : s);
 const host = SITE_URL.replace(/^https?:\/\//, "");
