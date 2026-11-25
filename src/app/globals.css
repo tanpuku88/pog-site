@@ -337,7 +337,7 @@ table.rank-table .picks-cell .big { font-size: 17px; }
 .pickup-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
 .pickup-card { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; text-decoration: none; color: var(--text); background: var(--card); }
 .pickup-card:hover strong { text-decoration: underline; }
-.pickup-card img { width: 100%; aspect-ratio: 1280 / 670; object-fit: cover; display: block; }
+.pickup-card img { width: 100%; aspect-ratio: 1200 / 628; object-fit: cover; display: block; }
 .pickup-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 4px; font-size: 14px; line-height: 1.5; flex: 1; }
 .pickup-go { margin-top: auto; font-size: 13px; font-weight: 700; color: var(--accent); }
 @media (max-width: 640px) {

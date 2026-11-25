@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 628" width="1200" height="628">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffd3b8"/><stop offset=".6" stop-color="#ffe9d6"/><stop offset="1" stop-color="#fff6ea"/>
+    </linearGradient>
+    <linearGradient id="turf" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9ad874"/><stop offset="1" stop-color="#62b04a"/>
+    </linearGradient>
+    <g id="foal">
+      <!-- tail -->
+      <path d="M-105,-20 C-170,-30 -185,40 -150,85 C-140,60 -125,30 -100,10 Z" fill="#8d86a0"/>
+      <!-- back legs -->
+      <rect x="-90" y="20" width="34" height="110" rx="17" fill="#cbc4d2"/>
+      <rect x="-45" y="30" width="34" height="104" rx="17" fill="#dcd6e2"/>
+      <rect x="-92" y="112" width="38" height="22" rx="8" fill="#4a3426"/>
+      <rect x="-47" y="116" width="38" height="22" rx="8" fill="#4a3426"/>
+      <!-- body -->
+      <ellipse cx="0" cy="0" rx="115" ry="72" fill="#ece8f0"/>
+      <ellipse cx="-10" cy="22" rx="80" ry="38" fill="#faf8fc" opacity=".6"/>
+      <!-- front legs -->
+      <rect x="40" y="25" width="34" height="108" rx="17" fill="#dcd6e2"/>
+      <rect x="80" y="18" width="34" height="112" rx="17" fill="#ece8f0"/>
+      <rect x="38" y="116" width="38" height="22" rx="8" fill="#4a3426"/>
+      <rect x="78" y="112" width="38" height="22" rx="8" fill="#4a3426"/>
+      <!-- white socks -->
+      <rect x="80" y="92" width="34" height="22" fill="#ffffff"/>
+      <!-- neck -->
+      <path d="M50,-40 C70,-110 120,-140 160,-120 L150,-20 C120,0 80,0 50,-40 Z" fill="#ece8f0"/>
+      <!-- mane -->
+      <path d="M60,-70 C70,-130 110,-185 160,-190 C140,-170 150,-160 128,-150 C140,-140 120,-128 112,-120 C118,-104 95,-100 92,-88 C88,-72 72,-70 60,-70 Z" fill="#8d86a0"/>
+      <!-- head -->
+      <ellipse cx="170" cy="-140" rx="78" ry="70" fill="#ece8f0"/>
+      <!-- ears -->
+      <path d="M128,-196 L120,-252 L162,-208 Z" fill="#dcd6e2"/>
+      <path d="M132,-204 L127,-236 L152,-210 Z" fill="#f4b6b0"/>
+      <path d="M182,-204 L200,-258 L218,-200 Z" fill="#dcd6e2"/>
+      <path d="M190,-206 L200,-240 L210,-204 Z" fill="#f4b6b0"/>
+      <!-- forelock -->
+      <path d="M150,-210 C170,-230 205,-220 210,-196 C195,-202 185,-190 172,-196 C165,-186 150,-190 150,-210 Z" fill="#8d86a0"/>
+      <!-- blaze -->
+      <path d="M200,-178 C214,-172 222,-140 232,-118 L214,-112 C206,-136 198,-160 200,-178 Z" fill="#ffffff"/>
+      <!-- muzzle -->
+      <ellipse cx="228" cy="-105" rx="46" ry="36" fill="#f9e8ef"/>
+      <ellipse cx="248" cy="-112" rx="5" ry="7" fill="#6b4630"/>
+      <path d="M222,-86 Q236,-76 250,-88" stroke="#6b4630" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <!-- eye -->
+      <ellipse cx="172" cy="-145" rx="17" ry="22" fill="#2a1a12"/>
+      <circle cx="178" cy="-154" r="7" fill="#fff"/>
+      <circle cx="166" cy="-136" r="3.5" fill="#fff"/>
+      <path d="M152,-168 Q160,-176 170,-172" stroke="#2a1a12" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <!-- blush -->
+      <ellipse cx="186" cy="-112" rx="16" ry="9" fill="#ff8f8f" opacity=".55"/>
+    </g>
+  
+  </defs>
+  <rect width="1200" height="628" fill="url(#sky)"/>
+  <circle cx="1060" cy="120" r="70" fill="#fff3a8" opacity=".9"/>
+  <g fill="#ffffff" opacity=".9">
+    <ellipse cx="840" cy="90" rx="70" ry="24"/><ellipse cx="880" cy="74" rx="44" ry="28"/>
+    <ellipse cx="420" cy="70" rx="60" ry="20"/><ellipse cx="450" cy="56" rx="36" ry="22"/>
+  </g>
+  <rect x="0" y="420" width="1200" height="208" fill="url(#turf)"/>
+  <!-- starting gate -->
+  <g transform="translate(470,180)">
+    <rect x="0" y="0" width="330" height="40" rx="8" fill="#2e8b57"/>
+    <text x="165" y="29" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="24" fill="#fff" letter-spacing="6">START</text>
+    <rect x="0" y="40" width="18" height="230" fill="#2e8b57"/>
+    <rect x="104" y="40" width="18" height="230" fill="#2e8b57"/>
+    <rect x="208" y="40" width="18" height="230" fill="#2e8b57"/>
+    <rect x="312" y="40" width="18" height="230" fill="#2e8b57"/>
+    <g fill="#ffffff" stroke="#2e8b57" stroke-width="4">
+      <rect x="22" y="70" width="78" height="20" rx="4"/><rect x="126" y="70" width="78" height="20" rx="4"/><rect x="230" y="70" width="78" height="20" rx="4"/>
+    </g>
+    <g font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="22" text-anchor="middle">
+      <text x="61" y="87" fill="#1a1f1c">1</text><text x="165" y="87" fill="#1a1f1c">2</text><text x="269" y="87" fill="#1a1f1c">3</text>
+    </g>
+  </g>
+  <!-- speed lines -->
+  <g stroke="#ffffff" stroke-width="10" stroke-linecap="round" opacity=".85">
+    <line x1="560" y1="360" x2="680" y2="360"/><line x1="590" y1="410" x2="700" y2="410"/><line x1="540" y1="460" x2="660" y2="460"/>
+  </g>
+  <!-- dust -->
+  <g fill="#e9d3a8" opacity=".9">
+    <circle cx="640" cy="540" r="22"/><circle cx="672" cy="528" r="16"/><circle cx="612" cy="552" r="14"/>
+  </g>
+  <!-- foal bursting out -->
+  <g transform="translate(860,420) rotate(-6)">
+    <ellipse cx="40" cy="138" rx="190" ry="16" fill="#3f7f2e" opacity=".3"/>
+    <use href="#foal"/>
+    <path d="M-50,-66 L50,-66 L58,30 L-58,30 Z" fill="#ff6f91" stroke="#ffffff" stroke-width="4"/>
+    <text x="0" y="6" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="64" fill="#ffffff">2</text>
+    <!-- music notes / hearts -->
+    <path d="M250,-230 c0,-14 22,-14 22,0 c0,-14 22,-14 22,0 c0,16 -22,28 -22,34 c0,-6 -22,-18 -22,-34 z" fill="#ff6f91"/>
+  </g>
+  <g fill="#ffb02e">
+    <path d="M1150,340 l7,18 18,7 -18,7 -7,18 -7,-18 -18,-7 18,-7 z"/>
+    <path d="M760,120 l6,15 15,6 -15,6 -6,15 -6,-15 -15,-6 15,-6 z"/>
+  </g>
+  <!-- title -->
+  <g transform="translate(60,150)">
+    <rect x="0" y="0" width="300" height="60" rx="30" fill="#2e8b57"/>
+    <text x="150" y="41" text-anchor="middle" font-family="'Hiragino Maru Gothic ProN','M PLUS Rounded 1c','Noto Sans JP',sans-serif" font-weight="800" font-size="32" fill="#fff">デビュー戦</text>
+    <text x="0" y="176" font-family="'Hiragino Maru Gothic ProN','M PLUS Rounded 1c','Noto Sans JP',sans-serif" font-weight="900" font-size="112" fill="#e2456f" stroke="#ffffff" stroke-width="10" paint-order="stroke">新馬戦</text>
+    <text x="4" y="248" font-family="'Hiragino Maru Gothic ProN','M PLUS Rounded 1c','Noto Sans JP',sans-serif" font-weight="800" font-size="42" fill="#ffffff" stroke="#c0532f" stroke-width="8" paint-order="stroke">火下遊の予想</text>
+  </g>
+</svg>

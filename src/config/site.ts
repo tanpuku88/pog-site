@@ -17,18 +17,18 @@ export const PICKUP_NOTE = {
   avatar: "https://assets.st-note.com/production/uploads/images/6763558/profile_7d689eecf274cd40a270394e6993b570.jpg?fit=bounds&format=jpeg&quality=85&width=330",
   catch: "競馬歴20数年。競馬場・距離・コース・馬場を加味した血統予想で、新馬戦から2027年ダービー馬を探す。",
   count: 2,
+  /** カードの画像（noteのサムネイルではなくサイトのオリジナルイラストを順に使う） */
+  images: ["/brand/hishita-shinba-1.svg", "/brand/hishita-shinba-2.svg"],
   fallback: [
     {
       title: "2027年ダービーへの道・火下新馬戦予想11月23日(月）東京５Ｒ芝１６００ｍ【12:20】東京６Ｒ芝１４００ｍ【12:50】",
       url: "https://note.com/hishita_asobu/n/n9484d899a63f",
       date: "2026-11-22T17:54:09.000Z",
-      image: "https://assets.st-note.com/production/uploads/images/339464157/rectangle_large_type_2_0dd8f8b07cb1fd8235362c502f8b65a6.png?width=800",
     },
     {
       title: "2027年ダービーへの道・火下新馬戦予想11月22日(日）東京５Ｒ芝２０００ｍ【12:10】京都５Ｒ芝１８００ｍ【12:25】",
       url: "https://note.com/hishita_asobu/n/n66d42ba42d3b",
       date: "2026-11-21T15:43:55.000Z",
-      image: "https://assets.st-note.com/production/uploads/images/339003527/rectangle_large_type_2_e00b6b0b06585fe0bfd6b8eb60ce7b4b.png?width=800",
     },
   ],
 };

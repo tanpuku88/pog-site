@@ -79,7 +79,7 @@ export async function Columns() {
 export async function PickupNote() {
   const p = PICKUP_NOTE;
   let items = (await loadFeeds([{ label: p.fullName, url: p.rss }], p.count)).filter((i) => i.url.startsWith(p.url));
-  if (items.length < p.count) items = p.fallback.map((f) => ({ ...f, source: p.fullName }));
+  if (items.length < p.count) items = p.fallback.map((f) => ({ ...f, source: p.fullName, image: null }));
   return (
     <section className="pickup">
       <div className="pickup-head">
@@ -93,10 +93,10 @@ export async function PickupNote() {
         <a href={p.url} target="_blank" rel="noreferrer" className="pickup-more">記事一覧 ›</a>
       </div>
       <div className="pickup-grid">
-        {items.slice(0, p.count).map((i) => (
+        {items.slice(0, p.count).map((i, n) => (
           <a key={i.url} href={i.url} target="_blank" rel="noreferrer" className="pickup-card">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            {i.image && <img src={i.image} alt="" loading="lazy" />}
+            <img src={p.images[n % p.images.length]} alt="新馬戦のイラスト" width={1200} height={628} />
             <span className="pickup-body">
               <span className="column-src">{p.fullName}{i.date && ` ・ ${new Date(i.date).toLocaleDateString("ja-JP", { timeZone: "Asia/Tokyo" })}`}</span>
               <strong>{i.title}</strong>
