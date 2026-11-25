@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getUser } from "@/lib/supabase/server";
-import { HomeBoard, Columns } from "@/components/HomeSections";
+import { HomeBoard, Columns, PickupNote } from "@/components/HomeSections";
 
 const MENU = [
   { href: "/popular", icon: "🏆", title: "注目馬30傑", text: "賞金・指名数で世代の注目馬" },
@@ -44,6 +44,7 @@ export default async function Home() {
           </ul>
         </div>
         <QuickMenu />
+        <PickupNote />
         <HomeBoard>
           <Columns />
         </HomeBoard>
@@ -77,6 +78,7 @@ export default async function Home() {
         ))}
       </div>
       <QuickMenu />
+      <PickupNote />
       <HomeBoard>
         <Columns />
       </HomeBoard>
