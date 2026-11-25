@@ -1,0 +1,92 @@
+// 地方競馬の場外発売所。正本は地方競馬公式「場外発売場一覧」
+// https://www.keiba.go.jp/guide/offsite_sales/ （2026-11-25確認）。
+// 住所・管理主催者・有料席は同ページの記載どおり。発売する競馬の種類は施設・日によって違うので、
+// 行く前に各施設の公式サイトで確認すること。
+import type { Facility } from "./types";
+
+export const NAR_FACILITIES: Facility[] = [
+  // 北海道（ばんえい競馬・帯広市）
+  { slug: "halons-nayoro", name: "ハロンズ名寄", org: "NAR", kind: "ハロンズ", pref: "北海道", region: "北海道", address: "北海道名寄市西1条南8丁目1-1", operator: "帯広市（ばんえい競馬）", paidSeat: false, url: "https://www.banei-keiba.or.jp" },
+  { slug: "rera-spot-kitasaito", name: "旭川北彩都（レラ・スポット北彩都）", org: "NAR", kind: "レラ・スポット", pref: "北海道", region: "北海道", address: "北海道旭川市南6条通20丁目1978-17", operator: "帯広市（ばんえい競馬）", paidSeat: false, url: "https://www.banei-keiba.or.jp" },
+  { slug: "mint-spot-kitami", name: "北見場外（ミントスポット北見）", org: "NAR", kind: "ミントスポット", pref: "北海道", region: "北海道", address: "北海道北見市小泉408-1", operator: "帯広市（ばんえい競馬）", paidSeat: false, url: "https://www.banei-keiba.or.jp" },
+  { slug: "ap-spot-abashiri", name: "網走場外（アプスポット網走）", org: "NAR", kind: "アプスポット", pref: "北海道", region: "北海道", address: "北海道網走市南4条東1丁目3号 APTマツブンビル1階・2階", operator: "帯広市（ばんえい競馬）", paidSeat: false, url: "https://www.banei-keiba.or.jp" },
+  { slug: "kotoni-ekimae", name: "琴似駅前場外", org: "NAR", kind: "場外発売所", pref: "北海道", region: "北海道", address: "北海道札幌市西区琴似2条1丁目3 琴似Lビル2階・3階", operator: "帯広市（ばんえい競馬）", paidSeat: true, url: "https://www.banei-keiba.or.jp", access: "JR函館本線・琴似駅前" },
+  { slug: "illum-fukagawa", name: "深川場外発売所（イルムふかがわ）", org: "NAR", kind: "イルム", pref: "北海道", region: "北海道", address: "北海道深川市3条22-26号", operator: "帯広市（ばんえい競馬）", paidSeat: false, url: "https://www.banei-keiba.or.jp" },
+  { slug: "halons-iwamizawa", name: "ハロンズ岩見沢", org: "NAR", kind: "ハロンズ", pref: "北海道", region: "北海道", address: "北海道岩見沢市南町8条3丁目152番地1", operator: "帯広市（ばんえい競馬）", paidSeat: false, url: "https://www.banei-keiba.or.jp" },
+  // 北海道（ホッカイドウ競馬・北海道）
+  { slug: "aiba-tomakomai", name: "Aiba苫小牧", org: "NAR", kind: "Aiba", pref: "北海道", region: "北海道", address: "北海道苫小牧市木場町1丁目6-1（MEGAドン・キホーテ苫小牧店3階）", operator: "北海道（ホッカイドウ競馬）", paidSeat: false, url: "https://www.hokkaidokeiba.net" },
+  { slug: "aiba-asahikawa", name: "Aiba旭川", org: "NAR", kind: "Aiba", pref: "北海道", region: "北海道", address: "北海道旭川市豊岡3条2丁目2-19 アモールショッピングセンター2F", operator: "北海道（ホッカイドウ競馬）", paidSeat: true, url: "https://www.hokkaidokeiba.net", note: "JRAの馬券を扱うJ-PLACE旭川を併設（旧・旭川レーシングセンターから移転）。" },
+  { slug: "aiba-shizunai", name: "Aiba静内", org: "NAR", kind: "Aiba", pref: "北海道", region: "北海道", address: "北海道日高郡新ひだか町静内木場町2丁目1番5号", operator: "北海道（ホッカイドウ競馬）", paidSeat: false, url: "https://www.hokkaidokeiba.net", note: "かつて同町にあったウインズ静内（JRA）は2013年に閉鎖。いまはAibaが馬産地・日高の場外発売を担う。" },
+  { slug: "aiba-otaru", name: "Aiba小樽", org: "NAR", kind: "Aiba", pref: "北海道", region: "北海道", address: "北海道小樽市築港11-5 ウイングベイ小樽5番街3階", operator: "北海道（ホッカイドウ競馬）", paidSeat: false, url: "https://www.hokkaidokeiba.net" },
+  { slug: "aiba-takikawa", name: "Aiba滝川", org: "NAR", kind: "Aiba", pref: "北海道", region: "北海道", address: "北海道滝川市栄町3丁目12-8", operator: "北海道（ホッカイドウ競馬）", paidSeat: false, url: "https://www.hokkaidokeiba.net" },
+  { slug: "aiba-urakawa", name: "Aiba浦河", org: "NAR", kind: "Aiba", pref: "北海道", region: "北海道", address: "北海道浦河郡浦河町大通3丁目", operator: "北海道（ホッカイドウ競馬）", paidSeat: false, url: "https://www.hokkaidokeiba.net" },
+  { slug: "aiba-nakashibetsu", name: "Aiba中標津", org: "NAR", kind: "Aiba", pref: "北海道", region: "北海道", address: "北海道標津郡中標津町東31条南1丁目5", operator: "北海道（ホッカイドウ競馬）", paidSeat: false, url: "https://www.hokkaidokeiba.net" },
+  { slug: "aiba-chitose", name: "Aiba千歳", org: "NAR", kind: "Aiba", pref: "北海道", region: "北海道", address: "北海道千歳市東郊1丁目7-1", operator: "北海道（ホッカイドウ競馬）", paidSeat: false, url: "https://www.hokkaidokeiba.net" },
+  { slug: "aiba-hakodate", name: "Aiba函館港町", org: "NAR", kind: "Aiba", pref: "北海道", region: "北海道", address: "北海道函館市港町3丁目17", operator: "北海道（ホッカイドウ競馬）", paidSeat: false, url: "https://www.hokkaidokeiba.net" },
+  { slug: "aiba-ebetsu", name: "Aiba江別", org: "NAR", kind: "Aiba", pref: "北海道", region: "北海道", address: "北海道江別市東野幌町1-16", operator: "北海道（ホッカイドウ競馬）", paidSeat: false, url: "https://www.hokkaidokeiba.net" },
+  { slug: "aiba-ishikari", name: "Aiba石狩", org: "NAR", kind: "Aiba", pref: "北海道", region: "北海道", address: "北海道石狩市新港南2丁目729-3 サテライト石狩内", operator: "北海道（ホッカイドウ競馬）", paidSeat: true, url: "https://www.st-ishikari.com" },
+  { slug: "aiba-sapporo-chuo", name: "Aiba札幌中央", org: "NAR", kind: "Aiba", pref: "北海道", region: "北海道", address: "北海道札幌市中央区南6条西1丁目1-1 サテライト札幌内", operator: "北海道（ホッカイドウ競馬）", paidSeat: false, url: "https://www.satellite-sapporo.com" },
+  { slug: "aiba-sapporo-ekimae", name: "Aiba札幌駅前", org: "NAR", kind: "Aiba", pref: "北海道", region: "北海道", address: "北海道札幌市中央区北4条西2丁目1-1 キタコートレードビル地下1F～3F", operator: "北海道（ホッカイドウ競馬）", paidSeat: true, url: "https://aiba-sapporoekimae.jp", access: "JR札幌駅近く", note: "2015年に一度閉鎖したが、2018年に移転して再開業。J-PLACE札幌駅前としてJRAの馬券も扱う。" },
+  { slug: "aiba-noboribetsu-muroran", name: "Aiba登別室蘭", org: "NAR", kind: "Aiba", pref: "北海道", region: "北海道", address: "北海道登別市若草町4丁目23", operator: "北海道（ホッカイドウ競馬）", paidSeat: false, url: "https://hokkaidokeiba-kabu.com", note: "かつて室蘭市にあったウインズ室蘭（JRA）は2013年に閉鎖。登別・室蘭エリアの場外発売はいまはこちら。" },
+  { slug: "aiba-kushiro", name: "Aibaくしろ", org: "NAR", kind: "Aiba", pref: "北海道", region: "北海道", address: "北海道釧路郡釧路町桂木3丁目1番地", operator: "北海道（ホッカイドウ競馬）", paidSeat: false, url: "https://hokkaidokeiba-kabu.com" },
+  // 岩手競馬（岩手県競馬組合）・テレトラック系
+  { slug: "iwate-wins-tsugaru", name: "ウインズ津軽内岩手競馬発売所", org: "NAR", kind: "テレトラック", pref: "青森県", region: "東北", address: "青森県南津軽郡田舎館村大字高樋字大曲7番1", operator: "岩手県競馬組合", paidSeat: false, url: "https://www.iwatekeiba.or.jp", access: "弘南鉄道弘南線・田んぼアート駅から徒歩約5分", note: "JRAのウインズ津軽の中にある岩手競馬の発売所。同じ建物で中央と地方の両方が買える。" },
+  { slug: "teletrack-towada", name: "テレトラック十和田", org: "NAR", kind: "テレトラック", pref: "青森県", region: "東北", address: "青森県十和田市大字伝法寺字平窪37-14", operator: "岩手県競馬組合", paidSeat: true, url: "https://www.iwatekeiba.or.jp" },
+  { slug: "teletrack-yamamoto", name: "テレトラック山本", org: "NAR", kind: "テレトラック", pref: "秋田県", region: "東北", address: "秋田県山本郡三種町森岳字東堤沢72番3", operator: "岩手県競馬組合", paidSeat: false, url: "https://www.iwatekeiba.or.jp" },
+  { slug: "teletrack-yokote", name: "テレトラック横手", org: "NAR", kind: "テレトラック", pref: "秋田県", region: "東北", address: "秋田県横手市安田字向田201番", operator: "岩手県競馬組合", paidSeat: true, url: "https://www.iwatekeiba.or.jp", access: "JR横手駅からタクシー約10分", note: "JRAのウインズ横手と同居。岩手競馬とその他地方競馬を発売する。" },
+  { slug: "teletrack-ishidoriya", name: "テレトラック石鳥谷", org: "NAR", kind: "テレトラック", pref: "岩手県", region: "東北", address: "岩手県花巻市石鳥谷町小森林第2地割10-1", operator: "岩手県競馬組合", paidSeat: true, url: "https://www.iwatekeiba.or.jp" },
+  { slug: "teletrack-taneichi", name: "テレトラック種市", org: "NAR", kind: "テレトラック", pref: "岩手県", region: "東北", address: "岩手県九戸郡洋野町種市第24地割144", operator: "岩手県競馬組合", paidSeat: true, url: "https://www.iwatekeiba.or.jp" },
+  { slug: "teletrack-sanbongi", name: "テレトラック三本木", org: "NAR", kind: "テレトラック", pref: "宮城県", region: "東北", address: "宮城県大崎市三本木字善並田24-1", operator: "岩手県競馬組合", paidSeat: false, url: "https://www.iwatekeiba.or.jp" },
+  { slug: "iwate-tokyo-racecourse", name: "JRA東京競馬場内岩手競馬発売所", org: "NAR", kind: "競馬場内発売所", pref: "東京都", region: "関東", address: "東京都府中市日吉町1-1（東京競馬場内）", operator: "岩手県競馬組合", paidSeat: false, url: "https://www.iwatekeiba.or.jp", note: "中央の競馬場の中で地方競馬が買える、珍しい発売所。" },
+  { slug: "umacco-morioka", name: "UMACCO盛岡大通", org: "NAR", kind: "UMACCO", pref: "岩手県", region: "東北", address: "岩手県盛岡市大通1丁目（ヒグチビル2階）", operator: "岩手県競馬組合", paidSeat: false, url: "https://www.iwatekeiba.or.jp", note: "盛岡の繁華街・大通にある街なか場外。" },
+  { slug: "teletrack-kamaishi", name: "テレトラック釜石", org: "NAR", kind: "テレトラック", pref: "岩手県", region: "東北", address: "岩手県釜石市両石町第4地割18-21", operator: "岩手県競馬組合", paidSeat: false, url: "https://www.iwatekeiba.or.jp" },
+  // 千葉県競馬組合（船橋）・f-keiba
+  { slug: "fkeiba-narita", name: "f-keiba成田", org: "NAR", kind: "f-keiba", pref: "千葉県", region: "関東", address: "千葉県山武郡芝山町岩山1411番地 サテライト成田2階", operator: "千葉県競馬組合（船橋競馬）", paidSeat: true, url: "https://satellite-narita.com" },
+  { slug: "fkeiba-kisarazu", name: "f-keiba木更津", org: "NAR", kind: "f-keiba", pref: "千葉県", region: "関東", address: "千葉県木更津市富士見1丁目2番1号 アクア木更津 地下1階", operator: "千葉県競馬組合（船橋競馬）", paidSeat: true, url: "https://f-keiba-kisarazu.jp", access: "JR木更津駅近く" },
+  // 特別区競馬組合（大井）系・ニュートラック／オフト／オープス
+  { slug: "newtrack-kaminoyama", name: "ニュートラックかみのやま", org: "NAR", kind: "ニュートラック", pref: "山形県", region: "東北", address: "山形県上山市金瓶字山ノ上134番地", operator: "特別区競馬組合／岩手県競馬組合", paidSeat: true, url: "https://www.tokyocitykeiba.com" },
+  { slug: "newtrack-matsuyama", name: "ニュートラック松山", org: "NAR", kind: "ニュートラック", pref: "山形県", region: "東北", address: "山形県酒田市相沢字道脇325-1", operator: "特別区競馬組合／岩手県競馬組合", paidSeat: true, url: "https://www.tokyocitykeiba.com", note: "名前の松山は酒田市内の地名で、四国の松山市ではない。" },
+  { slug: "newtrack-fukushima", name: "ニュートラック福島", org: "NAR", kind: "ニュートラック", pref: "福島県", region: "東北", address: "福島県福島市瀬上町字北中川原6-1 サテライト福島3階", operator: "特別区競馬組合／岩手県競馬組合", paidSeat: false, url: "https://www.tokyocitykeiba.com" },
+  { slug: "offt-minamisoma", name: "オフト南相馬", org: "NAR", kind: "オフト", pref: "福島県", region: "東北", address: "福島県南相馬市鹿島区南柚木字八久々沢42", operator: "特別区競馬組合（大井競馬）", paidSeat: false, url: "https://keiba-minamisoma.jp" },
+  { slug: "offt-osato", name: "オフト大郷", org: "NAR", kind: "オフト", pref: "宮城県", region: "東北", address: "宮城県黒川郡大郷町中村字屋敷前78番地", operator: "特別区競馬組合（大井競馬）", paidSeat: true, url: "https://www.tokyocitykeiba.com" },
+  { slug: "offt-hitachinaka", name: "オフトひたちなか", org: "NAR", kind: "オフト", pref: "茨城県", region: "関東", address: "茨城県ひたちなか市新光町65番地", operator: "特別区競馬組合（大井競馬）", paidSeat: true, url: "https://www.tokyocitykeiba.com" },
+  { slug: "offt-korakuen", name: "オフト後楽園", org: "NAR", kind: "オフト", pref: "東京都", region: "関東", address: "東京都文京区後楽1丁目3-61 黄色いビル6F・7F", operator: "特別区競馬組合（大井競馬）", paidSeat: true, url: "https://www.tokyocitykeiba.com", access: "JR水道橋駅西口から徒歩約1分", note: "JRAのウインズ後楽園と同じ後楽園の場外ビルに入る南関の発売所。都心で中央と地方の両方が買える代表格。" },
+  { slug: "offt-shiodome", name: "オフト汐留", org: "NAR", kind: "オフト", pref: "東京都", region: "関東", address: "東京都港区東新橋2-18-1（ウインズ汐留7階）", operator: "特別区競馬組合（大井競馬）", paidSeat: true, url: "https://www.tokyocitykeiba.com", access: "汐留駅から徒歩約3分", note: "ウインズ汐留の7階。中央のビルで地方が買える。" },
+  { slug: "opus-nakago", name: "オープス中郷", org: "NAR", kind: "オープス", pref: "新潟県", region: "北陸・東海", address: "新潟県上越市中郷区四ツ屋237番地", operator: "特別区競馬組合（大井競馬）", paidSeat: true, url: "https://www.tokyocitykeiba.com", note: "offt新潟の発売終了（2025年末）後は、新潟県で南関が買えるのはここが中心になる。" },
+  { slug: "offt-isesaki", name: "オフト伊勢崎", org: "NAR", kind: "オフト", pref: "群馬県", region: "関東", address: "群馬県伊勢崎市宮子町3074 伊勢崎オートレース場グリーンスタンド4階", operator: "特別区競馬組合（大井競馬）", paidSeat: false, url: "https://www.tokyocitykeiba.com", note: "オートレース場の中にある場外。公営競技の複合施設。" },
+  { slug: "offt-tatebayashi", name: "オフト館林", org: "NAR", kind: "オフト", pref: "群馬県", region: "関東", address: "群馬県館林市赤生田町345", operator: "特別区競馬組合（大井競馬）", paidSeat: true, url: "https://www.tokyocitykeiba.com" },
+  { slug: "offt-keiokaku", name: "オフト京王閣（会員制）", org: "NAR", kind: "オフト", pref: "東京都", region: "関東", address: "東京都調布市多摩川4丁目31番地1 京王閣競輪場バックスタンド3階", operator: "特別区競馬組合（大井競馬）", paidSeat: true, url: "https://www.offt-keiokaku.com", note: "競輪場・京王閣の中にある会員制の場外。" },
+  // 神奈川県川崎競馬組合・ジョイホース
+  { slug: "joyhorse-yokohama", name: "ジョイホース横浜（会員制）", org: "NAR", kind: "ジョイホース", pref: "神奈川県", region: "関東", address: "神奈川県横浜市中区桜木町1丁目1番地 桜木町ゴールデンセンター10階", operator: "神奈川県川崎競馬組合", paidSeat: true, url: "https://www.joyhorse-yokohama.co.jp", access: "JR・市営地下鉄 桜木町駅前", note: "桜木町駅前のビルの最上階にある会員制場外。川崎競馬の場外ネットワークの旗艦。" },
+  { slug: "joyhorse-futaba", name: "ジョイホース双葉", org: "NAR", kind: "ジョイホース", pref: "山梨県", region: "北陸・東海", address: "山梨県甲斐市下今井2998番地 サテライト双葉内", operator: "神奈川県川崎競馬組合", paidSeat: false, url: "https://st-mbp-futaba.com" },
+  // 岐阜県地方競馬組合（笠松）
+  { slug: "theatre-ena", name: "シアター恵那", org: "NAR", kind: "シアター", pref: "岐阜県", region: "北陸・東海", address: "岐阜県恵那市大井町2709-55", operator: "岐阜県地方競馬組合（笠松競馬）", paidSeat: false, url: "https://www.kasamatsu-keiba.com", access: "JR中央線・恵那駅から約2.6km（車主体）" },
+  // 愛知県競馬組合（名古屋）・サンアール
+  { slug: "nagoya-chukyo-jra", name: "JRA中京競馬場内発売所", org: "NAR", kind: "競馬場内発売所", pref: "愛知県", region: "北陸・東海", address: "愛知県豊明市間米町敷田1225（中京競馬場内）", operator: "愛知県競馬組合（名古屋競馬）", paidSeat: false, url: "https://www.nagoyakeiba.com", note: "中京競馬場の中で名古屋競馬が買える発売所。" },
+  { slug: "sanarl-osu", name: "サンアール大須", org: "NAR", kind: "サンアール", pref: "愛知県", region: "北陸・東海", address: "愛知県名古屋市中区大須3-30-40 万松寺ビル2階", operator: "愛知県競馬組合（名古屋競馬）", paidSeat: false, url: "https://www.nagoyakeiba.com", access: "地下鉄・上前津駅近く", note: "大須商店街の中の街なか場外。買い物ついでに寄れる立地。" },
+  { slug: "sanarl-isobe", name: "サンアール磯部", org: "NAR", kind: "サンアール", pref: "三重県", region: "北陸・東海", address: "三重県志摩市磯部町穴川511-5 道の駅「伊勢志摩」内", operator: "愛知県競馬組合（名古屋競馬）", paidSeat: true, url: "https://www.nagoyakeiba.com", access: "近鉄志摩線・志摩磯部駅から徒歩約17分", note: "道の駅の中にある場外という珍しい組み合わせ。" },
+  { slug: "sanarl-ichinomiya", name: "サンアール一宮", org: "NAR", kind: "サンアール", pref: "愛知県", region: "北陸・東海", address: "愛知県一宮市羽衣二丁目5番100号 サテライト一宮内", operator: "愛知県競馬組合（名古屋競馬）", paidSeat: true, url: "https://www.nagoyakeiba.com" },
+  { slug: "sanarl-nagoya", name: "サンアール名古屋", org: "NAR", kind: "サンアール", pref: "愛知県", region: "北陸・東海", address: "愛知県名古屋市港区泰明町1-1-3", operator: "愛知県競馬組合（名古屋競馬）", paidSeat: true, url: "https://www.nagoyakeiba.com", access: "あおなみ線・港北駅（旧名古屋競馬場の最寄り駅）", note: "旧・名古屋競馬場（弥富へ移転前の土古）の近くに残る場外。" },
+  // 兵庫県競馬組合（園田・姫路）・DASH
+  { slug: "dash-shinsaibashi", name: "DASH心斎橋", org: "NAR", kind: "DASH", pref: "大阪府", region: "関西", address: "大阪府大阪市中央区東心斎橋2-4-30 グランドジャニスビル2階～4階", operator: "兵庫県競馬組合（園田・姫路）", paidSeat: true, url: "https://dash-shinsaibashi.jp", access: "大阪メトロ・長堀橋駅7番出口から徒歩約4分", note: "ミナミの繁華街にある兵庫競馬の場外。大阪で地方競馬を買うならまずここ。" },
+  { slug: "dash-kishiwada", name: "DASH岸和田", org: "NAR", kind: "DASH", pref: "大阪府", region: "関西", address: "大阪府岸和田市下松町1丁目20番8号 DASHビル2階～3階", operator: "兵庫県競馬組合（園田・姫路）", paidSeat: true, url: "https://dash-kishiwada.jp", access: "JR阪和線・下松駅西出口すぐ" },
+  { slug: "dash-wakayama", name: "DASH和歌山", org: "NAR", kind: "DASH", pref: "和歌山県", region: "関西", address: "和歌山県和歌山市米屋町3番地 ブリスビル地下1階", operator: "兵庫県競馬組合（園田・姫路）", paidSeat: true, url: "https://www.wakayama-keiba.co.jp", access: "南海・和歌山市駅から徒歩約12分" },
+  { slug: "dash-yokawa", name: "DASHよかわ", org: "NAR", kind: "DASH", pref: "兵庫県", region: "関西", address: "兵庫県三木市吉川町吉安877-442（サテライト阪神内）", operator: "兵庫県競馬組合（園田・姫路）", paidSeat: false, url: "https://dash-satellite.com", access: "三田駅から無料送迎バス約20分" },
+  { slug: "dash-fukuyama", name: "DASH福山駅前", org: "NAR", kind: "DASH", pref: "広島県", region: "中国", address: "広島県福山市三之丸町30番1号（JR福山駅前・さんすて福山2番街）", operator: "兵庫県競馬組合（園田・姫路）", paidSeat: false, url: "https://dash-fukuyama.jp", access: "JR福山駅から徒歩約1分", note: "駅ビル直結の場外。旧・DASH柳津の役割を引き継いだ駅前立地。" },
+  { slug: "dash-kure", name: "DASH呉", org: "NAR", kind: "DASH", pref: "広島県", region: "中国", address: "広島県呉市宝町4番21号 マリンビル2号館1階", operator: "兵庫県競馬組合（園田・姫路）", paidSeat: false, url: "https://dash-kure.jp" },
+  { slug: "dash-kannonji", name: "DASH観音寺", org: "NAR", kind: "DASH", pref: "香川県", region: "四国・九州", address: "香川県観音寺市琴浪町2丁目1-25", operator: "兵庫県競馬組合（園田・姫路）", paidSeat: false, url: "https://dash-satellite.com", access: "JR予讃線・観音寺駅から徒歩約18分" },
+  // 高知県競馬組合・パルス
+  { slug: "pulse-aizumi", name: "パルス藍住", org: "NAR", kind: "パルス", pref: "徳島県", region: "四国・九州", address: "徳島県板野郡藍住町徳命字元村東25-1", operator: "高知県競馬組合", paidSeat: true, url: "https://www.keiba.or.jp" },
+  { slug: "pulse-kochi", name: "パルス高知", org: "NAR", kind: "パルス", pref: "高知県", region: "四国・九州", address: "高知県高知市本町1丁目7番7号", operator: "高知県競馬組合", paidSeat: false, url: "https://www.keiba.or.jp", note: "高知市中心部、本町にある街なか場外。" },
+  { slug: "pulse-sukumo", name: "パルス宿毛", org: "NAR", kind: "パルス", pref: "高知県", region: "四国・九州", address: "高知県宿毛市和田1400番地1", operator: "高知県競馬組合", paidSeat: false, url: "https://www.keiba.or.jp", access: "土佐くろしお鉄道・東宿毛駅から約1.2km" },
+  // BAOO（日本レーシングサービス・複数主催者の共同利用）
+  { slug: "baoo-oga", name: "BAOO男鹿", org: "NAR", kind: "BAOO", pref: "秋田県", region: "東北", address: "秋田県男鹿市船越字内子294番地1055（サテライト男鹿内）", operator: "複数主催者による共同利用", paidSeat: true, url: "https://www.baoo.jp" },
+  { slug: "baoo-takasaki", name: "BAOO高崎", org: "NAR", kind: "BAOO", pref: "群馬県", region: "関東", address: "群馬県高崎市京目町392番地4", operator: "複数主催者による共同利用", paidSeat: true, url: "https://www.baoo.jp", note: "かつて同じ高崎にあったウインズ高崎（旧高崎競馬場スタンド）は2014年に閉鎖。場外の灯はBAOOが引き継いだ形。" },
+  { slug: "baoo-tottori-iwami", name: "BAOO鳥取岩美", org: "NAR", kind: "BAOO", pref: "鳥取県", region: "中国", address: "鳥取県岩美郡岩美町大谷1645番地", operator: "複数主催者による共同利用", paidSeat: true, url: "https://www.baoo.jp", access: "JR山陰本線・大岩駅から徒歩約15分" },
+  { slug: "baoo-mitoya", name: "BAOO三刀屋", org: "NAR", kind: "BAOO", pref: "島根県", region: "中国", address: "島根県雲南市三刀屋町三刀屋45番地1", operator: "複数主催者による共同利用", paidSeat: true, url: "https://www.baoo.jp", access: "JR木次線・木次駅から約1.1km（車主体）", note: "益田場外発売所（旧益田競馬場）が2024年に閉鎖したあと、島根県内の地方場外はここだけになった。" },
+  { slug: "baoo-ube", name: "BAOO宇部", org: "NAR", kind: "BAOO", pref: "山口県", region: "中国", address: "山口県宇部市大字東岐波字横尾1519番地8", operator: "複数主催者による共同利用", paidSeat: true, url: "https://www.baoo.jp", access: "JR宇部線・岐波駅から約1.2km" },
+  { slug: "baoo-hakata", name: "BAOO博多", org: "NAR", kind: "BAOO", pref: "福岡県", region: "四国・九州", address: "福岡県福岡市博多区中洲三丁目7-24 gate's3階", operator: "複数主催者による共同利用", paidSeat: true, url: "https://www.baoo.jp", access: "福岡市地下鉄・中洲川端駅4番出口直結", note: "中洲の商業施設gate'sの中。JRAのエクセル博多と同じビルに入る。" },
+  { slug: "baoo-arao", name: "BAOO荒尾", org: "NAR", kind: "BAOO", pref: "熊本県", region: "四国・九州", address: "熊本県荒尾市海陽町三丁目4番地46", operator: "複数主催者による共同利用", paidSeat: true, url: "https://www.baoo.jp", access: "JR鹿児島本線・荒尾駅から約1.5km", note: "旧・荒尾競馬場の地元に残る場外。" },
+  { slug: "baoo-mizobe", name: "BAOOみぞべ", org: "NAR", kind: "BAOO", pref: "鹿児島県", region: "四国・九州", address: "鹿児島県霧島市溝辺町有川2356番地（サテライトみぞべ内）", operator: "複数主催者による共同利用", paidSeat: true, url: "https://www.baoo.jp" },
+  { slug: "baoo-tenmonkan", name: "BAOO天文館", org: "NAR", kind: "BAOO", pref: "鹿児島県", region: "四国・九州", address: "鹿児島県鹿児島市山之口町7-2 TM-19ビルディング1階", operator: "複数主催者による共同利用", paidSeat: true, url: "https://www.baoo.jp", note: "鹿児島随一の繁華街・天文館の中の場外。" },
+];
