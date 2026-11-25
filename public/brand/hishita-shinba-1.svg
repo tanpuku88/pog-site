@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 628" width="1200" height="628">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#bfe6ff"/><stop offset="1" stop-color="#eaf7ff"/>
+    </linearGradient>
+    <linearGradient id="turf" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8fd16a"/><stop offset="1" stop-color="#5fae45"/>
+    </linearGradient>
+    <g id="foal">
+      <!-- tail -->
+      <path d="M-105,-20 C-170,-30 -185,40 -150,85 C-140,60 -125,30 -100,10 Z" fill="#7a4a2a"/>
+      <!-- back legs -->
+      <rect x="-90" y="20" width="34" height="110" rx="17" fill="#b8763f"/>
+      <rect x="-45" y="30" width="34" height="104" rx="17" fill="#c98a50"/>
+      <rect x="-92" y="112" width="38" height="22" rx="8" fill="#4a3426"/>
+      <rect x="-47" y="116" width="38" height="22" rx="8" fill="#4a3426"/>
+      <!-- body -->
+      <ellipse cx="0" cy="0" rx="115" ry="72" fill="#d39a5e"/>
+      <ellipse cx="-10" cy="22" rx="80" ry="38" fill="#e2b27c" opacity=".6"/>
+      <!-- front legs -->
+      <rect x="40" y="25" width="34" height="108" rx="17" fill="#c98a50"/>
+      <rect x="80" y="18" width="34" height="112" rx="17" fill="#d39a5e"/>
+      <rect x="38" y="116" width="38" height="22" rx="8" fill="#4a3426"/>
+      <rect x="78" y="112" width="38" height="22" rx="8" fill="#4a3426"/>
+      <!-- white socks -->
+      <rect x="80" y="92" width="34" height="22" fill="#fff8ee"/>
+      <!-- neck -->
+      <path d="M50,-40 C70,-110 120,-140 160,-120 L150,-20 C120,0 80,0 50,-40 Z" fill="#d39a5e"/>
+      <!-- mane -->
+      <path d="M60,-70 C70,-130 110,-185 160,-190 C140,-170 150,-160 128,-150 C140,-140 120,-128 112,-120 C118,-104 95,-100 92,-88 C88,-72 72,-70 60,-70 Z" fill="#7a4a2a"/>
+      <!-- head -->
+      <ellipse cx="170" cy="-140" rx="78" ry="70" fill="#d39a5e"/>
+      <!-- ears -->
+      <path d="M128,-196 L120,-252 L162,-208 Z" fill="#c98a50"/>
+      <path d="M132,-204 L127,-236 L152,-210 Z" fill="#f4b6b0"/>
+      <path d="M182,-204 L200,-258 L218,-200 Z" fill="#c98a50"/>
+      <path d="M190,-206 L200,-240 L210,-204 Z" fill="#f4b6b0"/>
+      <!-- forelock -->
+      <path d="M150,-210 C170,-230 205,-220 210,-196 C195,-202 185,-190 172,-196 C165,-186 150,-190 150,-210 Z" fill="#7a4a2a"/>
+      <!-- blaze -->
+      <path d="M200,-178 C214,-172 222,-140 232,-118 L214,-112 C206,-136 198,-160 200,-178 Z" fill="#fff8ee"/>
+      <!-- muzzle -->
+      <ellipse cx="228" cy="-105" rx="46" ry="36" fill="#f1cfa3"/>
+      <ellipse cx="248" cy="-112" rx="5" ry="7" fill="#6b4630"/>
+      <path d="M222,-86 Q236,-76 250,-88" stroke="#6b4630" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <!-- eye -->
+      <ellipse cx="172" cy="-145" rx="17" ry="22" fill="#2a1a12"/>
+      <circle cx="178" cy="-154" r="7" fill="#fff"/>
+      <circle cx="166" cy="-136" r="3.5" fill="#fff"/>
+      <path d="M152,-168 Q160,-176 170,-172" stroke="#2a1a12" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <!-- blush -->
+      <ellipse cx="186" cy="-112" rx="16" ry="9" fill="#ff8f8f" opacity=".55"/>
+    </g>
+  </defs>
+  <rect width="1200" height="628" fill="url(#sky)"/>
+  <!-- clouds -->
+  <g fill="#fff">
+    <ellipse cx="170" cy="110" rx="80" ry="30"/><ellipse cx="220" cy="92" rx="55" ry="34"/><ellipse cx="130" cy="98" rx="40" ry="26"/>
+    <ellipse cx="1010" cy="80" rx="70" ry="26"/><ellipse cx="1050" cy="64" rx="45" ry="30"/>
+  </g>
+  <!-- distant fence -->
+  <rect x="0" y="388" width="1200" height="10" fill="#ffffff"/>
+  <g fill="#ffffff">
+    <rect x="40" y="372" width="10" height="40"/><rect x="200" y="372" width="10" height="40"/><rect x="360" y="372" width="10" height="40"/>
+    <rect x="520" y="372" width="10" height="40"/><rect x="680" y="372" width="10" height="40"/><rect x="840" y="372" width="10" height="40"/>
+    <rect x="1000" y="372" width="10" height="40"/><rect x="1160" y="372" width="10" height="40"/>
+  </g>
+  <rect x="0" y="410" width="1200" height="218" fill="url(#turf)"/>
+  <!-- flowers -->
+  <g>
+    <circle cx="120" cy="520" r="9" fill="#ffd84d"/><circle cx="120" cy="520" r="4" fill="#ff9c3a"/>
+    <circle cx="300" cy="580" r="9" fill="#ffffff"/><circle cx="300" cy="580" r="4" fill="#ffd84d"/>
+    <circle cx="1080" cy="540" r="9" fill="#ffb3c7"/><circle cx="1080" cy="540" r="4" fill="#ffd84d"/>
+    <circle cx="980" cy="595" r="9" fill="#ffffff"/><circle cx="980" cy="595" r="4" fill="#ffd84d"/>
+  </g>
+  <!-- foal with saddle cloth -->
+  <g transform="translate(760,410)">
+    <ellipse cx="40" cy="138" rx="200" ry="18" fill="#3f7f2e" opacity=".35"/>
+    <use href="#foal"/>
+    <path d="M-50,-66 L50,-66 L58,30 L-58,30 Z" fill="#ffffff" stroke="#e0e0e0" stroke-width="3"/>
+    <text x="0" y="6" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="64" fill="#1a1f1c">1</text>
+    <!-- rosette -->
+    <g transform="translate(140,-30) rotate(-12)">
+      <circle r="26" fill="#ff6f91"/><circle r="17" fill="#ffd84d"/>
+      <path d="M-10,22 L-18,56 L-4,48 L2,60 L8,24 Z" fill="#ff6f91"/>
+    </g>
+  </g>
+  <!-- sparkles -->
+  <g fill="#ffd84d">
+    <path d="M560,160 l10,26 26,10 -26,10 -10,26 -10,-26 -26,-10 26,-10 z"/>
+    <path d="M1080,250 l7,18 18,7 -18,7 -7,18 -7,-18 -18,-7 18,-7 z"/>
+    <path d="M610,330 l5,13 13,5 -13,5 -5,13 -5,-13 -13,-5 13,-5 z"/>
+  </g>
+</svg>
