@@ -5,6 +5,7 @@ import { TRACKS, findTrack } from "@/content/keibajo";
 import { COMMON_MANNERS, JRA_HOWTO, NAR_HOWTO } from "@/content/keibajo/common";
 import type { RaceTrack } from "@/content/keibajo/types";
 import { FoodIcon, RaceHero } from "@/components/asia/Art";
+import PhotoSlider from "@/components/PhotoSlider";
 import { SITE_NAME, SITE_URL, SUPERVISOR } from "@/config/site";
 
 export const dynamicParams = false;
@@ -115,20 +116,7 @@ export default async function TrackPage({ params }: { params: Promise<{ track: s
         </div>
       )}
 
-      {t.photos && t.photos.length > 0 && (
-        <div className={`asia-photos n${Math.min(t.photos.length, 3)}`}>
-          {t.photos.map((ph) => (
-            <figure key={ph.src} className="asia-photo">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <span className="ph-box"><img src={ph.src} alt={ph.alt} loading="lazy" decoding="async" /></span>
-              <figcaption>
-                {ph.alt}
-                <span>写真：<a href={ph.page} target="_blank" rel="noopener noreferrer">{ph.credit}</a>（{ph.license}／Wikimedia Commons）</span>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-      )}
+      {t.photos && t.photos.length > 0 && <PhotoSlider photos={t.photos} />}
 
       <div className="stats">
         {t.quickFacts.map((f) => (

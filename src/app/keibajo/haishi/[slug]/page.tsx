@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { LOST_TRACKS, findLost } from "@/content/keibajo/lost";
 import type { LostTrack } from "@/content/keibajo/lost";
 import { RaceHero } from "@/components/asia/Art";
+import PhotoSlider from "@/components/PhotoSlider";
 import { SITE_NAME, SITE_URL, SUPERVISOR } from "@/config/site";
 
 export const dynamicParams = false;
@@ -78,20 +79,7 @@ export default async function LostPage({ params }: { params: Promise<{ slug: str
         {t.intro.map((p, i) => <p key={i}>{p}</p>)}
       </div>
 
-      {t.photos && t.photos.length > 0 && (
-        <div className={`asia-photos n${Math.min(t.photos.length, 3)}`}>
-          {t.photos.map((ph) => (
-            <figure key={ph.src} className="asia-photo">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <span className="ph-box"><img src={ph.src} alt={ph.alt} loading="lazy" decoding="async" /></span>
-              <figcaption>
-                {ph.alt}
-                <span>写真：<a href={ph.page} target="_blank" rel="noopener noreferrer">{ph.credit}</a>（{ph.license}／Wikimedia Commons）</span>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-      )}
+      {t.photos && t.photos.length > 0 && <PhotoSlider photos={t.photos} />}
 
       <div className="sec-title"><h2>基本データ</h2></div>
       <article className="card asia-track" style={{ borderLeftColor: "#7a5a3a" }}>

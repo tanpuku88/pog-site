@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { COUNTRIES, findCountry } from "@/content/asia";
 import { Flag, FoodIcon, RaceHero, TrackMap } from "@/components/asia/Art";
 import type { CountryGuide } from "@/content/asia/types";
+import PhotoSlider from "@/components/PhotoSlider";
 import { SITE_NAME, SITE_URL, SUPERVISOR } from "@/config/site";
 
 export const dynamicParams = false;
@@ -122,20 +123,7 @@ export default async function CountryPage({ params }: { params: Promise<{ countr
         </section>
       )}
 
-      {c.photos && c.photos.length > 0 && (
-        <div className={`asia-photos n${Math.min(c.photos.length, 3)}`}>
-          {c.photos.map((ph) => (
-            <figure key={ph.src} className="asia-photo">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <span className="ph-box"><img src={ph.src} alt={ph.alt} loading="lazy" decoding="async" /></span>
-              <figcaption>
-                {ph.alt}
-                <span>写真：<a href={ph.page} target="_blank" rel="noopener noreferrer">{ph.credit}</a>（{ph.license}／Wikimedia Commons）</span>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-      )}
+      {c.photos && c.photos.length > 0 && <PhotoSlider photos={c.photos} />}
 
       <div className="stats">
         {c.quickFacts.map((f) => (
