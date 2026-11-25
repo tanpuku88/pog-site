@@ -12,19 +12,20 @@ import { loadCropData } from "@/lib/sires";
 import { computeMetrics, scoreProfiles } from "@/lib/profile";
 import { defaultSeason } from "@/lib/standings";
 import { rankShinbaRace, scoreShinbaHorse, shinbaHighlights, type ShinbaScore } from "@/lib/shinba-picks";
+import { jockeyData } from "@/lib/jockey-data";
 
 export const metadata = { title: "今週の新馬戦 | POG" };
 
 const WEEK = ["日", "月", "火", "水", "木", "金", "土"];
 
-type Entry = { horse_id: string; race_id: string; race_date: string; venue: string | null; race_no: number | null; race_name: string | null; post_time: string | null };
+type Entry = { horse_id: string; race_id: string; race_date: string; venue: string | null; race_no: number | null; race_name: string | null; post_time: string | null; jockey: string | null };
 type Horse = { id: string; name: string; sex: string | null; sire: string | null; dam: string | null; damsire: string | null; trainer: string | null; owner: string | null };
 
 export default async function Shinba() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("entries")
-    .select("horse_id, race_id, race_date, venue, race_no, race_name, post_time")
+    .select("horse_id, race_id, race_date, venue, race_no, race_name, post_time, jockey")
     .like("race_name", "%新馬%")
     .gte("race_date", todayJst())
     .order("race_date")
@@ -50,8 +51,9 @@ export default async function Shinba() {
 
   const marks = ids.length ? await loadHorseMarks() : undefined;
 
-  // 狙い目スコア（第1段階：騎手なし）。父・母父は種牡馬データ（全産駒）から、
+  // 狙い目スコア（第2段階：騎手を追加）。父・母父は種牡馬データ（全産駒）から、
   // 厩舎は今の世代の集計から能力値を出す。厩舎側が取れなくても血統だけで計算する。
+  // 騎手は出走ごとに違うので、スコアはレース×馬の単位で持つ。
   let trainerScores = new Map<string, { early: number | null; consistency: number | null }>();
   if (ids.length) {
     try {
@@ -69,14 +71,17 @@ export default async function Shinba() {
     return o && o.runs >= 30 && o.winnerRate !== null ? o.winnerRate : null;
   };
   const scoreOf = new Map<string, ShinbaScore>();
-  for (const id of ids) {
-    const h = horseMap.get(id);
+  for (const e of entries) {
+    const h = horseMap.get(e.horse_id);
     if (!h) continue;
     const t = h.trainer ? trainerScores.get(h.trainer) : undefined;
-    scoreOf.set(id, scoreShinbaHorse({
+    const jd = jockeyData(e.jockey);
+    scoreOf.set(`${e.race_id}:${e.horse_id}`, scoreShinbaHorse({
       sireWinnerRate: winnerRateOf(h.sire), sireName: h.sire,
       damsireWinnerRate: winnerRateOf(h.damsire), damsireName: h.damsire,
       trainerEarly: t?.early ?? null, trainerConsistency: t?.consistency ?? null, trainerName: h.trainer,
+      jockeyName: e.jockey,
+      jockeyDebut: jd ? { rides: jd.debutRides, wins: jd.debutWins, places: jd.debutPlaces } : null,
     }));
   }
 
@@ -91,9 +96,9 @@ export default async function Shinba() {
   // レースごとに狙い目を付け、全レースの上位をまとめる
   const pickIds = new Set<string>();
   const rankedRaces = [...days.values()].flatMap((races) =>
-    [...races.values()].map((list) => rankShinbaRace(list, (e) => scoreOf.get(e.horse_id) ?? { score: null, reasons: [] })),
+    [...races.values()].map((list) => rankShinbaRace(list, (e) => scoreOf.get(`${e.race_id}:${e.horse_id}`) ?? { score: null, reasons: [] })),
   );
-  for (const r of rankedRaces.flat()) if (r.isPick) pickIds.add(r.item.horse_id);
+  for (const r of rankedRaces.flat()) if (r.isPick) pickIds.add(`${r.item.race_id}:${r.item.horse_id}`);
   const highlights = shinbaHighlights(rankedRaces, 5);
 
   return (
@@ -103,7 +108,7 @@ export default async function Shinba() {
         中央・地方の新馬戦（門別のフレッシュチャレンジを含む）に出走する馬の一覧です。出馬表が出たら毎日夕方に更新します。指名数はこのサイトの全グループの合計です。
       </p>
       <p className="muted" style={{ marginTop: -8 }}>
-        「狙い目」は父・母父の勝ち上がり率と厩舎の仕上がり・勝ち上がり傾向から出したスコア（100点満点）です。騎手はまだ見ていません。
+        「狙い目」は父・母父の勝ち上がり率、厩舎の仕上がり・勝ち上がり傾向に、今の世代のデビュー戦での騎手の成績を加えたスコア（100点満点）です。騎手が未定のうちは騎手なしで計算し、決まり次第反映します。
       </p>
       {highlights.length > 0 && (
         <div className="card" style={{ marginBottom: 12 }}>
@@ -164,7 +169,7 @@ export default async function Shinba() {
                   </div>
                   <div className="scroll">
                     <table className="list compact">
-                      <thead><tr><th>馬名・血統</th><th className="hide-sm">厩舎</th><th>狙い目</th><th className="num">指名数</th></tr></thead>
+                      <thead><tr><th>馬名・血統</th><th className="hide-sm">厩舎</th><th className="hide-sm">騎手</th><th>狙い目</th><th className="num">指名数</th></tr></thead>
                       <tbody>
                         {list.map((e) => {
                           const h = horseMap.get(e.horse_id);
@@ -175,13 +180,14 @@ export default async function Shinba() {
                                 <HorseLabel id={e.horse_id} horse={h} marks={marks} />
                               </td>
                               <td className="hide-sm sub">{h?.trainer ?? ""}</td>
+                              <td className="hide-sm sub">{e.jockey ?? <span className="muted">未定</span>}</td>
                               <td>
                                 {(() => {
-                                  const s = scoreOf.get(e.horse_id);
+                                  const s = scoreOf.get(`${e.race_id}:${e.horse_id}`);
                                   if (!s || s.score === null) return <span className="muted">-</span>;
                                   return (
                                     <>
-                                      {pickIds.has(e.horse_id) && <span className="big">🎯狙い目　</span>}
+                                      {pickIds.has(`${e.race_id}:${e.horse_id}`) && <span className="big">🎯狙い目　</span>}
                                       <span>{s.score}点</span>
                                       {s.reasons.length > 0 && <div className="muted" style={{ fontSize: 12 }}>{s.reasons.join("。")}。</div>}
                                     </>

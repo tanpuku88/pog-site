@@ -1,6 +1,8 @@
-// 新馬戦の狙い目スコア（第1段階：騎手なし）。
-// 血統（父・母父の勝ち上がり率）と厩舎（仕上がり・勝ち上がりの能力値）だけから出す純粋な計算。
-// データが無い項目は重みを付け直して割り算するので、欠けたまま使える。
+// 新馬戦の狙い目スコア（第2段階：騎手を追加）。
+// 血統（父・母父の勝ち上がり率）、厩舎（仕上がり・勝ち上がりの能力値）、
+// 騎手（今の世代のデビュー戦での成績）から出す純粋な計算。
+// データが無い項目は重みを付け直して割り算するので、欠けたまま使える
+// （騎手は枠順確定まで未定のことが多く、その間は騎手なしで計算される）。
 
 export type ShinbaFactors = {
   /** 父の産駒の勝ち上がり率（%）。サンプルが少ない・データ無しは null */
@@ -13,6 +15,9 @@ export type ShinbaFactors = {
   trainerEarly: number | null;
   trainerConsistency: number | null;
   trainerName?: string | null;
+  /** 騎手名と、その騎手のデビュー戦成績（jockey-data 由来）。未定・未集計は null */
+  jockeyName?: string | null;
+  jockeyDebut?: { rides: number; wins: number; places: number } | null;
 };
 
 export type ShinbaScore = {
@@ -34,29 +39,53 @@ export function winnerRateScore(rate: number | null): number | null {
   return Math.round(clamp100(((rate - 10) / 40) * 100));
 }
 
+/** 騎手スコアに使うデビュー戦騎乗数の下限（これ未満はサンプル不足で使わない） */
+export const JOCKEY_MIN_DEBUT_RIDES = 15;
+
+/**
+ * 騎手のデビュー戦成績を 0〜100 のスコアに直す。
+ * 勝率5%以下を0・25%以上を100、複勝率（3着以内）20%以下を0・55%以上を100として、
+ * 勝率6：複勝率4で混ぜる。新馬戦は「勝ち切る」より「崩れない」ことも大事だが、
+ * 狙い目としては勝率を重くする。
+ */
+export function jockeyScore(d: { rides: number; wins: number; places: number } | null | undefined): number | null {
+  if (!d || d.rides < JOCKEY_MIN_DEBUT_RIDES) return null;
+  const winRate = (d.wins / d.rides) * 100;
+  const placeRate = (d.places / d.rides) * 100;
+  const winScore = clamp100(((winRate - 5) / 20) * 100);
+  const placeScore = clamp100(((placeRate - 20) / 35) * 100);
+  return Math.round(winScore * 0.6 + placeScore * 0.4);
+}
+
 type Part = { weight: number; score: number | null; reason: string | null };
 
 export function scoreShinbaHorse(f: ShinbaFactors): ShinbaScore {
   const sire = winnerRateScore(f.sireWinnerRate);
   const damsire = winnerRateScore(f.damsireWinnerRate);
+  const jockey = jockeyScore(f.jockeyDebut);
   const parts: Part[] = [
     {
-      weight: 35, score: sire,
+      weight: 30, score: sire,
       reason: sire !== null && sire >= 60 && f.sireWinnerRate !== null
         ? `父${f.sireName ?? ""}の勝ち上がり率${f.sireWinnerRate.toFixed(1)}%と高い` : null,
     },
     {
-      weight: 25, score: f.trainerEarly,
+      weight: 20, score: f.trainerEarly,
       reason: f.trainerEarly !== null && f.trainerEarly >= 80
         ? `${f.trainerName ?? "厩舎"}は仕上がりが早く、夏の新馬戦から動ける` : null,
     },
     {
-      weight: 25, score: f.trainerConsistency,
+      weight: 20, score: f.trainerConsistency,
       reason: f.trainerConsistency !== null && f.trainerConsistency >= 80
         ? `${f.trainerName ?? "厩舎"}の管理馬は勝ち上がり率が高い` : null,
     },
     {
-      weight: 15, score: damsire,
+      weight: 20, score: jockey,
+      reason: jockey !== null && jockey >= 60 && f.jockeyDebut
+        ? `${f.jockeyName ?? "騎手"}騎手はデビュー戦で${f.jockeyDebut.rides}戦${f.jockeyDebut.wins}勝（勝率${((f.jockeyDebut.wins / f.jockeyDebut.rides) * 100).toFixed(0)}%）と新馬戦に強い` : null,
+    },
+    {
+      weight: 10, score: damsire,
       reason: damsire !== null && damsire >= 60 && f.damsireWinnerRate !== null
         ? `母父${f.damsireName ?? ""}の勝ち上がり率${f.damsireWinnerRate.toFixed(1)}%` : null,
     },

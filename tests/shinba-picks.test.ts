@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { rankShinbaRace, scoreShinbaHorse, shinbaHighlights, winnerRateScore, type ShinbaFactors } from "../src/lib/shinba-picks";
+import { jockeyScore, rankShinbaRace, scoreShinbaHorse, shinbaHighlights, winnerRateScore, type ShinbaFactors } from "../src/lib/shinba-picks";
 
 const base: ShinbaFactors = {
   sireWinnerRate: null, sireName: "テスト父",
@@ -30,6 +30,22 @@ describe("新馬戦の狙い目スコア", () => {
   it("欠けた項目は重みを付け直す（父だけでもスコアが出る）", () => {
     const s = scoreShinbaHorse({ ...base, sireWinnerRate: 30 });
     expect(s.score).toBe(50);
+  });
+
+  it("騎手スコア：サンプル不足は使わず、強い騎手は高く出る", () => {
+    expect(jockeyScore(null)).toBeNull();
+    expect(jockeyScore({ rides: 14, wins: 7, places: 10 })).toBeNull(); // 15戦未満
+    expect(jockeyScore({ rides: 100, wins: 25, places: 55 })).toBe(100);
+    expect(jockeyScore({ rides: 100, wins: 5, places: 20 })).toBe(0);
+    const mid = jockeyScore({ rides: 100, wins: 15, places: 40 })!;
+    expect(mid).toBeGreaterThan(40);
+    expect(mid).toBeLessThan(70);
+  });
+
+  it("騎手が入ると根拠にデビュー戦成績が出る", () => {
+    const s = scoreShinbaHorse({ ...base, jockeyName: "テスト騎手", jockeyDebut: { rides: 50, wins: 12, places: 26 } });
+    expect(s.score).not.toBeNull();
+    expect(s.reasons.join("")).toContain("デビュー戦で50戦12勝");
   });
 
   it("弱い材料だけでは低スコア", () => {

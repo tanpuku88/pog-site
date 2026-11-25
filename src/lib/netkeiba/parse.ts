@@ -49,7 +49,15 @@ export type RaceResult = {
   surface: string | null;
   /** 距離（m） */
   distance: number | null;
+  /** 騎手名。成績表に騎手列が無ければ null */
+  jockey: string | null;
 };
+
+/** 騎手名の後ろに付く減量記号（▲△☆★）などを落とす */
+export function cleanJockeyName(s: string | undefined | null): string | null {
+  const name = clean(s).replace(/[▲△☆★]/g, "").replace(/\s+/g, "").trim();
+  return name === "" ? null : name;
+}
 
 const clean = (s: string | undefined | null) => (s ?? "").replace(/\s+/g, " ").trim();
 const orNull = (s: string) => (s === "" ? null : s);
@@ -119,6 +127,7 @@ export function parseRaceResults(html: string): RaceResult[] | null {
   const cFinish = findCol(idx, "着順");
   const cPrize = findCol(idx, "賞金");
   const cDist = findCol(idx, "距離");
+  const cJockey = findCol(idx, "騎手");
 
   const results: RaceResult[] = [];
   table.find("tr").each((_, tr) => {
@@ -138,6 +147,7 @@ export function parseRaceResults(html: string): RaceResult[] | null {
       prize_man: cPrize >= 0 ? parsePrize(tds.eq(cPrize).text()) : 0,
       is_jra: isJraVenue(venue),
       ...parseCourse(cDist >= 0 ? tds.eq(cDist).text() : ""),
+      jockey: cJockey >= 0 ? cleanJockeyName(tds.eq(cJockey).text()) : null,
     });
   });
   return results;
@@ -254,15 +264,27 @@ export type Shutuba = {
   race_no: number;
   post_time: string | null;
   horse_ids: string[];
+  /** 馬ID → 騎手名。出馬表の行ごとに読むので、騎手未定の馬は入らない */
+  jockeys: Record<string, string>;
 };
 
-/** 出馬表から出走馬の馬IDを集める */
+/** 出馬表から出走馬の馬IDと騎手を集める */
 export function parseShutuba(raceId: string, html: string): Shutuba {
   const $ = cheerio.load(html);
   const horseIds = new Set<string>();
   $("a[href*='/horse/']").each((_, a) => {
     const id = horseIdFromHref($(a).attr("href"));
     if (id) horseIds.add(id);
+  });
+  // 騎手は「馬と同じ行にある騎手リンク」から読む（想定段階では空欄＝リンクなし）
+  const jockeys: Record<string, string> = {};
+  $("tr").each((_, tr) => {
+    const row = $(tr);
+    const horseLink = row.find("a[href*='/horse/']").first();
+    const id = horseIdFromHref(horseLink.attr("href"));
+    if (!id) return;
+    const name = cleanJockeyName(row.find("a[href*='jockey']").first().text());
+    if (name) jockeys[id] = name;
   });
   const data01 = clean($(".RaceData01").first().text());
   return {
@@ -272,6 +294,7 @@ export function parseShutuba(raceId: string, html: string): Shutuba {
     race_no: Number(raceId.slice(10, 12)),
     post_time: data01.match(/(\d{1,2}:\d{2})/)?.[1] ?? null,
     horse_ids: [...horseIds],
+    jockeys,
   };
 }
 
