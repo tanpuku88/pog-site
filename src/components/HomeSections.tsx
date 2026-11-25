@@ -3,6 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { loadGenerationBoard, type GenerationBoard } from "@/lib/popular";
 import { defaultSeason } from "@/lib/standings";
 import { loadFeeds } from "@/lib/feeds";
+import { noteThumb } from "@/lib/note-thumb";
 import { COLUMN_FEEDS, NOTE_URL, PICKUP_NOTE } from "@/config/site";
 import { PopularTable, RisingBox, SireBox } from "./PopularTable";
 import { OwnerSide } from "./OwnerSites";
@@ -75,17 +76,6 @@ export async function Columns() {
   );
 }
 
-/** 記事タイトルの「11月23日(月）」からレースの日付を取る。無ければ公開日 */
-function raceDay(title: string, date: string | null): string | null {
-  const m = title.match(/(\d{1,2})月(\d{1,2})日\s*[（(]([月火水木金土日])/);
-  if (m) return `${m[1]}/${m[2]}(${m[3]})`;
-  const m2 = title.match(/(\d{1,2})月(\d{1,2})日/);
-  if (m2) return `${m2[1]}/${m2[2]}`;
-  if (!date) return null;
-  const d = new Date(date);
-  return d.toLocaleDateString("ja-JP", { timeZone: "Asia/Tokyo", month: "numeric", day: "numeric" });
-}
-
 /** トップページ：注目コラム（火下遊さんのnote新着2本を大きく表示） */
 export async function PickupNote() {
   const p = PICKUP_NOTE;
@@ -98,21 +88,23 @@ export async function PickupNote() {
         <img src={p.avatar} alt="" className="pickup-avatar" />
         <div>
           <p className="pickup-kicker">注目コラム ・ note</p>
-          <h2>{p.name}の新馬戦予想「2027年ダービーへの道」</h2>
+          <h2>{p.name}のnote（新馬戦予想・コラム）</h2>
           <p className="pickup-catch">{p.catch}</p>
         </div>
         <a href={p.url} target="_blank" rel="noreferrer" className="pickup-more">記事一覧 ›</a>
       </div>
       <div className="pickup-grid">
-        {items.slice(0, p.count).map((i, n) => (
+        {items.slice(0, p.count).map((i, n) => {
+          const t = noteThumb(i.title, i.date);
+          return (
           <a key={i.url} href={i.url} target="_blank" rel="noreferrer" className="pickup-card">
-            <span className={`pickup-thumb pickup-thumb-${(n % p.images.length) + 1}`}>
+            <span className={`pickup-thumb pickup-thumb-${(n % p.images.length) + 1} pt-${t.kind}`}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={p.images[n % p.images.length]} alt="" width={1200} height={628} />
               <span className="pt-text" aria-hidden>
-                <span className="pt-kicker">2027年ダービーへの道</span>
-                <span className="pt-title">新馬戦予想</span>
-                {raceDay(i.title, i.date) && <span className="pt-date">{raceDay(i.title, i.date)}</span>}
+                <span className="pt-kicker">{t.kicker}</span>
+                <span className="pt-title" style={t.title.length > 5 ? { fontSize: `${Math.max(5, 43 / t.title.length)}cqw` } : undefined}>{t.title}</span>
+                {t.date && <span className="pt-date">{t.date}</span>}
                 <span className="pt-by">火下遊</span>
               </span>
             </span>
@@ -122,7 +114,8 @@ export async function PickupNote() {
               <span className="pickup-go">noteで読む ›</span>
             </span>
           </a>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

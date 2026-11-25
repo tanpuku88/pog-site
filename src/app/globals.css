@@ -348,6 +348,8 @@ table.rank-table .picks-cell .big { font-size: 17px; }
 .pickup-thumb-2 .pt-title { color: #e2456f; }
 .pickup-thumb-2 .pt-date { background: #e2456f; }
 .pickup-thumb-2 .pt-by { color: #c0532f; }
+.pt-column .pt-title { font-size: 10cqw; letter-spacing: .1em; }
+.pt-column .pt-date { font-size: 6cqw; }
 .pickup-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 4px; font-size: 14px; line-height: 1.5; flex: 1; }
 .pickup-go { margin-top: auto; font-size: 13px; font-weight: 700; color: var(--accent); }
 @media (max-width: 640px) {
