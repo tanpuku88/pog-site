@@ -75,6 +75,17 @@ export async function Columns() {
   );
 }
 
+/** 記事タイトルの「11月23日(月）」からレースの日付を取る。無ければ公開日 */
+function raceDay(title: string, date: string | null): string | null {
+  const m = title.match(/(\d{1,2})月(\d{1,2})日\s*[（(]([月火水木金土日])/);
+  if (m) return `${m[1]}/${m[2]}(${m[3]})`;
+  const m2 = title.match(/(\d{1,2})月(\d{1,2})日/);
+  if (m2) return `${m2[1]}/${m2[2]}`;
+  if (!date) return null;
+  const d = new Date(date);
+  return d.toLocaleDateString("ja-JP", { timeZone: "Asia/Tokyo", month: "numeric", day: "numeric" });
+}
+
 /** トップページ：注目コラム（火下遊さんのnote新着2本を大きく表示） */
 export async function PickupNote() {
   const p = PICKUP_NOTE;
@@ -95,8 +106,16 @@ export async function PickupNote() {
       <div className="pickup-grid">
         {items.slice(0, p.count).map((i, n) => (
           <a key={i.url} href={i.url} target="_blank" rel="noreferrer" className="pickup-card">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={p.images[n % p.images.length]} alt="新馬戦のイラスト" width={1200} height={628} />
+            <span className={`pickup-thumb pickup-thumb-${(n % p.images.length) + 1}`}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={p.images[n % p.images.length]} alt="" width={1200} height={628} />
+              <span className="pt-text" aria-hidden>
+                <span className="pt-kicker">2027年ダービーへの道</span>
+                <span className="pt-title">新馬戦予想</span>
+                {raceDay(i.title, i.date) && <span className="pt-date">{raceDay(i.title, i.date)}</span>}
+                <span className="pt-by">火下遊</span>
+              </span>
+            </span>
             <span className="pickup-body">
               <span className="column-src">{p.fullName}{i.date && ` ・ ${new Date(i.date).toLocaleDateString("ja-JP", { timeZone: "Asia/Tokyo" })}`}</span>
               <strong>{i.title}</strong>

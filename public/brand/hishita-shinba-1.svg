@@ -91,11 +91,4 @@
     <path d="M1080,250 l7,18 18,7 -18,7 -7,18 -7,-18 -18,-7 18,-7 z"/>
     <path d="M610,330 l5,13 13,5 -13,5 -5,13 -5,-13 -13,-5 13,-5 z"/>
   </g>
-  <!-- title -->
-  <g transform="translate(70,170)">
-    <rect x="0" y="0" width="440" height="66" rx="33" fill="#ff6f91"/>
-    <text x="220" y="45" text-anchor="middle" font-family="'Hiragino Maru Gothic ProN','M PLUS Rounded 1c','Noto Sans JP',sans-serif" font-weight="800" font-size="34" fill="#fff">2027年ダービーへの道</text>
-    <text x="0" y="190" font-family="'Hiragino Maru Gothic ProN','M PLUS Rounded 1c','Noto Sans JP',sans-serif" font-weight="900" font-size="128" fill="#1d4f8f" stroke="#ffffff" stroke-width="10" paint-order="stroke">新馬戦</text>
-    <text x="6" y="262" font-family="'Hiragino Maru Gothic ProN','M PLUS Rounded 1c','Noto Sans JP',sans-serif" font-weight="800" font-size="46" fill="#ffffff" stroke="#3f7f2e" stroke-width="8" paint-order="stroke">火下遊の予想</text>
-  </g>
 </svg>

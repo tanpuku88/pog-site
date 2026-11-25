@@ -337,7 +337,17 @@ table.rank-table .picks-cell .big { font-size: 17px; }
 .pickup-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
 .pickup-card { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; text-decoration: none; color: var(--text); background: var(--card); }
 .pickup-card:hover strong { text-decoration: underline; }
-.pickup-card img { width: 100%; aspect-ratio: 1200 / 628; object-fit: cover; display: block; }
+.pickup-thumb { position: relative; display: block; container-type: inline-size; }
+.pickup-thumb img { width: 100%; height: auto; aspect-ratio: 1200 / 628; object-fit: cover; display: block; }
+.pt-text { position: absolute; left: 5cqw; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; align-items: flex-start; gap: 1.2cqw; font-family: "Hiragino Maru Gothic ProN", "M PLUS Rounded 1c", "Noto Sans JP", sans-serif; line-height: 1.05; }
+.pt-kicker { background: #ff6f91; color: #fff; font-weight: 800; font-size: 2.9cqw; padding: 1cqw 2.6cqw; border-radius: 99px; }
+.pt-title { font-weight: 900; font-size: 8.6cqw; color: #1d4f8f; -webkit-text-stroke: 0; text-shadow: 0 0 .5cqw #fff, .4cqw .4cqw 0 #fff, -.4cqw -.4cqw 0 #fff, .4cqw -.4cqw 0 #fff, -.4cqw .4cqw 0 #fff; }
+.pt-date { font-family: "Arial Black", Arial, sans-serif; font-weight: 900; font-size: 9cqw; color: #fff; background: #1d4f8f; padding: .4cqw 2.4cqw .8cqw; border-radius: 1.6cqw; box-shadow: 0 .6cqw 0 rgba(0,0,0,.15); }
+.pt-by { font-weight: 800; font-size: 3.4cqw; color: #2f6b23; text-shadow: 0 0 .5cqw #fff, .3cqw .3cqw 0 #fff, -.3cqw -.3cqw 0 #fff; }
+.pickup-thumb-2 .pt-kicker { background: #2e8b57; }
+.pickup-thumb-2 .pt-title { color: #e2456f; }
+.pickup-thumb-2 .pt-date { background: #e2456f; }
+.pickup-thumb-2 .pt-by { color: #c0532f; }
 .pickup-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 4px; font-size: 14px; line-height: 1.5; flex: 1; }
 .pickup-go { margin-top: auto; font-size: 13px; font-weight: 700; color: var(--accent); }
 @media (max-width: 640px) {
