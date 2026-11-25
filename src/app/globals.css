@@ -621,6 +621,32 @@ table.asia-terms caption { text-align: left; font-weight: 700; padding: 10px 12p
 .asia-photos.n1 .ph-box { padding-top: 50%; }
 .asia-photo figcaption { font-size: 13px; padding: 6px 10px 8px; line-height: 1.45; }
 .asia-photo figcaption span { display: block; font-size: 11px; color: var(--muted); }
+
+/* 写真スライダー（スワイプ・矢印・丸ボタン） */
+.photo-slider { position: relative; margin: 14px 0; }
+.ps-track { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; scrollbar-width: none; touch-action: pan-x pan-y; outline: none; }
+.ps-track::-webkit-scrollbar { display: none; }
+.ps-track:focus-visible { box-shadow: 0 0 0 2px var(--accent, #1f7a3d); border-radius: 6px; }
+.ps-slide { flex: 0 0 calc((100% - 10px) / 2.15); scroll-snap-align: start; min-width: 0; }
+.photo-slider.n1 .ps-slide { flex-basis: 100%; }
+.photo-slider.n1 .ph-box { padding-top: 50%; }
+.photo-slider.n2 .ps-slide { flex-basis: calc((100% - 10px) / 2); }
+.ps-slide img { -webkit-user-drag: none; user-select: none; }
+.ps-arrow { position: absolute; top: calc(50% - 30px); transform: translateY(-50%); width: 40px; height: 40px; border-radius: 50%; border: 0; background: rgba(0,0,0,.55); color: #fff; font-size: 28px; line-height: 38px; text-align: center; padding: 0; cursor: pointer; z-index: 2; box-shadow: 0 1px 4px rgba(0,0,0,.3); }
+.ps-arrow.prev { left: 6px; }
+.ps-arrow.next { right: 6px; }
+.ps-arrow:hover:not(:disabled) { background: rgba(0,0,0,.75); }
+.ps-arrow:disabled { opacity: 0; pointer-events: none; }
+.ps-dots { display: flex; justify-content: center; align-items: center; gap: 6px; margin-top: 8px; }
+.ps-dots button { width: 10px; height: 10px; border-radius: 50%; border: 0; padding: 0; background: var(--line); cursor: pointer; }
+.ps-dots button.on { background: var(--accent, #1f7a3d); width: 22px; border-radius: 5px; }
+.ps-count { font-size: 12px; color: var(--muted); margin-left: 6px; }
+@media (max-width: 760px) {
+  .ps-slide, .photo-slider.n2 .ps-slide { flex-basis: 86%; }
+  .photo-slider.n1 .ps-slide { flex-basis: 100%; }
+  .photo-slider.n1 .ph-box { padding-top: 75%; }
+  .ps-arrow { width: 34px; height: 34px; font-size: 24px; line-height: 32px; }
+}
 .asia-note { background: #fff8e1; border: 1px solid #f1d58a; border-radius: 6px; padding: 8px 12px; font-size: 14px; margin: 0 0 12px; color: #5b4a12; }
 .asia-routes { display: grid; gap: 12px; grid-template-columns: repeat(2, 1fr); }
 .asia-route { border-top: 4px solid #1f6fb2; }
