@@ -1,711 +1,941 @@
 {
- "generated_at": "2026-11-26T03:57:47.170Z",
+ "generated_at": "2026-11-26T10:23:23.378Z",
  "season_crop": 2024,
  "jockeys": {
-  "小野楓馬": {
-   "debutRides": 41,
-   "debutWins": 6,
-   "debutPlaces": 13
+  "松山弘平": {
+   "debutRides": 73,
+   "debutWins": 16,
+   "debutPlaces": 32
+  },
+  "津村明秀": {
+   "debutRides": 61,
+   "debutWins": 8,
+   "debutPlaces": 23
   },
   "菊沢一樹": {
-   "debutRides": 38,
-   "debutWins": 3,
-   "debutPlaces": 5
+   "debutRides": 60,
+   "debutWins": 4,
+   "debutPlaces": 10
   },
-  "丹内祐次": {
-   "debutRides": 37,
-   "debutWins": 1,
-   "debutPlaces": 7
-  },
-  "岩橋勇二": {
-   "debutRides": 36,
-   "debutWins": 8,
-   "debutPlaces": 14
+  "吉村誠之": {
+   "debutRides": 59,
+   "debutWins": 5,
+   "debutPlaces": 12
   },
   "田山旺佑": {
-   "debutRides": 36,
-   "debutWins": 3,
-   "debutPlaces": 8
-  },
-  "木幡巧也": {
-   "debutRides": 35,
-   "debutWins": 0,
-   "debutPlaces": 3
-  },
-  "柴田大知": {
-   "debutRides": 35,
-   "debutWins": 0,
-   "debutPlaces": 1
-  },
-  "田口貫太": {
-   "debutRides": 35,
-   "debutWins": 3,
-   "debutPlaces": 7
-  },
-  "石川倭": {
-   "debutRides": 34,
-   "debutWins": 4,
-   "debutPlaces": 11
-  },
-  "松若風馬": {
-   "debutRides": 33,
-   "debutWins": 2,
-   "debutPlaces": 10
-  },
-  "幸英明": {
-   "debutRides": 32,
-   "debutWins": 0,
-   "debutPlaces": 4
-  },
-  "宮内勇樹": {
-   "debutRides": 32,
-   "debutWins": 3,
-   "debutPlaces": 10
-  },
-  "松山弘平": {
-   "debutRides": 31,
+   "debutRides": 59,
    "debutWins": 6,
    "debutPlaces": 15
   },
-  "落合玄太": {
-   "debutRides": 30,
-   "debutWins": 5,
-   "debutPlaces": 14
+  "小野楓馬": {
+   "debutRides": 57,
+   "debutWins": 7,
+   "debutPlaces": 17
   },
-  "桑村真明": {
-   "debutRides": 30,
+  "横山武史": {
+   "debutRides": 57,
+   "debutWins": 7,
+   "debutPlaces": 27
+  },
+  "坂井瑠星": {
+   "debutRides": 57,
+   "debutWins": 11,
+   "debutPlaces": 23
+  },
+  "戸崎圭太": {
+   "debutRides": 55,
+   "debutWins": 7,
+   "debutPlaces": 22
+  },
+  "西村淳也": {
+   "debutRides": 54,
+   "debutWins": 5,
+   "debutPlaces": 15
+  },
+  "幸英明": {
+   "debutRides": 54,
+   "debutWins": 5,
+   "debutPlaces": 12
+  },
+  "松若風馬": {
+   "debutRides": 53,
+   "debutWins": 3,
+   "debutPlaces": 15
+  },
+  "ルメール": {
+   "debutRides": 53,
+   "debutWins": 17,
+   "debutPlaces": 33
+  },
+  "笹川翼": {
+   "debutRides": 52,
+   "debutWins": 14,
+   "debutPlaces": 35
+  },
+  "丹内祐次": {
+   "debutRides": 52,
+   "debutWins": 2,
+   "debutPlaces": 11
+  },
+  "岩橋勇二": {
+   "debutRides": 51,
+   "debutWins": 11,
+   "debutPlaces": 20
+  },
+  "北村友一": {
+   "debutRides": 50,
+   "debutWins": 9,
+   "debutPlaces": 19
+  },
+  "三浦皇成": {
+   "debutRides": 48,
    "debutWins": 5,
    "debutPlaces": 13
   },
-  "吉村誠之": {
-   "debutRides": 30,
-   "debutWins": 2,
+  "原優介": {
+   "debutRides": 48,
+   "debutWins": 0,
+   "debutPlaces": 3
+  },
+  "宮内勇樹": {
+   "debutRides": 48,
+   "debutWins": 7,
+   "debutPlaces": 16
+  },
+  "岩田望来": {
+   "debutRides": 46,
+   "debutWins": 10,
+   "debutPlaces": 16
+  },
+  "石川倭": {
+   "debutRides": 46,
+   "debutWins": 6,
+   "debutPlaces": 17
+  },
+  "木幡巧也": {
+   "debutRides": 45,
+   "debutWins": 0,
    "debutPlaces": 4
   },
-  "三浦皇成": {
-   "debutRides": 29,
-   "debutWins": 4,
-   "debutPlaces": 9
-  },
-  "笹川翼": {
-   "debutRides": 29,
-   "debutWins": 7,
-   "debutPlaces": 20
-  },
-  "阿部龍": {
-   "debutRides": 29,
+  "田口貫太": {
+   "debutRides": 45,
    "debutWins": 3,
-   "debutPlaces": 10
+   "debutPlaces": 7
   },
-  "原優介": {
-   "debutRides": 28,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "矢野貴之": {
-   "debutRides": 28,
-   "debutWins": 12,
+  "落合玄太": {
+   "debutRides": 44,
+   "debutWins": 9,
    "debutPlaces": 21
   },
+  "野畑凌": {
+   "debutRides": 43,
+   "debutWins": 11,
+   "debutPlaces": 24
+  },
+  "桑村真明": {
+   "debutRides": 43,
+   "debutWins": 8,
+   "debutPlaces": 17
+  },
+  "阿部龍": {
+   "debutRides": 43,
+   "debutWins": 5,
+   "debutPlaces": 15
+  },
+  "川田将雅": {
+   "debutRides": 43,
+   "debutWins": 7,
+   "debutPlaces": 22
+  },
+  "佐々木大": {
+   "debutRides": 42,
+   "debutWins": 3,
+   "debutPlaces": 13
+  },
+  "矢野貴之": {
+   "debutRides": 42,
+   "debutWins": 15,
+   "debutPlaces": 28
+  },
+  "武豊": {
+   "debutRides": 41,
+   "debutWins": 5,
+   "debutPlaces": 17
+  },
   "服部茂史": {
-   "debutRides": 27,
+   "debutRides": 41,
    "debutWins": 1,
+   "debutPlaces": 14
+  },
+  "斎藤新": {
+   "debutRides": 38,
+   "debutWins": 3,
+   "debutPlaces": 13
+  },
+  "柴田大知": {
+   "debutRides": 37,
+   "debutWins": 0,
+   "debutPlaces": 1
+  },
+  "鮫島克駿": {
+   "debutRides": 37,
+   "debutWins": 3,
    "debutPlaces": 9
   },
   "和田譲治": {
-   "debutRides": 27,
-   "debutWins": 3,
-   "debutPlaces": 10
-  },
-  "野畑凌": {
-   "debutRides": 26,
-   "debutWins": 8,
-   "debutPlaces": 15
-  },
-  "井上瑛太": {
-   "debutRides": 25,
-   "debutWins": 3,
-   "debutPlaces": 11
-  },
-  "横山武史": {
-   "debutRides": 24,
-   "debutWins": 4,
-   "debutPlaces": 12
-  },
-  "佐々木大": {
-   "debutRides": 23,
-   "debutWins": 1,
-   "debutPlaces": 4
-  },
-  "岩田望来": {
-   "debutRides": 22,
+   "debutRides": 37,
    "debutWins": 5,
-   "debutPlaces": 5
-  },
-  "津村明秀": {
-   "debutRides": 22,
-   "debutWins": 2,
-   "debutPlaces": 6
-  },
-  "武藤雅": {
-   "debutRides": 22,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "斎藤新": {
-   "debutRides": 21,
-   "debutWins": 2,
-   "debutPlaces": 8
-  },
-  "野中悠太": {
-   "debutRides": 21,
-   "debutWins": 0,
-   "debutPlaces": 3
-  },
-  "今村聖奈": {
-   "debutRides": 21,
-   "debutWins": 1,
-   "debutPlaces": 3
+   "debutPlaces": 16
   },
   "石橋脩": {
-   "debutRides": 21,
-   "debutWins": 0,
-   "debutPlaces": 2
-  },
-  "大野拓弥": {
-   "debutRides": 21,
-   "debutWins": 2,
-   "debutPlaces": 5
-  },
-  "石神深道": {
-   "debutRides": 21,
-   "debutWins": 1,
-   "debutPlaces": 1
-  },
-  "富田暁": {
-   "debutRides": 20,
+   "debutRides": 36,
    "debutWins": 0,
    "debutPlaces": 3
+  },
+  "武藤雅": {
+   "debutRides": 36,
+   "debutWins": 0,
+   "debutPlaces": 0
   },
   "小林美駒": {
-   "debutRides": 19,
+   "debutRides": 33,
+   "debutWins": 2,
+   "debutPlaces": 7
+  },
+  "井上瑛太": {
+   "debutRides": 33,
+   "debutWins": 4,
+   "debutPlaces": 14
+  },
+  "石神深道": {
+   "debutRides": 33,
+   "debutWins": 1,
+   "debutPlaces": 4
+  },
+  "横山和生": {
+   "debutRides": 33,
+   "debutWins": 9,
+   "debutPlaces": 17
+  },
+  "大野拓弥": {
+   "debutRides": 32,
+   "debutWins": 2,
+   "debutPlaces": 6
+  },
+  "Ｍ．デム": {
+   "debutRides": 31,
+   "debutWins": 1,
+   "debutPlaces": 7
+  },
+  "今村聖奈": {
+   "debutRides": 31,
    "debutWins": 2,
    "debutPlaces": 5
   },
-  "黒澤愛斗": {
-   "debutRides": 19,
-   "debutWins": 0,
-   "debutPlaces": 2
+  "荻野極": {
+   "debutRides": 31,
+   "debutWins": 7,
+   "debutPlaces": 18
   },
-  "石田拓郎": {
-   "debutRides": 19,
+  "丸山元気": {
+   "debutRides": 31,
    "debutWins": 0,
-   "debutPlaces": 1
+   "debutPlaces": 8
   },
-  "坂井瑠星": {
-   "debutRides": 19,
-   "debutWins": 3,
+  "横山琉人": {
+   "debutRides": 29,
+   "debutWins": 1,
    "debutPlaces": 3
   },
-  "嶋田純次": {
-   "debutRides": 19,
-   "debutWins": 0,
-   "debutPlaces": 4
-  },
-  "遠藤汰月": {
-   "debutRides": 18,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "長浜鴻緒": {
-   "debutRides": 18,
-   "debutWins": 0,
-   "debutPlaces": 3
-  },
-  "菱田裕二": {
-   "debutRides": 16,
+  "石川裕紀": {
+   "debutRides": 29,
    "debutWins": 0,
    "debutPlaces": 5
   },
-  "Ｍ．デム": {
-   "debutRides": 16,
+  "富田暁": {
+   "debutRides": 28,
    "debutWins": 0,
    "debutPlaces": 4
   },
-  "杉原誠人": {
-   "debutRides": 16,
-   "debutWins": 1,
-   "debutPlaces": 1
-  },
-  "横山琉人": {
-   "debutRides": 16,
-   "debutWins": 0,
-   "debutPlaces": 2
-  },
-  "石川裕紀": {
-   "debutRides": 16,
+  "野中悠太": {
+   "debutRides": 27,
    "debutWins": 0,
    "debutPlaces": 4
   },
-  "木幡初也": {
-   "debutRides": 16,
-   "debutWins": 1,
+  "長浜鴻緒": {
+   "debutRides": 27,
+   "debutWins": 0,
+   "debutPlaces": 4
+  },
+  "黒澤愛斗": {
+   "debutRides": 27,
+   "debutWins": 0,
    "debutPlaces": 2
   },
-  "佐藤翔馬": {
-   "debutRides": 15,
+  "菱田裕二": {
+   "debutRides": 26,
    "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "武豊": {
-   "debutRides": 15,
-   "debutWins": 1,
    "debutPlaces": 6
   },
-  "荻野極": {
-   "debutRides": 15,
+  "田辺裕信": {
+   "debutRides": 25,
    "debutWins": 3,
    "debutPlaces": 6
   },
   "小沢大仁": {
-   "debutRides": 15,
+   "debutRides": 25,
+   "debutWins": 0,
+   "debutPlaces": 2
+  },
+  "石田拓郎": {
+   "debutRides": 25,
    "debutWins": 0,
    "debutPlaces": 1
   },
-  "戸崎圭太": {
-   "debutRides": 15,
-   "debutWins": 2,
-   "debutPlaces": 7
-  },
-  "丸山元気": {
-   "debutRides": 15,
-   "debutWins": 0,
-   "debutPlaces": 2
-  },
-  "近藤翔月": {
-   "debutRides": 15,
-   "debutWins": 0,
-   "debutPlaces": 5
-  },
-  "鮫島克駿": {
-   "debutRides": 14,
-   "debutWins": 0,
-   "debutPlaces": 4
-  },
-  "岡村健司": {
-   "debutRides": 14,
-   "debutWins": 1,
-   "debutPlaces": 6
-  },
-  "角田大和": {
-   "debutRides": 14,
-   "debutWins": 0,
-   "debutPlaces": 2
-  },
-  "北村友一": {
-   "debutRides": 14,
-   "debutWins": 2,
-   "debutPlaces": 5
-  },
-  "阿岸潤一": {
-   "debutRides": 14,
-   "debutWins": 0,
-   "debutPlaces": 4
-  },
-  "西塚洸二": {
-   "debutRides": 14,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "横山和生": {
-   "debutRides": 14,
-   "debutWins": 3,
-   "debutPlaces": 7
-  },
-  "国分恭介": {
-   "debutRides": 13,
-   "debutWins": 2,
-   "debutPlaces": 3
-  },
-  "田辺裕信": {
-   "debutRides": 13,
-   "debutWins": 0,
-   "debutPlaces": 2
-  },
-  "西村淳也": {
-   "debutRides": 13,
-   "debutWins": 2,
-   "debutPlaces": 5
-  },
-  "吉田隼人": {
-   "debutRides": 13,
-   "debutWins": 0,
-   "debutPlaces": 1
-  },
-  "内田博幸": {
-   "debutRides": 13,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "江田照男": {
-   "debutRides": 13,
-   "debutWins": 0,
-   "debutPlaces": 2
-  },
-  "西啓太": {
-   "debutRides": 13,
-   "debutWins": 3,
-   "debutPlaces": 6
-  },
-  "古川吉洋": {
-   "debutRides": 13,
-   "debutWins": 0,
-   "debutPlaces": 1
-  },
-  "本田正重": {
-   "debutRides": 13,
-   "debutWins": 5,
-   "debutPlaces": 9
-  },
-  "河原田菜": {
-   "debutRides": 13,
+  "杉原誠人": {
+   "debutRides": 24,
    "debutWins": 1,
    "debutPlaces": 1
-  },
-  "松岡正海": {
-   "debutRides": 12,
-   "debutWins": 0,
-   "debutPlaces": 0
   },
   "横山典弘": {
-   "debutRides": 12,
+   "debutRides": 24,
+   "debutWins": 6,
+   "debutPlaces": 9
+  },
+  "岩田康誠": {
+   "debutRides": 24,
+   "debutWins": 2,
+   "debutPlaces": 7
+  },
+  "古川吉洋": {
+   "debutRides": 24,
+   "debutWins": 1,
+   "debutPlaces": 2
+  },
+  "本田正重": {
+   "debutRides": 24,
+   "debutWins": 8,
+   "debutPlaces": 16
+  },
+  "藤田凌駕": {
+   "debutRides": 23,
+   "debutWins": 2,
+   "debutPlaces": 6
+  },
+  "嶋田純次": {
+   "debutRides": 23,
+   "debutWins": 0,
+   "debutPlaces": 4
+  },
+  "西啓太": {
+   "debutRides": 22,
+   "debutWins": 5,
+   "debutPlaces": 12
+  },
+  "遠藤汰月": {
+   "debutRides": 21,
+   "debutWins": 0,
+   "debutPlaces": 0
+  },
+  "岡村健司": {
+   "debutRides": 21,
+   "debutWins": 2,
+   "debutPlaces": 7
+  },
+  "近藤翔月": {
+   "debutRides": 21,
+   "debutWins": 0,
+   "debutPlaces": 6
+  },
+  "佐藤翔馬": {
+   "debutRides": 20,
+   "debutWins": 0,
+   "debutPlaces": 0
+  },
+  "国分恭介": {
+   "debutRides": 20,
+   "debutWins": 2,
+   "debutPlaces": 5
+  },
+  "団野大成": {
+   "debutRides": 20,
+   "debutWins": 1,
+   "debutPlaces": 6
+  },
+  "浜中俊": {
+   "debutRides": 20,
+   "debutWins": 3,
+   "debutPlaces": 8
+  },
+  "内田博幸": {
+   "debutRides": 20,
+   "debutWins": 0,
+   "debutPlaces": 2
+  },
+  "角田大和": {
+   "debutRides": 20,
    "debutWins": 1,
    "debutPlaces": 3
   },
-  "永島まな": {
-   "debutRides": 12,
+  "池添謙一": {
+   "debutRides": 19,
+   "debutWins": 2,
+   "debutPlaces": 4
+  },
+  "小崎綾也": {
+   "debutRides": 19,
    "debutWins": 0,
    "debutPlaces": 2
   },
   "藤本現暉": {
-   "debutRides": 12,
+   "debutRides": 19,
    "debutWins": 0,
-   "debutPlaces": 3
+   "debutPlaces": 6
   },
-  "藤田凌駕": {
-   "debutRides": 12,
-   "debutWins": 2,
-   "debutPlaces": 3
+  "西塚洸二": {
+   "debutRides": 19,
+   "debutWins": 0,
+   "debutPlaces": 0
   },
-  "浜中俊": {
-   "debutRides": 11,
+  "松岡正海": {
+   "debutRides": 18,
+   "debutWins": 0,
+   "debutPlaces": 0
+  },
+  "吉田隼人": {
+   "debutRides": 18,
    "debutWins": 1,
-   "debutPlaces": 4
+   "debutPlaces": 3
   },
-  "新原周馬": {
-   "debutRides": 11,
+  "藤田凌": {
+   "debutRides": 18,
    "debutWins": 2,
-   "debutPlaces": 4
+   "debutPlaces": 7
   },
-  "岩田康誠": {
-   "debutRides": 11,
+  "木幡初也": {
+   "debutRides": 18,
    "debutWins": 1,
    "debutPlaces": 2
   },
-  "達城龍次": {
-   "debutRides": 11,
+  "吉田豊": {
+   "debutRides": 18,
+   "debutWins": 2,
+   "debutPlaces": 7
+  },
+  "原田和真": {
+   "debutRides": 17,
+   "debutWins": 0,
+   "debutPlaces": 1
+  },
+  "永島まな": {
+   "debutRides": 17,
+   "debutWins": 0,
+   "debutPlaces": 4
+  },
+  "阿岸潤一": {
+   "debutRides": 17,
+   "debutWins": 0,
+   "debutPlaces": 4
+  },
+  "高杉吏麒": {
+   "debutRides": 17,
+   "debutWins": 3,
+   "debutPlaces": 11
+  },
+  "河原田菜": {
+   "debutRides": 17,
+   "debutWins": 1,
+   "debutPlaces": 1
+  },
+  "古岡勇樹": {
+   "debutRides": 17,
+   "debutWins": 1,
+   "debutPlaces": 6
+  },
+  "江田照男": {
+   "debutRides": 16,
+   "debutWins": 0,
+   "debutPlaces": 2
+  },
+  "Ｃ．デム": {
+   "debutRides": 16,
+   "debutWins": 6,
+   "debutPlaces": 13
+  },
+  "太宰啓介": {
+   "debutRides": 15,
+   "debutWins": 0,
+   "debutPlaces": 4
+  },
+  "和田陽希": {
+   "debutRides": 15,
+   "debutWins": 0,
+   "debutPlaces": 1
+  },
+  "吉村智洋": {
+   "debutRides": 15,
+   "debutWins": 5,
+   "debutPlaces": 10
+  },
+  "小牧太": {
+   "debutRides": 15,
+   "debutWins": 4,
+   "debutPlaces": 7
+  },
+  "新原周馬": {
+   "debutRides": 14,
    "debutWins": 2,
    "debutPlaces": 5
   },
-  "古岡勇樹": {
+  "柴田裕一": {
+   "debutRides": 14,
+   "debutWins": 0,
+   "debutPlaces": 0
+  },
+  "達城龍次": {
+   "debutRides": 14,
+   "debutWins": 2,
+   "debutPlaces": 7
+  },
+  "吉井章": {
+   "debutRides": 14,
+   "debutWins": 1,
+   "debutPlaces": 4
+  },
+  "コレット": {
+   "debutRides": 14,
+   "debutWins": 2,
+   "debutPlaces": 7
+  },
+  "藤懸貴志": {
+   "debutRides": 14,
+   "debutWins": 0,
+   "debutPlaces": 5
+  },
+  "酒井学": {
+   "debutRides": 14,
+   "debutWins": 0,
+   "debutPlaces": 1
+  },
+  "菅原明良": {
+   "debutRides": 14,
+   "debutWins": 0,
+   "debutPlaces": 4
+  },
+  "渡辺竜也": {
+   "debutRides": 13,
+   "debutWins": 2,
+   "debutPlaces": 7
+  },
+  "上里直汰": {
+   "debutRides": 13,
+   "debutWins": 0,
+   "debutPlaces": 0
+  },
+  "松井伸也": {
+   "debutRides": 12,
+   "debutWins": 0,
+   "debutPlaces": 1
+  },
+  "舟山瑠泉": {
+   "debutRides": 12,
+   "debutWins": 0,
+   "debutPlaces": 4
+  },
+  "廣瀬航": {
+   "debutRides": 12,
+   "debutWins": 2,
+   "debutPlaces": 8
+  },
+  "長岡禎仁": {
+   "debutRides": 12,
+   "debutWins": 0,
+   "debutPlaces": 3
+  },
+  "佐野遥久": {
+   "debutRides": 12,
+   "debutWins": 2,
+   "debutPlaces": 5
+  },
+  "井上俊彦": {
+   "debutRides": 12,
+   "debutWins": 0,
+   "debutPlaces": 2
+  },
+  "森田誠也": {
+   "debutRides": 12,
+   "debutWins": 0,
+   "debutPlaces": 0
+  },
+  "木間塚龍": {
+   "debutRides": 11,
+   "debutWins": 0,
+   "debutPlaces": 3
+  },
+  "池谷匠翔": {
+   "debutRides": 11,
+   "debutWins": 0,
+   "debutPlaces": 4
+  },
+  "町田直希": {
+   "debutRides": 11,
+   "debutWins": 1,
+   "debutPlaces": 8
+  },
+  "ミシェル": {
+   "debutRides": 11,
+   "debutWins": 1,
+   "debutPlaces": 3
+  },
+  "室陽一朗": {
+   "debutRides": 11,
+   "debutWins": 2,
+   "debutPlaces": 7
+  },
+  "張田昂": {
+   "debutRides": 11,
+   "debutWins": 1,
+   "debutPlaces": 6
+  },
+  "黛弘人": {
    "debutRides": 11,
    "debutWins": 1,
    "debutPlaces": 4
   },
-  "太宰啓介": {
-   "debutRides": 10,
+  "下原理": {
+   "debutRides": 11,
    "debutWins": 0,
-   "debutPlaces": 1
+   "debutPlaces": 8
   },
-  "小崎綾也": {
+  "マーカン": {
    "debutRides": 10,
    "debutWins": 0,
-   "debutPlaces": 0
+   "debutPlaces": 2
   },
   "及川烈": {
    "debutRides": 10,
    "debutWins": 0,
    "debutPlaces": 2
   },
-  "藤田凌": {
-   "debutRides": 10,
-   "debutWins": 0,
-   "debutPlaces": 4
-  },
-  "吉村智洋": {
+  "山中悠希": {
    "debutRides": 10,
    "debutWins": 4,
-   "debutPlaces": 7
-  },
-  "松井伸也": {
-   "debutRides": 9,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "渡辺竜也": {
-   "debutRides": 9,
-   "debutWins": 2,
    "debutPlaces": 5
   },
-  "柴田裕一": {
-   "debutRides": 9,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "町田直希": {
-   "debutRides": 9,
-   "debutWins": 1,
-   "debutPlaces": 7
-  },
-  "上里直汰": {
-   "debutRides": 9,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "室陽一朗": {
-   "debutRides": 9,
+  "福原杏": {
+   "debutRides": 10,
    "debutWins": 2,
    "debutPlaces": 6
   },
-  "廣瀬航": {
-   "debutRides": 9,
-   "debutWins": 1,
-   "debutPlaces": 6
-  },
-  "櫻井光輔": {
-   "debutRides": 9,
-   "debutWins": 2,
-   "debutPlaces": 3
-  },
-  "藤懸貴志": {
-   "debutRides": 9,
-   "debutWins": 0,
-   "debutPlaces": 3
-  },
-  "小牧太": {
-   "debutRides": 9,
-   "debutWins": 2,
-   "debutPlaces": 5
-  },
-  "酒井学": {
-   "debutRides": 9,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "団野大成": {
-   "debutRides": 8,
+  "永井孝典": {
+   "debutRides": 10,
    "debutWins": 0,
    "debutPlaces": 1
   },
-  "池添謙一": {
-   "debutRides": 8,
+  "川須栄彦": {
+   "debutRides": 10,
    "debutWins": 0,
    "debutPlaces": 0
   },
+  "櫻井光輔": {
+   "debutRides": 10,
+   "debutWins": 2,
+   "debutPlaces": 3
+  },
+  "小林脩斗": {
+   "debutRides": 10,
+   "debutWins": 1,
+   "debutPlaces": 2
+  },
+  "望月洵輝": {
+   "debutRides": 10,
+   "debutWins": 2,
+   "debutPlaces": 6
+  },
+  "塚本征吾": {
+   "debutRides": 10,
+   "debutWins": 2,
+   "debutPlaces": 5
+  },
+  "杉浦健太": {
+   "debutRides": 10,
+   "debutWins": 3,
+   "debutPlaces": 8
+  },
+  "石川慎将": {
+   "debutRides": 10,
+   "debutWins": 2,
+   "debutPlaces": 5
+  },
+  "鷹見陸": {
+   "debutRides": 10,
+   "debutWins": 1,
+   "debutPlaces": 6
+  },
+  "山本聡哉": {
+   "debutRides": 10,
+   "debutWins": 2,
+   "debutPlaces": 5
+  },
+  "金山昇馬": {
+   "debutRides": 10,
+   "debutWins": 1,
+   "debutPlaces": 2
+  },
   "秋元耕成": {
-   "debutRides": 8,
+   "debutRides": 9,
    "debutWins": 0,
    "debutPlaces": 3
   },
   "秋山稔樹": {
-   "debutRides": 8,
+   "debutRides": 9,
    "debutWins": 0,
    "debutPlaces": 1
+  },
+  "山本聡紀": {
+   "debutRides": 9,
+   "debutWins": 1,
+   "debutPlaces": 3
+  },
+  "飛田愛斗": {
+   "debutRides": 9,
+   "debutWins": 2,
+   "debutPlaces": 9
+  },
+  "加藤聡一": {
+   "debutRides": 9,
+   "debutWins": 1,
+   "debutPlaces": 2
+  },
+  "木幡育也": {
+   "debutRides": 9,
+   "debutWins": 0,
+   "debutPlaces": 0
+  },
+  "小林凌": {
+   "debutRides": 9,
+   "debutWins": 2,
+   "debutPlaces": 4
+  },
+  "塚本涼人": {
+   "debutRides": 9,
+   "debutWins": 1,
+   "debutPlaces": 5
+  },
+  "山本政聡": {
+   "debutRides": 9,
+   "debutWins": 1,
+   "debutPlaces": 5
+  },
+  "山口達弥": {
+   "debutRides": 9,
+   "debutWins": 1,
+   "debutPlaces": 5
+  },
+  "丸田恭介": {
+   "debutRides": 9,
+   "debutWins": 0,
+   "debutPlaces": 0
+  },
+  "水沼元輝": {
+   "debutRides": 9,
+   "debutWins": 0,
+   "debutPlaces": 0
+  },
+  "松本大輝": {
+   "debutRides": 9,
+   "debutWins": 2,
+   "debutPlaces": 4
+  },
+  "Ｆ．ゴン": {
+   "debutRides": 8,
+   "debutWins": 2,
+   "debutPlaces": 5
   },
   "加藤祥太": {
    "debutRides": 8,
    "debutWins": 0,
    "debutPlaces": 0
   },
-  "山中悠希": {
+  "笹田知宏": {
    "debutRides": 8,
-   "debutWins": 3,
+   "debutWins": 1,
    "debutPlaces": 3
   },
-  "加藤聡一": {
+  "中山遥人": {
    "debutRides": 8,
-   "debutWins": 0,
-   "debutPlaces": 1
+   "debutWins": 1,
+   "debutPlaces": 2
   },
-  "川須栄彦": {
+  "荻野琢真": {
    "debutRides": 8,
    "debutWins": 0,
    "debutPlaces": 0
   },
-  "川田将雅": {
+  "菅原辰徳": {
    "debutRides": 8,
-   "debutWins": 2,
+   "debutWins": 1,
    "debutPlaces": 3
   },
-  "吉田豊": {
+  "古川奈穂": {
    "debutRides": 8,
    "debutWins": 0,
-   "debutPlaces": 3
+   "debutPlaces": 2
   },
-  "高杉吏麒": {
+  "プーシャ": {
    "debutRides": 8,
-   "debutWins": 3,
-   "debutPlaces": 7
+   "debutWins": 2,
+   "debutPlaces": 2
+  },
+  "小杉亮": {
+   "debutRides": 8,
+   "debutWins": 0,
+   "debutPlaces": 2
+  },
+  "村上忍": {
+   "debutRides": 8,
+   "debutWins": 2,
+   "debutPlaces": 5
+  },
+  "七夕裕次": {
+   "debutRides": 8,
+   "debutWins": 0,
+   "debutPlaces": 1
+  },
+  "高橋悠里": {
+   "debutRides": 8,
+   "debutWins": 2,
+   "debutPlaces": 4
+  },
+  "本橋孝太": {
+   "debutRides": 8,
+   "debutWins": 2,
+   "debutPlaces": 4
+  },
+  "国分優作": {
+   "debutRides": 8,
+   "debutWins": 0,
+   "debutPlaces": 1
   },
   "加藤雄真": {
    "debutRides": 7,
    "debutWins": 0,
    "debutPlaces": 3
   },
-  "山本聡紀": {
-   "debutRides": 7,
-   "debutWins": 0,
-   "debutPlaces": 2
-  },
-  "原田和真": {
-   "debutRides": 7,
-   "debutWins": 0,
-   "debutPlaces": 1
-  },
-  "笹田知宏": {
-   "debutRides": 7,
-   "debutWins": 0,
-   "debutPlaces": 2
-  },
-  "池谷匠翔": {
-   "debutRides": 7,
-   "debutWins": 0,
-   "debutPlaces": 1
-  },
-  "張田昂": {
+  "亀井洋司": {
    "debutRides": 7,
    "debutWins": 1,
-   "debutPlaces": 5
+   "debutPlaces": 3
+  },
+  "安藤洋一": {
+   "debutRides": 7,
+   "debutWins": 0,
+   "debutPlaces": 1
+  },
+  "ゴンサル": {
+   "debutRides": 7,
+   "debutWins": 1,
+   "debutPlaces": 4
   },
   "山本咲希": {
    "debutRides": 7,
    "debutWins": 3,
    "debutPlaces": 4
   },
-  "中山遥人": {
-   "debutRides": 7,
-   "debutWins": 1,
-   "debutPlaces": 2
-  },
-  "菅原辰徳": {
-   "debutRides": 7,
-   "debutWins": 1,
-   "debutPlaces": 3
-  },
-  "長岡禎仁": {
-   "debutRides": 7,
-   "debutWins": 0,
-   "debutPlaces": 2
-  },
-  "吉井章": {
-   "debutRides": 7,
-   "debutWins": 0,
-   "debutPlaces": 2
-  },
-  "小林脩斗": {
+  "杉山海波": {
    "debutRides": 7,
    "debutWins": 0,
    "debutPlaces": 1
   },
-  "和田陽希": {
+  "御神本訓": {
+   "debutRides": 7,
+   "debutWins": 1,
+   "debutPlaces": 4
+  },
+  "鈴木祐": {
+   "debutRides": 7,
+   "debutWins": 1,
+   "debutPlaces": 5
+  },
+  "大畑慧悟": {
+   "debutRides": 7,
+   "debutWins": 2,
+   "debutPlaces": 3
+  },
+  "出水拓人": {
+   "debutRides": 7,
+   "debutWins": 0,
+   "debutPlaces": 0
+  },
+  "増田充宏": {
+   "debutRides": 7,
+   "debutWins": 1,
+   "debutPlaces": 3
+  },
+  "小川悠汰": {
    "debutRides": 7,
    "debutWins": 0,
    "debutPlaces": 1
   },
-  "黛弘人": {
+  "近藤颯羽": {
+   "debutRides": 7,
+   "debutWins": 0,
+   "debutPlaces": 1
+  },
+  "山口勲": {
    "debutRides": 7,
    "debutWins": 1,
-   "debutPlaces": 3
+   "debutPlaces": 5
   },
-  "小杉亮": {
+  "亀田温心": {
    "debutRides": 7,
    "debutWins": 0,
-   "debutPlaces": 2
+   "debutPlaces": 1
   },
-  "佐野遥久": {
+  "レーン": {
    "debutRides": 7,
-   "debutWins": 2,
-   "debutPlaces": 4
-  },
-  "塚本征吾": {
-   "debutRides": 7,
-   "debutWins": 2,
-   "debutPlaces": 4
-  },
-  "山口達弥": {
-   "debutRides": 7,
-   "debutWins": 1,
-   "debutPlaces": 4
-  },
-  "国分優作": {
-   "debutRides": 7,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "丸田恭介": {
-   "debutRides": 7,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "水沼元輝": {
-   "debutRides": 7,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "舟山瑠泉": {
-   "debutRides": 6,
-   "debutWins": 0,
-   "debutPlaces": 3
-  },
-  "木間塚龍": {
-   "debutRides": 6,
-   "debutWins": 0,
-   "debutPlaces": 3
-  },
-  "亀井洋司": {
-   "debutRides": 6,
-   "debutWins": 1,
-   "debutPlaces": 3
-  },
-  "飛田愛斗": {
-   "debutRides": 6,
-   "debutWins": 1,
+   "debutWins": 4,
    "debutPlaces": 6
   },
-  "ミシェル": {
-   "debutRides": 6,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "福原杏": {
+  "篠谷葵": {
    "debutRides": 6,
    "debutWins": 1,
+   "debutPlaces": 4
+  },
+  "高松亮": {
+   "debutRides": 6,
+   "debutWins": 2,
    "debutPlaces": 3
   },
-  "木幡育也": {
+  "千田洋": {
    "debutRides": 6,
    "debutWins": 0,
    "debutPlaces": 0
   },
-  "永井孝典": {
+  "赤岡修次": {
    "debutRides": 6,
-   "debutWins": 0,
+   "debutWins": 3,
+   "debutPlaces": 5
+  },
+  "小野俊斗": {
+   "debutRides": 6,
+   "debutWins": 1,
    "debutPlaces": 1
   },
-  "荻野琢真": {
+  "栗原大河": {
+   "debutRides": 6,
+   "debutWins": 2,
+   "debutPlaces": 5
+  },
+  "丸野勝虎": {
    "debutRides": 6,
    "debutWins": 0,
-   "debutPlaces": 0
+   "debutPlaces": 4
+  },
+  "佐々木志": {
+   "debutRides": 6,
+   "debutWins": 1,
+   "debutPlaces": 2
   },
   "竹村達也": {
    "debutRides": 6,
@@ -717,267 +947,222 @@
    "debutWins": 0,
    "debutPlaces": 2
   },
-  "古川奈穂": {
-   "debutRides": 6,
-   "debutWins": 0,
-   "debutPlaces": 2
-  },
-  "望月洵輝": {
-   "debutRides": 6,
-   "debutWins": 1,
-   "debutPlaces": 5
-  },
-  "七夕裕次": {
-   "debutRides": 6,
-   "debutWins": 0,
-   "debutPlaces": 1
-  },
-  "杉浦健太": {
-   "debutRides": 6,
-   "debutWins": 2,
-   "debutPlaces": 5
-  },
-  "菅原明良": {
-   "debutRides": 6,
-   "debutWins": 0,
-   "debutPlaces": 2
-  },
-  "森田誠也": {
+  "山田義貴": {
    "debutRides": 6,
    "debutWins": 0,
    "debutPlaces": 0
   },
-  "塚本涼人": {
+  "青柳正義": {
    "debutRides": 6,
    "debutWins": 1,
    "debutPlaces": 3
   },
-  "鷹見陸": {
-   "debutRides": 6,
-   "debutWins": 1,
-   "debutPlaces": 3
-  },
-  "下原理": {
+  "中井裕二": {
    "debutRides": 6,
    "debutWins": 0,
+   "debutPlaces": 0
+  },
+  "澤田龍哉": {
+   "debutRides": 6,
+   "debutWins": 0,
+   "debutPlaces": 2
+  },
+  "多田羅誠": {
+   "debutRides": 6,
+   "debutWins": 2,
+   "debutPlaces": 2
+  },
+  "仲野光馬": {
+   "debutRides": 6,
+   "debutWins": 1,
    "debutPlaces": 4
   },
-  "篠谷葵": {
-   "debutRides": 5,
-   "debutWins": 1,
+  "保園翔也": {
+   "debutRides": 6,
+   "debutWins": 0,
+   "debutPlaces": 2
+  },
+  "石川駿介": {
+   "debutRides": 6,
+   "debutWins": 0,
+   "debutPlaces": 0
+  },
+  "小笠原羚": {
+   "debutRides": 6,
+   "debutWins": 0,
+   "debutPlaces": 1
+  },
+  "永森大智": {
+   "debutRides": 6,
+   "debutWins": 2,
    "debutPlaces": 3
+  },
+  "中越琉世": {
+   "debutRides": 6,
+   "debutWins": 0,
+   "debutPlaces": 1
+  },
+  "田野豊三": {
+   "debutRides": 6,
+   "debutWins": 0,
+   "debutPlaces": 2
+  },
+  "笠野雄大": {
+   "debutRides": 6,
+   "debutWins": 1,
+   "debutPlaces": 2
+  },
+  "木之前葵": {
+   "debutRides": 5,
+   "debutWins": 0,
+   "debutPlaces": 2
+  },
+  "細川智史": {
+   "debutRides": 5,
+   "debutWins": 0,
+   "debutPlaces": 2
+  },
+  "岡村卓弥": {
+   "debutRides": 5,
+   "debutWins": 0,
+   "debutPlaces": 3
+  },
+  "小谷哲平": {
+   "debutRides": 5,
+   "debutWins": 0,
+   "debutPlaces": 1
+  },
+  "佐々木世": {
+   "debutRides": 5,
+   "debutWins": 0,
+   "debutPlaces": 1
   },
   "菅原隆一": {
    "debutRides": 5,
    "debutWins": 0,
    "debutPlaces": 0
   },
-  "杉山海波": {
-   "debutRides": 5,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "小野俊斗": {
-   "debutRides": 5,
-   "debutWins": 1,
-   "debutPlaces": 1
-  },
-  "御神本訓": {
+  "筒井勇介": {
    "debutRides": 5,
    "debutWins": 1,
    "debutPlaces": 3
   },
-  "鈴木祐": {
+  "大畑雅章": {
    "debutRides": 5,
-   "debutWins": 0,
-   "debutPlaces": 4
+   "debutWins": 2,
+   "debutPlaces": 3
   },
-  "丸野勝虎": {
-   "debutRides": 5,
-   "debutWins": 0,
-   "debutPlaces": 4
-  },
-  "コレット": {
-   "debutRides": 5,
-   "debutWins": 1,
-   "debutPlaces": 1
-  },
-  "山田義貴": {
-   "debutRides": 5,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "青柳正義": {
+  "松木大地": {
    "debutRides": 5,
    "debutWins": 1,
    "debutPlaces": 3
+  },
+  "野澤憲彦": {
+   "debutRides": 5,
+   "debutWins": 0,
+   "debutPlaces": 2
   },
   "宮川実": {
    "debutRides": 5,
    "debutWins": 1,
    "debutPlaces": 2
   },
-  "増田充宏": {
-   "debutRides": 5,
-   "debutWins": 0,
-   "debutPlaces": 1
-  },
-  "小川悠汰": {
-   "debutRides": 5,
-   "debutWins": 0,
-   "debutPlaces": 1
-  },
-  "村上忍": {
-   "debutRides": 5,
-   "debutWins": 1,
-   "debutPlaces": 4
-  },
-  "井上俊彦": {
-   "debutRides": 5,
-   "debutWins": 0,
-   "debutPlaces": 1
-  },
-  "本橋孝太": {
-   "debutRides": 5,
-   "debutWins": 1,
-   "debutPlaces": 2
-  },
-  "山口勲": {
-   "debutRides": 5,
-   "debutWins": 1,
-   "debutPlaces": 4
-  },
-  "石川慎将": {
-   "debutRides": 5,
-   "debutWins": 1,
-   "debutPlaces": 2
-  },
-  "山本政聡": {
+  "中山蓮王": {
    "debutRides": 5,
    "debutWins": 1,
    "debutPlaces": 3
   },
-  "山本聡哉": {
+  "土方颯太": {
+   "debutRides": 5,
+   "debutWins": 0,
+   "debutPlaces": 1
+  },
+  "田知弘久": {
+   "debutRides": 5,
+   "debutWins": 0,
+   "debutPlaces": 1
+  },
+  "山下裕貴": {
+   "debutRides": 5,
+   "debutWins": 0,
+   "debutPlaces": 1
+  },
+  "青海大樹": {
+   "debutRides": 5,
+   "debutWins": 0,
+   "debutPlaces": 1
+  },
+  "大山真吾": {
+   "debutRides": 5,
+   "debutWins": 1,
+   "debutPlaces": 2
+  },
+  "長谷川蓮": {
    "debutRides": 5,
    "debutWins": 2,
    "debutPlaces": 3
   },
-  "松本大輝": {
-   "debutRides": 5,
-   "debutWins": 1,
-   "debutPlaces": 1
-  },
-  "小笠原羚": {
+  "柴田勇真": {
    "debutRides": 5,
    "debutWins": 0,
-   "debutPlaces": 1
+   "debutPlaces": 3
+  },
+  "川島正太": {
+   "debutRides": 5,
+   "debutWins": 2,
+   "debutPlaces": 2
   },
   "川又賢治": {
    "debutRides": 5,
    "debutWins": 0,
    "debutPlaces": 0
   },
-  "亀田温心": {
+  "城戸義政": {
+   "debutRides": 5,
+   "debutWins": 0,
+   "debutPlaces": 0
+  },
+  "郷間勇太": {
    "debutRides": 5,
    "debutWins": 0,
    "debutPlaces": 1
   },
-  "田野豊三": {
+  "加藤翔馬": {
    "debutRides": 5,
-   "debutWins": 0,
-   "debutPlaces": 2
-  },
-  "Ｆ．ゴン": {
-   "debutRides": 4,
-   "debutWins": 2,
+   "debutWins": 1,
    "debutPlaces": 3
   },
-  "マーカン": {
-   "debutRides": 4,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "岡村卓弥": {
-   "debutRides": 4,
+  "魚住謙心": {
+   "debutRides": 5,
    "debutWins": 0,
    "debutPlaces": 2
-  },
-  "小谷哲平": {
-   "debutRides": 4,
-   "debutWins": 0,
-   "debutPlaces": 1
-  },
-  "高松亮": {
-   "debutRides": 4,
-   "debutWins": 2,
-   "debutPlaces": 2
-  },
-  "千田洋": {
-   "debutRides": 4,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "佐々木世": {
-   "debutRides": 4,
-   "debutWins": 0,
-   "debutPlaces": 0
   },
   "菅原涼太": {
    "debutRides": 4,
    "debutWins": 0,
    "debutPlaces": 3
   },
-  "ゴンサル": {
+  "城野慈尚": {
    "debutRides": 4,
    "debutWins": 0,
-   "debutPlaces": 2
-  },
-  "大畑雅章": {
-   "debutRides": 4,
-   "debutWins": 2,
-   "debutPlaces": 3
-  },
-  "栗原大河": {
-   "debutRides": 4,
-   "debutWins": 2,
-   "debutPlaces": 4
+   "debutPlaces": 0
   },
   "明星晴大": {
    "debutRides": 4,
    "debutWins": 1,
    "debutPlaces": 2
   },
-  "小林凌": {
-   "debutRides": 4,
-   "debutWins": 1,
-   "debutPlaces": 3
-  },
-  "松木大地": {
-   "debutRides": 4,
-   "debutWins": 1,
-   "debutPlaces": 2
-  },
-  "大畑慧悟": {
-   "debutRides": 4,
-   "debutWins": 2,
-   "debutPlaces": 3
-  },
-  "出水拓人": {
-   "debutRides": 4,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "近藤颯羽": {
+  "谷内貫太": {
    "debutRides": 4,
    "debutWins": 0,
    "debutPlaces": 1
   },
-  "高橋悠里": {
+  "竹吉徹": {
    "debutRides": 4,
-   "debutWins": 1,
-   "debutPlaces": 2
+   "debutWins": 0,
+   "debutPlaces": 1
   },
-  "山下裕貴": {
+  "大久保友": {
    "debutRides": 4,
    "debutWins": 0,
    "debutPlaces": 1
@@ -987,57 +1172,32 @@
    "debutWins": 0,
    "debutPlaces": 0
   },
-  "柴田勇真": {
-   "debutRides": 4,
-   "debutWins": 0,
-   "debutPlaces": 3
-  },
-  "多田羅誠": {
-   "debutRides": 4,
-   "debutWins": 1,
-   "debutPlaces": 1
-  },
-  "仲野光馬": {
-   "debutRides": 4,
-   "debutWins": 1,
-   "debutPlaces": 3
-  },
-  "保園翔也": {
-   "debutRides": 4,
-   "debutWins": 0,
-   "debutPlaces": 2
-  },
-  "石川駿介": {
+  "伊藤工真": {
    "debutRides": 4,
    "debutWins": 0,
    "debutPlaces": 0
   },
-  "中越琉世": {
+  "今井貴大": {
    "debutRides": 4,
-   "debutWins": 0,
-   "debutPlaces": 1
-  },
-  "木之前葵": {
-   "debutRides": 3,
-   "debutWins": 0,
+   "debutWins": 1,
    "debutPlaces": 2
   },
-  "細川智史": {
-   "debutRides": 3,
-   "debutWins": 0,
-   "debutPlaces": 2
-  },
-  "安藤洋一": {
-   "debutRides": 3,
+  "高橋優": {
+   "debutRides": 4,
    "debutWins": 0,
    "debutPlaces": 0
   },
-  "赤岡修次": {
-   "debutRides": 3,
+  "中島龍也": {
+   "debutRides": 4,
    "debutWins": 2,
-   "debutPlaces": 3
+   "debutPlaces": 2
   },
-  "城野慈尚": {
+  "田中純": {
+   "debutRides": 3,
+   "debutWins": 1,
+   "debutPlaces": 1
+  },
+  "木村直輝": {
    "debutRides": 3,
    "debutWins": 0,
    "debutPlaces": 0
@@ -1047,98 +1207,83 @@
    "debutWins": 0,
    "debutPlaces": 2
   },
-  "中山蓮王": {
+  "藤江渉": {
+   "debutRides": 3,
+   "debutWins": 0,
+   "debutPlaces": 0
+  },
+  "小松丈二": {
    "debutRides": 3,
    "debutWins": 1,
+   "debutPlaces": 2
+  },
+  "坂下秀樹": {
+   "debutRides": 3,
+   "debutWins": 0,
+   "debutPlaces": 0
+  },
+  "半澤慶実": {
+   "debutRides": 3,
+   "debutWins": 0,
+   "debutPlaces": 0
+  },
+  "南郷家全": {
+   "debutRides": 3,
+   "debutWins": 0,
+   "debutPlaces": 1
+  },
+  "泉谷楓真": {
+   "debutRides": 3,
+   "debutWins": 1,
+   "debutPlaces": 1
+  },
+  "阿部英俊": {
+   "debutRides": 3,
+   "debutWins": 0,
+   "debutPlaces": 1
+  },
+  "井上幹太": {
+   "debutRides": 3,
+   "debutWins": 2,
    "debutPlaces": 3
-  },
-  "土方颯太": {
-   "debutRides": 3,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "田知弘久": {
-   "debutRides": 3,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "大久保友": {
-   "debutRides": 3,
-   "debutWins": 0,
-   "debutPlaces": 1
-  },
-  "中井裕二": {
-   "debutRides": 3,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "今井貴大": {
-   "debutRides": 3,
-   "debutWins": 0,
-   "debutPlaces": 1
-  },
-  "澤田龍哉": {
-   "debutRides": 3,
-   "debutWins": 0,
-   "debutPlaces": 1
-  },
-  "大山真吾": {
-   "debutRides": 3,
-   "debutWins": 1,
-   "debutPlaces": 1
-  },
-  "長谷川蓮": {
-   "debutRides": 3,
-   "debutWins": 2,
-   "debutPlaces": 2
-  },
-  "高橋優": {
-   "debutRides": 3,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "川島正太": {
-   "debutRides": 3,
-   "debutWins": 2,
-   "debutPlaces": 2
-  },
-  "永森大智": {
-   "debutRides": 3,
-   "debutWins": 1,
-   "debutPlaces": 2
   },
   "西優哉": {
    "debutRides": 3,
    "debutWins": 0,
    "debutPlaces": 1
   },
-  "城戸義政": {
-   "debutRides": 3,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "郷間勇太": {
+  "バルザロ": {
    "debutRides": 3,
    "debutWins": 0,
    "debutPlaces": 1
   },
-  "加藤翔馬": {
+  "中村尚平": {
+   "debutRides": 3,
+   "debutWins": 0,
+   "debutPlaces": 0
+  },
+  "田中洸多": {
+   "debutRides": 3,
+   "debutWins": 0,
+   "debutPlaces": 0
+  },
+  "所蛍": {
+   "debutRides": 3,
+   "debutWins": 1,
+   "debutPlaces": 3
+  },
+  "加茂飛翔": {
+   "debutRides": 3,
+   "debutWins": 0,
+   "debutPlaces": 0
+  },
+  "川島拓": {
    "debutRides": 3,
    "debutWins": 0,
    "debutPlaces": 1
   },
-  "笠野雄大": {
-   "debutRides": 3,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "金山昇馬": {
-   "debutRides": 3,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "ルメール": {
-   "debutRides": 3,
+  "鷲頭虎太": {
+   "debutRides": 2,
    "debutWins": 1,
    "debutPlaces": 1
   },
@@ -1147,57 +1292,32 @@
    "debutWins": 0,
    "debutPlaces": 0
   },
-  "田中純": {
+  "實川純一": {
    "debutRides": 2,
-   "debutWins": 1,
-   "debutPlaces": 1
+   "debutWins": 0,
+   "debutPlaces": 0
   },
   "木澤奨": {
    "debutRides": 2,
    "debutWins": 0,
    "debutPlaces": 1
   },
-  "筒井勇介": {
-   "debutRides": 2,
-   "debutWins": 1,
-   "debutPlaces": 2
-  },
-  "佐々木志": {
+  "渡辺準己": {
    "debutRides": 2,
    "debutWins": 0,
    "debutPlaces": 0
   },
-  "木村直輝": {
-   "debutRides": 2,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "プーシャ": {
-   "debutRides": 2,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "藤江渉": {
-   "debutRides": 2,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "小松丈二": {
+  "大坪慎": {
    "debutRides": 2,
    "debutWins": 0,
    "debutPlaces": 1
-  },
-  "野澤憲彦": {
-   "debutRides": 2,
-   "debutWins": 0,
-   "debutPlaces": 0
   },
   "友森翔太": {
    "debutRides": 2,
    "debutWins": 1,
    "debutPlaces": 1
   },
-  "坂下秀樹": {
+  "佐原秀泰": {
    "debutRides": 2,
    "debutWins": 0,
    "debutPlaces": 0
@@ -1207,20 +1327,10 @@
    "debutWins": 0,
    "debutPlaces": 0
   },
-  "谷内貫太": {
-   "debutRides": 2,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "青海大樹": {
+  "岡遼太郎": {
    "debutRides": 2,
    "debutWins": 0,
    "debutPlaces": 1
-  },
-  "伊藤工真": {
-   "debutRides": 2,
-   "debutWins": 0,
-   "debutPlaces": 0
   },
   "山崎雅由": {
    "debutRides": 2,
@@ -1242,63 +1352,98 @@
    "debutWins": 0,
    "debutPlaces": 0
   },
-  "井上幹太": {
-   "debutRides": 2,
-   "debutWins": 1,
-   "debutPlaces": 2
-  },
   "平瀬城久": {
    "debutRides": 2,
    "debutWins": 0,
    "debutPlaces": 0
+  },
+  "松戸政也": {
+   "debutRides": 2,
+   "debutWins": 0,
+   "debutPlaces": 2
   },
   "伊藤裕人": {
    "debutRides": 2,
    "debutWins": 0,
    "debutPlaces": 1
   },
-  "中島龍也": {
-   "debutRides": 2,
-   "debutWins": 2,
-   "debutPlaces": 2
-  },
   "小林凌大": {
    "debutRides": 2,
    "debutWins": 0,
    "debutPlaces": 0
+  },
+  "西村栄喜": {
+   "debutRides": 2,
+   "debutWins": 0,
+   "debutPlaces": 2
   },
   "吉原寛人": {
    "debutRides": 2,
    "debutWins": 2,
    "debutPlaces": 2
   },
-  "田中洸多": {
+  "濱田達也": {
    "debutRides": 2,
    "debutWins": 0,
-   "debutPlaces": 0
+   "debutPlaces": 1
   },
   "東川慎": {
    "debutRides": 2,
    "debutWins": 0,
    "debutPlaces": 1
   },
-  "所蛍": {
-   "debutRides": 2,
-   "debutWins": 0,
-   "debutPlaces": 2
-  },
   "北村宏司": {
    "debutRides": 2,
    "debutWins": 0,
    "debutPlaces": 1
+  },
+  "椿聡太": {
+   "debutRides": 2,
+   "debutWins": 0,
+   "debutPlaces": 2
+  },
+  "本村直樹": {
+   "debutRides": 2,
+   "debutWins": 0,
+   "debutPlaces": 0
+  },
+  "中島良美": {
+   "debutRides": 2,
+   "debutWins": 2,
+   "debutPlaces": 2
   },
   "斉藤友香": {
    "debutRides": 2,
    "debutWins": 0,
    "debutPlaces": 0
   },
-  "鷲頭虎太": {
-   "debutRides": 1,
+  "土田真翔": {
+   "debutRides": 2,
+   "debutWins": 0,
+   "debutPlaces": 0
+  },
+  "田中直人": {
+   "debutRides": 2,
+   "debutWins": 0,
+   "debutPlaces": 0
+  },
+  "臼井健太": {
+   "debutRides": 2,
+   "debutWins": 0,
+   "debutPlaces": 1
+  },
+  "阿部基嗣": {
+   "debutRides": 2,
+   "debutWins": 0,
+   "debutPlaces": 1
+  },
+  "西森将司": {
+   "debutRides": 2,
+   "debutWins": 0,
+   "debutPlaces": 1
+  },
+  "関本玲花": {
+   "debutRides": 2,
    "debutWins": 0,
    "debutPlaces": 0
   },
@@ -1308,11 +1453,6 @@
    "debutPlaces": 1
   },
   "岡田祥嗣": {
-   "debutRides": 1,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "實川純一": {
    "debutRides": 1,
    "debutWins": 0,
    "debutPlaces": 0
@@ -1337,16 +1477,6 @@
    "debutWins": 0,
    "debutPlaces": 0
   },
-  "渡辺準己": {
-   "debutRides": 1,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "大坪慎": {
-   "debutRides": 1,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
   "鮫島良太": {
    "debutRides": 1,
    "debutWins": 0,
@@ -1362,22 +1492,12 @@
    "debutWins": 0,
    "debutPlaces": 1
   },
-  "佐原秀泰": {
-   "debutRides": 1,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
   "松本一心": {
    "debutRides": 1,
    "debutWins": 0,
    "debutPlaces": 1
   },
   "深澤杏花": {
-   "debutRides": 1,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "半澤慶実": {
    "debutRides": 1,
    "debutWins": 0,
    "debutPlaces": 0
@@ -1392,40 +1512,15 @@
    "debutWins": 0,
    "debutPlaces": 1
   },
-  "竹吉徹": {
-   "debutRides": 1,
-   "debutWins": 0,
-   "debutPlaces": 1
-  },
-  "南郷家全": {
-   "debutRides": 1,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
   "塩津璃菜": {
    "debutRides": 1,
    "debutWins": 0,
    "debutPlaces": 1
   },
-  "岡遼太郎": {
-   "debutRides": 1,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
   "沖静男": {
    "debutRides": 1,
    "debutWins": 0,
    "debutPlaces": 0
-  },
-  "泉谷楓真": {
-   "debutRides": 1,
-   "debutWins": 1,
-   "debutPlaces": 1
-  },
-  "阿部英俊": {
-   "debutRides": 1,
-   "debutWins": 0,
-   "debutPlaces": 1
   },
   "畑中信司": {
    "debutRides": 1,
@@ -1451,21 +1546,6 @@
    "debutRides": 1,
    "debutWins": 0,
    "debutPlaces": 0
-  },
-  "バルザロ": {
-   "debutRides": 1,
-   "debutWins": 0,
-   "debutPlaces": 1
-  },
-  "中村尚平": {
-   "debutRides": 1,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "松戸政也": {
-   "debutRides": 1,
-   "debutWins": 0,
-   "debutPlaces": 1
   },
   "馬渕繁治": {
    "debutRides": 1,
@@ -1502,16 +1582,6 @@
    "debutWins": 0,
    "debutPlaces": 0
   },
-  "西村栄喜": {
-   "debutRides": 1,
-   "debutWins": 0,
-   "debutPlaces": 1
-  },
-  "濱田達也": {
-   "debutRides": 1,
-   "debutWins": 0,
-   "debutPlaces": 1
-  },
   "岩本怜": {
    "debutRides": 1,
    "debutWins": 0,
@@ -1542,42 +1612,12 @@
    "debutWins": 0,
    "debutPlaces": 1
   },
-  "椿聡太": {
-   "debutRides": 1,
-   "debutWins": 0,
-   "debutPlaces": 1
-  },
   "大澤誠志": {
    "debutRides": 1,
    "debutWins": 0,
    "debutPlaces": 1
   },
-  "本村直樹": {
-   "debutRides": 1,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "魚住謙心": {
-   "debutRides": 1,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "中島良美": {
-   "debutRides": 1,
-   "debutWins": 1,
-   "debutPlaces": 1
-  },
   "渡瀬和幸": {
-   "debutRides": 1,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "土田真翔": {
-   "debutRides": 1,
-   "debutWins": 0,
-   "debutPlaces": 0
-  },
-  "田中直人": {
    "debutRides": 1,
    "debutWins": 0,
    "debutPlaces": 0
@@ -1597,11 +1637,6 @@
    "debutWins": 0,
    "debutPlaces": 1
   },
-  "臼井健太": {
-   "debutRides": 1,
-   "debutWins": 0,
-   "debutPlaces": 1
-  },
   "沖響主": {
    "debutRides": 1,
    "debutWins": 0,
@@ -1613,6 +1648,51 @@
    "debutPlaces": 0
   },
   "本田紀忠": {
+   "debutRides": 1,
+   "debutWins": 0,
+   "debutPlaces": 0
+  },
+  "後藤武蔵": {
+   "debutRides": 1,
+   "debutWins": 0,
+   "debutPlaces": 0
+  },
+  "服部大地": {
+   "debutRides": 1,
+   "debutWins": 0,
+   "debutPlaces": 0
+  },
+  "Ｅ．シャ": {
+   "debutRides": 1,
+   "debutWins": 0,
+   "debutPlaces": 0
+  },
+  "小谷周平": {
+   "debutRides": 1,
+   "debutWins": 0,
+   "debutPlaces": 0
+  },
+  "板野央": {
+   "debutRides": 1,
+   "debutWins": 0,
+   "debutPlaces": 0
+  },
+  "ディー": {
+   "debutRides": 1,
+   "debutWins": 0,
+   "debutPlaces": 0
+  },
+  "井上敏樹": {
+   "debutRides": 1,
+   "debutWins": 0,
+   "debutPlaces": 0
+  },
+  "高橋洸佑": {
+   "debutRides": 1,
+   "debutWins": 0,
+   "debutPlaces": 1
+  },
+  "若杉朝飛": {
    "debutRides": 1,
    "debutWins": 0,
    "debutPlaces": 0
