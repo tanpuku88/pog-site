@@ -793,6 +793,52 @@ table.list.group-horses thead th a, table.list.group-table thead th a { color: v
 .group-table tbody tr.top-1 td:first-child { box-shadow: inset 4px 0 0 var(--gold); }
 .group-table tbody tr.top-2 td:first-child { box-shadow: inset 4px 0 0 var(--silver); }
 .group-table tbody tr.top-3 td:first-child { box-shadow: inset 4px 0 0 var(--bronze); }
+/* ── 新馬戦ページ（2026-11 リデザイン） ── */
+.sb-hero { background: linear-gradient(135deg, var(--head) 0%, var(--head-2) 70%, var(--nav) 100%); color: var(--head-text); border-radius: 10px; padding: 22px 20px 18px; margin-bottom: 14px; border-bottom: 3px solid var(--gold); }
+.sb-kicker { margin: 0 0 4px; font-size: 11px; font-weight: 800; letter-spacing: .22em; color: var(--gold); }
+.sb-hero h1 { margin: 0; font-size: 26px; line-height: 1.25; color: #fff; }
+.sb-lead { margin: 8px 0 0; font-size: 13.5px; line-height: 1.7; opacity: .92; max-width: 42em; }
+.sb-stats { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.sb-stat { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); border-radius: 8px; padding: 7px 14px 8px; display: flex; align-items: baseline; gap: 7px; }
+.sb-stat b { font-size: 21px; font-weight: 900; color: #ffd966; font-variant-numeric: tabular-nums; line-height: 1; }
+.sb-stat span { font-size: 11.5px; opacity: .9; }
+.sb-factors { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.sb-factors span { font-size: 11px; font-weight: 700; border: 1px solid rgba(255,217,102,.55); color: #ffe8a0; border-radius: 999px; padding: 2px 9px; }
+.sb-howto { margin-top: 12px; font-size: 12.5px; }
+.sb-howto summary { cursor: pointer; font-weight: 700; color: #ffe8a0; width: fit-content; }
+.sb-howto p { margin: 8px 0 2px; line-height: 1.75; opacity: .92; max-width: 46em; }
+.sb-picks-sec { margin-bottom: 6px; }
+.sb-picks { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+.sb-pick-card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px 13px; display: flex; flex-direction: column; gap: 5px; }
+.sb-pick-card.is-top { border-color: var(--gold); box-shadow: inset 0 3px 0 var(--gold); }
+.sb-pick-head { display: flex; align-items: center; gap: 8px; }
+.sb-pick-meta { font-size: 12px; color: var(--muted); font-weight: 600; }
+.sb-pick-name { font-size: 18px; font-weight: 800; color: var(--text); text-decoration: none; line-height: 1.3; }
+.sb-pick-name:hover { text-decoration: underline; }
+.sb-pick-sub { font-size: 12px; color: var(--muted); }
+.sb-score-row { display: flex; align-items: center; gap: 10px; margin-top: 3px; }
+.sb-score-num { font-size: 24px; font-weight: 900; font-variant-numeric: tabular-nums; line-height: 1; }
+.sb-score-num small { font-size: 12px; font-weight: 700; margin-left: 1px; }
+.sb-bar { flex: 1; height: 7px; margin: 0; }
+.sb-reasons { display: block; margin: 0; font-size: 12px; line-height: 1.65; color: var(--muted); }
+.sb-pick-card .sb-reasons { margin-top: 2px; }
+.sb-score-cell { min-width: 150px; }
+.sb-score-line { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.sb-score-val { font-size: 16px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.sb-score-val small { font-size: 11px; font-weight: 700; }
+.sb-pick-pill { display: inline-block; background: var(--gold); color: #1b1400; font-size: 11px; font-weight: 800; border-radius: 999px; padding: 1px 8px; white-space: nowrap; }
+.sb-score-cell .sb-bar { display: block; width: 110px; margin-bottom: 4px; }
+.sb-score-cell .sb-reasons { max-width: 300px; }
+table.list tbody tr.sb-pickrow { background: var(--gold-weak); }
+table.list tbody tr.sb-pickrow td:first-child { box-shadow: inset 4px 0 0 var(--gold); }
+@media (max-width: 560px) {
+  .sb-hero { padding: 18px 15px 15px; }
+  .sb-hero h1 { font-size: 23px; }
+  .sb-picks { grid-template-columns: 1fr; }
+  .sb-score-cell { min-width: 118px; }
+  .sb-score-cell .sb-bar { width: 88px; }
+}
+
 /* ── スマホ最適化（2026-11） ── */
 @media (max-width: 560px) {
   /* メニュー：横に隠れないよう 4列×2段で全部見せる */
