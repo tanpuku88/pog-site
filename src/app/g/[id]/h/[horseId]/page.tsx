@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { requireGroup } from "@/lib/group-data";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { countsForRules } from "@/lib/standings";
+import { rulesOf, scoreRace, pointUnit } from "@/lib/group-rules";
 import { horsePageUrl, shutubaUrl } from "@/lib/netkeiba/fetch";
 import { formatMan, todayJst } from "@/lib/util";
 import { Finish } from "@/components/HorseLabel";
@@ -30,7 +31,9 @@ export default async function HorsePage({ params }: { params: Promise<{ id: stri
 
   const rows = (results ?? []).map((r) => ({ ...r, prize_man: Number(r.prize_man) }));
   const counted = rows.filter((r) => countsForRules(r, group));
-  const points = Math.round(counted.reduce((s, r) => s + r.prize_man, 0) * 10) / 10;
+  const rules = rulesOf(group);
+  const unit = pointUnit(rules);
+  const points = Math.round(counted.reduce((s, r) => s + scoreRace(r, rules).points, 0) * 10) / 10;
   const wins = counted.filter((r) => r.finish === "1").length;
   const allWins = rows.filter((r) => r.finish === "1").length;
 
@@ -71,7 +74,7 @@ export default async function HorsePage({ params }: { params: Promise<{ id: stri
       </div>
 
       <div className="stats">
-        <div className="stat"><div className="k">この大会の賞金</div><div className="v">{formatMan(points)}<small>万円</small></div></div>
+        <div className="stat"><div className="k">この大会の{unit === "万円" ? "賞金" : "ポイント"}</div><div className="v">{formatMan(points)}<small>{unit}</small></div></div>
         <div className="stat"><div className="k">通算成績</div><div className="v">{rows.length}<small>戦</small>{allWins}<small>勝</small></div><div className="s">大会期間中 {counted.length}戦{wins}勝</div></div>
         <div className="stat"><div className="k">サイト全体の指名数</div><div className="v">{siteWide ?? 0}<small>グループ</small></div></div>
       </div>

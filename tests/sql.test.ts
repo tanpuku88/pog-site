@@ -31,9 +31,11 @@ beforeAll(async () => {
     grant execute on function auth.uid() to authenticated;
   `);
   await db.exec(readFileSync("supabase/migrations/0001_init.sql", "utf8"));
+  await db.exec(readFileSync("supabase/migrations/0005_rules.sql", "utf8"));
   await db.exec(`
     insert into auth.users (id, email) values ('${A}', 'a@example.com'), ('${B}', 'b@example.com'), ('${C}', 'c@example.com');
     insert into public.horses (id, name, birth_year) values ('h1', '馬1', 2024), ('h2', '馬2', 2024), ('h3', '馬3', 2024);
+    insert into public.horses (id, name, birth_year, sex) values ('m1', '牡1', 2024, '牡'), ('m2', 'セ2', 2024, 'セ'), ('f1', '牝1', 2024, '牝'), ('f2', '牝2', 2024, '牝');
   `);
 });
 
@@ -121,5 +123,21 @@ describe("データベースのルール", () => {
     } finally {
       await db.exec(`reset role;`);
     }
+  });
+
+  it("牡馬・牝馬の頭数を超えられない（セン馬は牡馬）", async () => {
+    let g2 = "";
+    await as(C, async () => {
+      const r = await db.query<{ id: string }>(
+        `insert into groups (name, owner_id, crop_year, picks_per_member, season_start, season_end, rules)
+         values ('内訳', '${C}', 2024, 3, '2026-06-01', '2027-05-30', '{"male":1,"female":2}') returning id`);
+      g2 = r.rows[0].id;
+      await db.query(`insert into picks (group_id, user_id, horse_id) values ('${g2}', '${C}', 'm1')`);
+      await expect(db.query(`insert into picks (group_id, user_id, horse_id) values ('${g2}', '${C}', 'm2')`)).rejects.toThrow(/牡馬は1頭まで/);
+      await db.query(`insert into picks (group_id, user_id, horse_id) values ('${g2}', '${C}', 'f1')`);
+      await db.query(`insert into picks (group_id, user_id, horse_id) values ('${g2}', '${C}', 'f2')`);
+    });
+    const r = await db.query(`select * from picks where group_id = '${g2}'`);
+    expect(r.rows).toHaveLength(3);
   });
 });

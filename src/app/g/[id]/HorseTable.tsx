@@ -8,7 +8,7 @@ import Link from "next/link";
 
 /** 指名馬の一覧表（1頭1行。空き枠も表示する） */
 export function HorseSummaryTable({
-  groupId, scores, horseMap, results, includeNonJra, slots, marks,
+  groupId, scores, horseMap, results, includeNonJra, slots, marks, unit = "万円",
 }: {
   groupId: string;
   scores: HorseScore[];
@@ -17,6 +17,7 @@ export function HorseSummaryTable({
   includeNonJra: boolean;
   slots: number;
   marks?: HorseMarks;
+  unit?: string;
 }) {
   const thisYear = new Date().getFullYear();
   const empty = Math.max(0, slots - scores.length);
@@ -26,7 +27,7 @@ export function HorseSummaryTable({
         <thead>
           <tr>
             <th className="c">No</th><th>馬名</th><th className="c">性齢</th><th className="c">成績</th>
-            <th className="num">賞金</th><th className="num">直近</th>
+            <th className="num">{unit === "万円" ? "賞金" : "ポイント"}</th><th className="num">直近</th>
             <th className="num" title="中央のレースから計算した目安です">収得賞金</th>
             <th>厩舎</th><th>血統</th>
           </tr>
@@ -70,7 +71,7 @@ export function HorseSummaryTable({
 
 /** 指名馬ごとの成績一覧 */
 export function HorseTable({
-  groupId, scores, horseMap, results, includeNonJra, actions, slots, marks,
+  groupId, scores, horseMap, results, includeNonJra, actions, slots, marks, unit = "万円",
 }: {
   groupId: string;
   scores: HorseScore[];
@@ -80,11 +81,12 @@ export function HorseTable({
   actions?: (horseId: string) => React.ReactNode;
   slots?: number;
   marks?: HorseMarks;
+  unit?: string;
 }) {
   if (scores.length === 0 && !slots) return <div className="card muted">まだ指名馬がいません。</div>;
   return (
     <>
-      <HorseSummaryTable groupId={groupId} scores={scores} horseMap={horseMap} results={results} includeNonJra={includeNonJra} slots={slots ?? scores.length} marks={marks} />
+      <HorseSummaryTable groupId={groupId} scores={scores} horseMap={horseMap} results={results} includeNonJra={includeNonJra} slots={slots ?? scores.length} marks={marks} unit={unit} />
       {scores.length > 0 && <div className="sec-title"><h2>レースごとの成績</h2></div>}
       {scores.map((s) => {
         const h = horseMap.get(s.horse_id);
@@ -96,7 +98,8 @@ export function HorseTable({
                 <HorseLabel id={s.horse_id} horse={h} groupId={groupId} showTrainer marks={marks} />
               </div>
               <div className="hc-pts">
-                <strong>{formatMan(s.points)}</strong><span className="muted"> 万円</span>
+                <strong>{formatMan(s.points)}</strong><span className="muted"> {unit}</span>
+                {s.bonus > 0 && <div className="muted">うち重賞ボーナス {formatMan(s.bonus)}</div>}
                 {s.weekPoints > 0 && <div className="up">今週 +{formatMan(s.weekPoints)}</div>}
                 <div className="muted">{s.starts === 0 ? "未出走" : `${s.starts}戦${s.wins}勝`}</div>
                 {actions?.(s.horse_id)}

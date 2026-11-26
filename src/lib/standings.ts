@@ -1,9 +1,13 @@
 // ポイント集計（データベースに依存しない純粋な計算）
+import { rulesOf, scoreRace } from "./group-rules";
 
 export type Rules = {
   season_start: string; // YYYY-MM-DD
   season_end: string;
   include_non_jra: boolean;
+  /** 大会ごとのルール（groups.rules）。空なら今までどおり本賞金の合計 */
+  rules?: unknown;
+  picks_per_member?: number;
 };
 
 export type ResultRow = {
@@ -12,6 +16,8 @@ export type ResultRow = {
   prize_man: number;
   is_jra: boolean;
   finish: string | null;
+  race_name?: string | null;
+  surface?: string | null;
 };
 
 export type PickRow = { user_id: string; horse_id: string };
@@ -22,6 +28,8 @@ export type HorseScore = {
   weekPoints: number;
   starts: number;
   wins: number;
+  /** 重賞ボーナスの合計（points に含まれる） */
+  bonus: number;
 };
 
 export type MemberScore = {
@@ -35,6 +43,7 @@ export type MemberScore = {
 
 export function countsForRules(r: ResultRow, rules: Rules): boolean {
   if (r.race_date < rules.season_start || r.race_date > rules.season_end) return false;
+  if (rules.rules) return scoreRace(r, rulesOf(rules)).counted;
   return r.is_jra || rules.include_non_jra;
 }
 
@@ -46,16 +55,21 @@ export function isThisWeek(raceDate: string, today: string): boolean {
 }
 
 export function scoreHorse(horseId: string, results: ResultRow[], rules: Rules, today: string): HorseScore {
-  const s: HorseScore = { horse_id: horseId, points: 0, weekPoints: 0, starts: 0, wins: 0 };
+  const gr = rulesOf(rules);
+  const s: HorseScore = { horse_id: horseId, points: 0, weekPoints: 0, starts: 0, wins: 0, bonus: 0 };
   for (const r of results) {
-    if (r.horse_id !== horseId || !countsForRules(r, rules)) continue;
+    if (r.horse_id !== horseId || r.race_date < rules.season_start || r.race_date > rules.season_end) continue;
+    const sc = scoreRace(r, gr);
+    if (!sc.counted) continue;
     s.starts += 1;
     if (r.finish === "1") s.wins += 1;
-    s.points += r.prize_man;
-    if (isThisWeek(r.race_date, today)) s.weekPoints += r.prize_man;
+    s.points += sc.points;
+    s.bonus += sc.bonus;
+    if (isThisWeek(r.race_date, today)) s.weekPoints += sc.points;
   }
   s.points = round1(s.points);
   s.weekPoints = round1(s.weekPoints);
+  s.bonus = round1(s.bonus);
   return s;
 }
 
@@ -66,16 +80,18 @@ export function computeStandings(
   rules: Rules,
   today: string,
 ): MemberScore[] {
+  const bestN = rulesOf(rules).bestN;
   const scores: MemberScore[] = memberIds.map((user_id) => {
     const horses = picks
       .filter((p) => p.user_id === user_id)
       .map((p) => scoreHorse(p.horse_id, results, rules, today))
       .sort((a, b) => b.points - a.points);
+    const counted = bestN ? horses.slice(0, bestN) : horses;
     return {
       user_id,
       horses,
-      points: round1(horses.reduce((a, h) => a + h.points, 0)),
-      weekPoints: round1(horses.reduce((a, h) => a + h.weekPoints, 0)),
+      points: round1(counted.reduce((a, h) => a + h.points, 0)),
+      weekPoints: round1(counted.reduce((a, h) => a + h.weekPoints, 0)),
       wins: horses.reduce((a, h) => a + h.wins, 0),
       rank: 0,
     };

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getUser } from "@/lib/supabase/server";
 import { loadInvite } from "@/lib/invite";
+import { rulesOf, describeRules } from "@/lib/group-rules";
 
 const md = (d: string) => `${Number(d.slice(5, 7))}/${Number(d.slice(8, 10))}`;
 
@@ -34,6 +35,8 @@ export default async function Join({ params }: { params: Promise<{ code: string 
       </>
     );
   }
+  const rules = rulesOf(g);
+  const [, , ...pointLines] = describeRules(g, rules);
   const next = encodeURIComponent(`/join/${code}`);
   return (
     <>
@@ -49,8 +52,8 @@ export default async function Join({ params }: { params: Promise<{ code: string 
             <tr><th style={{ width: "8em", background: "var(--th)" }}>主催者</th><td>{g.owner_name}さん</td></tr>
             <tr><th style={{ background: "var(--th)" }}>参加者</th><td>{g.members}人</td></tr>
             <tr><th style={{ background: "var(--th)" }}>対象の世代</th><td>{g.crop_year}年生まれ</td></tr>
-            <tr><th style={{ background: "var(--th)" }}>指名頭数</th><td>1人{g.picks_per_member}頭</td></tr>
-            <tr><th style={{ background: "var(--th)" }}>ポイント</th><td>{g.include_non_jra ? "JRA＋地方・海外の本賞金" : "JRAの本賞金"}</td></tr>
+            <tr><th style={{ background: "var(--th)" }}>指名頭数</th><td>1人{g.picks_per_member}頭{rules.male !== null && `（牡馬${rules.male}頭・牝馬${rules.female}頭）`}</td></tr>
+            <tr><th style={{ background: "var(--th)" }}>ポイント</th><td>{pointLines.map((l) => <div key={l}>{l.replace(/^ポイント：/, "")}</div>)}</td></tr>
             <tr><th style={{ background: "var(--th)" }}>期間</th><td>{g.season_start.slice(0, 4)}/{md(g.season_start)} 〜 {g.season_end.slice(0, 4)}/{md(g.season_end)}</td></tr>
           </tbody>
         </table>
