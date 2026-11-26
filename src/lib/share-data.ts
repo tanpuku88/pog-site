@@ -14,7 +14,7 @@ export const loadShare = cache(async function loadShare(groupId: string, who: st
   const db = createAdminClient();
   const { data: group } = await db
     .from("groups")
-    .select("id, name, owner_id, crop_year, picks_per_member, season_start, season_end, include_non_jra")
+    .select("id, name, owner_id, crop_year, picks_per_member, season_start, season_end, include_non_jra, rules")
     .eq("id", groupId)
     .maybeSingle<Omit<Group, "invite_code">>();
   if (!group) return null;

@@ -3,6 +3,8 @@ import { inviteMessage } from "@/lib/invite";
 import { siteOrigin } from "@/lib/site-origin";
 import InviteShare from "@/components/InviteShare";
 import { updateRules, leaveGroup, resetInvite, deleteGroup } from "./actions";
+import RulesFields from "@/components/RulesFields";
+import { rulesOf } from "@/lib/group-rules";
 
 export default async function Settings({ params, searchParams }: {
   params: Promise<{ id: string }>;
@@ -10,7 +12,8 @@ export default async function Settings({ params, searchParams }: {
 }) {
   const { id } = await params;
   const sp = await searchParams;
-  const { group, user } = await requireGroup(id);
+  const { group, user, supabase } = await requireGroup(id);
+  const { count: pickCount } = await supabase.from("picks").select("horse_id", { count: "exact", head: true }).eq("group_id", id);
   const inviteUrl = `${await siteOrigin()}/join/${group.invite_code}`;
   const isOwner = group.owner_id === user.id;
 
@@ -35,18 +38,8 @@ export default async function Settings({ params, searchParams }: {
           <strong>ルール</strong>
           <label htmlFor="name">グループ名</label>
           <input id="name" name="name" defaultValue={group.name} maxLength={40} />
-          <label htmlFor="picks">1人あたりの指名頭数</label>
-          <input id="picks" name="picks_per_member" type="number" min={1} max={50} defaultValue={group.picks_per_member} />
-          <label htmlFor="crop">対象の世代（生まれ年）</label>
-          <input id="crop" name="crop_year" type="number" defaultValue={group.crop_year} />
-          <label htmlFor="start">集計開始日</label>
-          <input id="start" name="season_start" type="date" defaultValue={group.season_start} />
-          <label htmlFor="end">集計終了日</label>
-          <input id="end" name="season_end" type="date" defaultValue={group.season_end} />
-          <label style={{ display: "flex", gap: 8, alignItems: "center" }}>
-            <input type="checkbox" name="include_non_jra" defaultChecked={group.include_non_jra} style={{ width: "auto" }} />
-            地方・海外の賞金もポイントに含める
-          </label>
+          <RulesFields picks={group.picks_per_member} cropYear={group.crop_year} seasonStart={group.season_start} seasonEnd={group.season_end} rules={rulesOf(group)} collapsed={!!group.rules} />
+          {(pickCount ?? 0) > 0 && <p className="muted">すでに{pickCount}頭が指名されています。ルールを変えると、順位はすぐに新しいルールで計算し直されます。牡馬・牝馬の頭数の変更は、これからの指名にだけ効きます。</p>}
           <p><button>保存する</button></p>
         </form>
       ) : (

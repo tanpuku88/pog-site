@@ -8,6 +8,7 @@ import { shareText } from "@/lib/share";
 import { formatMan } from "@/lib/util";
 import { HorseLabel, Finish, Rank, MarkLegend } from "@/components/HorseLabel";
 import { groupBoardMarks } from "@/lib/horse-marks-server";
+import { rulesOf, pointUnit, describeRules } from "@/lib/group-rules";
 
 export default async function Ranking({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ joined?: string }> }) {
   const { id } = await params;
@@ -22,6 +23,8 @@ export default async function Ranking({ params, searchParams }: { params: Promis
     .sort()
     .at(-1);
 
+  const rules = rulesOf(group);
+  const unit = pointUnit(rules);
   const owner = new Map(picks.map((p) => [p.horse_id as string, p.user_id as string]));
   const me = standings.find((s) => s.user_id === user.id);
   const leader = standings[0];
@@ -56,17 +59,17 @@ export default async function Ranking({ params, searchParams }: { params: Promis
       <div className="stats">
         <div className="stat">
           <div className="k">首位</div>
-          <div className="v">{leader && leader.points > 0 ? formatMan(leader.points) : "-"}<small>万円</small></div>
-          <div className="s">{leader && leader.points > 0 ? names.get(leader.user_id) : "まだ賞金なし"}</div>
+          <div className="v">{leader && leader.points > 0 ? formatMan(leader.points) : "-"}<small>{unit}</small></div>
+          <div className="s">{leader && leader.points > 0 ? names.get(leader.user_id) : "まだポイントなし"}</div>
         </div>
         <div className="stat">
           <div className="k">自分の順位</div>
           <div className="v">{me ? me.rank : "-"}<small>位 / {standings.length}人</small></div>
-          <div className="s">{me ? `${formatMan(me.points)}万円` : ""}</div>
+          <div className="s">{me ? `${formatMan(me.points)}${unit}` : ""}</div>
         </div>
         <div className="stat">
           <div className="k">稼ぎ頭</div>
-          <div className="v">{topHorse && topHorse.points > 0 ? formatMan(topHorse.points) : "-"}<small>万円</small></div>
+          <div className="v">{topHorse && topHorse.points > 0 ? formatMan(topHorse.points) : "-"}<small>{unit}</small></div>
           <div className="s">{topHorse && topHorse.points > 0 ? horseMap.get(topHorse.horse_id)?.name : "まだいません"}</div>
         </div>
         <div className="stat">
@@ -76,14 +79,14 @@ export default async function Ranking({ params, searchParams }: { params: Promis
         </div>
       </div>
 
-      <div className="sec-title"><h2>順位表</h2><span className="muted">本賞金（万円）の合計</span></div>
+      <div className="sec-title"><h2>順位表</h2><span className="muted">{rules.base === "prize" ? `本賞金${rules.gradeBonus.G1 > 0 ? "＋重賞ボーナス" : ""}（万円）` : "着順ポイント"}の合計{rules.bestN ? `（上位${rules.bestN}頭）` : ""}</span></div>
       <div className="card flush scroll">
         <table className="list">
           <thead>
             <tr>
               <th className="c">順位</th>
               <th>参加者</th>
-              <th className="num">賞金</th>
+              <th className="num">{unit === "万円" ? "賞金" : "ポイント"}</th>
               <th className="num hide-sm">今週</th>
               <th className="num">勝利</th>
               <th className="num hide-sm">出走頭数</th>
@@ -148,6 +151,14 @@ export default async function Ranking({ params, searchParams }: { params: Promis
         </div>
         </>
       )}
+
+      <details className="card">
+        <summary style={{ cursor: "pointer" }}><strong>この大会のルール</strong></summary>
+        <ul style={{ margin: "8px 0 0", paddingLeft: "1.2em" }}>
+          {describeRules(group, rules).map((l) => <li key={l}>{l}</li>)}
+        </ul>
+        {group.owner_id === user.id && <p className="muted" style={{ margin: "8px 0 0" }}><Link href={`/g/${id}/settings`}>ルールを変える ›</Link></p>}
+      </details>
 
       <p className="muted">
         「今週」は直近7日間の増加分です。

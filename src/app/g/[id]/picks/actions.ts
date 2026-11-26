@@ -6,6 +6,7 @@ import { syncHorse, searchNetkeiba } from "@/lib/horse-sync";
 import { extractHorseId } from "@/lib/netkeiba/fetch";
 import { normalizeQuery } from "@/lib/kana";
 import { loadPopularIds } from "@/lib/horse-marks-server";
+import { rulesOf, sexSlot } from "@/lib/group-rules";
 
 export type Candidate = {
   id: string;
@@ -24,7 +25,7 @@ async function context(groupId: string) {
   const { supabase, user } = await getUser();
   if (!user) throw new Error("ログインしてください");
   const { data: group } = await supabase
-    .from("groups").select("id, crop_year").eq("id", groupId).maybeSingle();
+    .from("groups").select("id, crop_year, picks_per_member, include_non_jra, rules").eq("id", groupId).maybeSingle();
   if (!group) throw new Error("グループが見つかりません");
   return { supabase, user, group };
 }
@@ -84,16 +85,18 @@ async function insertPick(groupId: string, horseId: string): Promise<PickResult>
   const { supabase, user, group } = await context(groupId);
   const admin = createAdminClient();
   const { data: horse } = await admin
-    .from("horses").select("id, name, birth_year, sire, results_fetched_at").eq("id", horseId).maybeSingle();
+    .from("horses").select("id, name, sex, birth_year, sire, results_fetched_at").eq("id", horseId).maybeSingle();
 
   // 初めて指名される馬（または血統が空の馬）は、血統と成績をnetkeibaから取り込む
   let name = horse?.name ?? horseId;
   let birthYear = horse?.birth_year ?? null;
+  let sex: string | null = horse?.sex ?? null;
   if (!horse || !horse.results_fetched_at || !horse.sire) {
     try {
       const { profile } = await syncHorse(admin, horseId);
       name = profile.name;
       birthYear = profile.birth_year;
+      sex = profile.sex ?? sex;
     } catch {
       return { ok: false, message: "netkeibaから馬の情報を取得できませんでした。少し待ってからもう一度お試しください。" };
     }
@@ -101,6 +104,9 @@ async function insertPick(groupId: string, horseId: string): Promise<PickResult>
   if (birthYear !== null && birthYear !== group.crop_year) {
     return { ok: false, message: `${name}は${birthYear}年生まれなので、このグループ（${group.crop_year}年生まれ世代）では指名できません。` };
   }
+
+  const limit = await sexLimitMessage(admin, group, user.id, name, sex);
+  if (limit) return { ok: false, message: limit };
 
   const { error } = await supabase.from("picks").insert({ group_id: groupId, user_id: user.id, horse_id: horseId });
   if (error) {
@@ -110,6 +116,26 @@ async function insertPick(groupId: string, horseId: string): Promise<PickResult>
   }
   revalidatePath(`/g/${groupId}`, "layout");
   return { ok: true, message: `${name}を指名しました。` };
+}
+
+/** 牡馬・牝馬の頭数が決まっている大会で、枠が埋まっていればメッセージを返す */
+async function sexLimitMessage(
+  admin: ReturnType<typeof createAdminClient>,
+  group: { id: string; picks_per_member: number; include_non_jra: boolean; rules: unknown },
+  userId: string, name: string, sex: string | null,
+): Promise<string | null> {
+  const rules = rulesOf(group);
+  if (rules.male === null || rules.female === null) return null;
+  const slot = sexSlot(sex);
+  if (!slot) return null;
+  const { data: mine } = await admin.from("picks").select("horse_id").eq("group_id", group.id).eq("user_id", userId);
+  const ids = (mine ?? []).map((p) => p.horse_id as string);
+  const { data: hs } = ids.length ? await admin.from("horses").select("sex").in("id", ids) : { data: [] };
+  const used = (hs ?? []).filter((h) => sexSlot(h.sex as string | null) === slot).length;
+  const cap = slot === "male" ? rules.male : rules.female;
+  if (used < cap) return null;
+  const label = slot === "male" ? "牡馬" : "牝馬";
+  return `${name}は${label}です。この大会は${label}${cap}頭までなので、${label}の枠はもう埋まっています。`;
 }
 
 export async function addPick(groupId: string, horseId: string): Promise<PickResult> {

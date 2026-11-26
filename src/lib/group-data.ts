@@ -15,6 +15,8 @@ export type Group = {
   season_end: string;
   include_non_jra: boolean;
   invite_code: string;
+  /** 大会ごとのルール（JSON）。2026年の大会は null */
+  rules: unknown;
 };
 
 export type Horse = {
@@ -88,7 +90,7 @@ export async function fetchAllResults(
   for (let from = 0; ; from += PAGE) {
     const { data, error } = await supabase
       .from("race_results")
-      .select("horse_id, race_date, venue, race_name, race_id, finish, prize_man, is_jra")
+      .select("horse_id, race_date, venue, race_name, race_id, finish, prize_man, is_jra, surface")
       .in("horse_id", horseIds)
       .gte("race_date", group.season_start)
       .lte("race_date", group.season_end)
