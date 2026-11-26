@@ -101,33 +101,53 @@ export default async function Shinba() {
   for (const r of rankedRaces.flat()) if (r.isPick) pickIds.add(`${r.item.race_id}:${r.item.horse_id}`);
   const highlights = shinbaHighlights(rankedRaces, 5);
 
+  const totalRaces = [...days.values()].reduce((n, races) => n + races.size, 0);
+
   return (
     <>
-      <h1 id="top">今週の新馬戦</h1>
-      <p className="muted" style={{ marginTop: -8 }}>
-        中央・地方の新馬戦（門別のフレッシュチャレンジを含む）に出走する馬の一覧です。出馬表が出たら毎日夕方に更新します。指名数はこのサイトの全グループの合計です。
-      </p>
-      <p className="muted" style={{ marginTop: -8 }}>
-        「狙い目」は父・母父の勝ち上がり率、厩舎の仕上がり・勝ち上がり傾向に、今の世代のデビュー戦での騎手の成績を加えたスコア（100点満点）です。騎手が未定のうちは騎手なしで計算し、決まり次第反映します。
-      </p>
+      <section className="sb-hero" id="top">
+        <p className="sb-kicker">SHINBA PICKS</p>
+        <h1>今週の新馬戦</h1>
+        <p className="sb-lead">中央・地方の新馬戦（門別のフレッシュチャレンジを含む）の出走馬を、血統・厩舎・騎手のデータでスコア化。出馬表が出たら毎日夕方に更新します。</p>
+        <div className="sb-stats">
+          <div className="sb-stat"><b>{totalRaces}</b><span>レース</span></div>
+          <div className="sb-stat"><b>{entries.length}</b><span>出走馬</span></div>
+          <div className="sb-stat"><b>{pickIds.size}</b><span>狙い目🎯</span></div>
+          <div className="sb-stat"><b>{highlights[0]?.score.score ?? "-"}</b><span>最高スコア</span></div>
+        </div>
+        <div className="sb-factors" aria-label="スコアの材料">
+          <span>父の勝ち上がり率</span><span>厩舎の仕上がり</span><span>厩舎の勝ち上がり</span><span>騎手の新馬戦成績</span><span>母父の勝ち上がり率</span>
+        </div>
+        <details className="sb-howto">
+          <summary>スコアの見方</summary>
+          <p>「狙い目」は上の5つの材料を100点満点で計算したスコアです。65点以上で、そのレースの上位2頭までが🎯になります。騎手が未定のうちは騎手なしで計算し、決まり次第反映します。指名数はこのサイトの全グループの合計です（誰が指名したかは表示しません）。</p>
+        </details>
+      </section>
       {highlights.length > 0 && (
-        <div className="card" style={{ marginBottom: 12 }}>
-          <strong>今週の狙い目</strong>
-          <ul style={{ margin: "8px 0 0", paddingLeft: 18 }}>
-            {highlights.map((r) => {
+        <section className="sb-picks-sec">
+          <div className="sec-title"><h2>今週の狙い目 TOP{highlights.length}</h2><span className="muted">スコア順</span></div>
+          <div className="sb-picks">
+            {highlights.map((r, i) => {
               const h = horseMap.get(r.item.horse_id);
               const d = new Date(`${r.item.race_date}T00:00:00Z`);
               return (
-                <li key={r.item.horse_id} style={{ marginBottom: 4 }}>
-                  <span className="muted">{d.getUTCMonth() + 1}/{d.getUTCDate()} {r.item.venue}{r.item.race_no}R　</span>
-                  <Link className="horse-name" href={`/horse/${r.item.horse_id}`}>{h?.name ?? r.item.horse_id}</Link>
-                  <span className="big">　スコア{r.score.score}</span>
-                  {r.score.reasons.length > 0 && <div className="muted" style={{ fontSize: 12 }}>{r.score.reasons.join("。")}。</div>}
-                </li>
+                <article className={`sb-pick-card${i === 0 ? " is-top" : ""}`} key={`${r.item.race_id}:${r.item.horse_id}`}>
+                  <div className="sb-pick-head">
+                    <span className={`rk rk-${i + 1}`}>{i + 1}</span>
+                    <span className="sb-pick-meta">{d.getUTCMonth() + 1}/{d.getUTCDate()}（{WEEK[d.getUTCDay()]}）{r.item.venue}{r.item.race_no}R{r.item.post_time ? ` ${r.item.post_time}` : ""}</span>
+                  </div>
+                  <Link className="sb-pick-name" href={`/horse/${r.item.horse_id}`}>{h?.name ?? r.item.horse_id}</Link>
+                  <div className="sb-pick-sub">{h?.sire ? `父 ${h.sire}` : ""}{h?.trainer ? `　${h.trainer}厩舎` : ""}{r.item.jockey ? `　${r.item.jockey}騎手` : ""}</div>
+                  <div className="sb-score-row">
+                    <span className="sb-score-num">{r.score.score}<small>点</small></span>
+                    <span className="progress sb-bar"><span style={{ width: `${r.score.score ?? 0}%` }} /></span>
+                  </div>
+                  {r.score.reasons.length > 0 && <p className="sb-reasons">{r.score.reasons.join("。")}。</p>}
+                </article>
               );
             })}
-          </ul>
-        </div>
+          </div>
+        </section>
       )}
       {days.size > 0 && (
         <nav className="race-jump" aria-label="レースへ移動">
@@ -174,25 +194,26 @@ export default async function Shinba() {
                         {list.map((e) => {
                           const h = horseMap.get(e.horse_id);
                           const n = picks.get(e.horse_id) ?? 0;
+                          const s = scoreOf.get(`${e.race_id}:${e.horse_id}`);
+                          const isPick = pickIds.has(`${e.race_id}:${e.horse_id}`);
                           return (
-                            <tr key={e.horse_id}>
+                            <tr key={e.horse_id} className={isPick ? "sb-pickrow" : undefined}>
                               <td>
                                 <HorseLabel id={e.horse_id} horse={h} marks={marks} />
                               </td>
                               <td className="hide-sm sub">{h?.trainer ?? ""}</td>
                               <td className="hide-sm sub">{e.jockey ?? <span className="muted">未定</span>}</td>
-                              <td>
-                                {(() => {
-                                  const s = scoreOf.get(`${e.race_id}:${e.horse_id}`);
-                                  if (!s || s.score === null) return <span className="muted">-</span>;
-                                  return (
-                                    <>
-                                      {pickIds.has(`${e.race_id}:${e.horse_id}`) && <span className="big">🎯狙い目　</span>}
-                                      <span>{s.score}点</span>
-                                      {s.reasons.length > 0 && <div className="muted" style={{ fontSize: 12 }}>{s.reasons.join("。")}。</div>}
-                                    </>
-                                  );
-                                })()}
+                              <td className="sb-score-cell">
+                                {!s || s.score === null ? <span className="muted">-</span> : (
+                                  <>
+                                    <span className="sb-score-line">
+                                      <span className="sb-score-val">{s.score}<small>点</small></span>
+                                      {isPick && <span className="sb-pick-pill">🎯 狙い目</span>}
+                                    </span>
+                                    <span className="progress sb-bar"><span style={{ width: `${s.score}%` }} /></span>
+                                    {s.reasons.length > 0 && <span className="sb-reasons">{s.reasons.join("。")}。</span>}
+                                  </>
+                                )}
                               </td>
                               <td className="num">{n > 0 ? <span className="big">{n}</span> : <span className="muted">-</span>}</td>
                             </tr>
