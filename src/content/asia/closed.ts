@@ -34,6 +34,7 @@ export const CLOSED: ClosedTrack[] = [
     flag: "my",
     years: "1864年〜2025年5月31日",
     body: ["1864年創立のペナン・ターフクラブは、2025年5月31日の開催を最後に閉場しました。マレーシアの競馬はセランゴールとペラで続いています。"],
+    photo: CLOSED_PHOTOS.penang,
     source: { label: "Wikipedia ペナン・ターフクラブ", url: "https://en.wikipedia.org/wiki/Penang_Turf_Club" },
   },
   {
@@ -41,6 +42,7 @@ export const CLOSED: ClosedTrack[] = [
     flag: "th",
     years: "〜2018年9月16日",
     body: ["バンコクのナーンルーン競馬場は2018年9月16日のレースを最後に閉場し、跡地はラーマ9世記念公園になりました。バンコクでは王立バンコク・スポーツクラブの競馬が続いています。"],
+    photo: CLOSED_PHOTOS.nangloeng,
     source: { label: "Wikipedia タイ王立競馬場", url: "https://en.wikipedia.org/wiki/Royal_Turf_Club_of_Thailand" },
   },
 ];

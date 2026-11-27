@@ -3,7 +3,7 @@ import type { Photo } from "./types";
 // 写真はすべて Wikimedia Commons の自由ライセンス（CC BY / CC BY-SA / CC0 / パブリックドメイン）。
 // 画像は Wikimedia のサーバーから直接表示し、撮影者とライセンスをページに表示する。
 // 2026-11-22 に Commons でライセンスを確認し、競馬場の写真であることを目で確かめて選んだ。
-// 名古屋競馬場は2022年に弥富市へ移転しており、Commons には旧競馬場の写真しかないため載せていない。
+// 名古屋競馬場は2022年に弥富市へ移転。移転後のスタンド写真（弥富市駒野町）が Commons にあったため掲載（2026-11-28確認）。
 
 const U = "https://upload.wikimedia.org/wikipedia/commons/";
 const page = (name: string) => `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(name.replace(/ /g, "_"))}`;
@@ -97,6 +97,9 @@ export const KEIBAJO_PHOTOS: Record<string, Photo[]> = {
   kasamatsu: [
     p("e/ea/Kasamatsu_racecourse.jpg", "Kasamatsu racecourse.jpg", "笠松競馬場のコース（2014年）", "Unmaokur", "CC BY-SA 3.0"),
     p("6/66/Kasamatsu_racecourse_entrance.jpg", "Kasamatsu racecourse entrance.jpg", "笠松競馬場の入口（2014年）", "Unmaokur", "CC BY-SA 3.0"),
+  ],
+  nagoya: [
+    p("2/2d/Nagoya_race_course_newstand.jpg", "Nagoya race course newstand.jpg", "弥富市へ移転した名古屋競馬場のスタンド（2022年）", "Wata0929", "CC BY-SA 4.0"),
   ],
   sonoda: [
     p("9/9e/Sonoda-Racecourse-2.jpg", "Sonoda-Racecourse-2.jpg", "園田競馬場のスタンド（2009年）", "Cake6", "CC BY-SA 3.0", false),
