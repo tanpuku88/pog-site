@@ -53,6 +53,15 @@ export default function JyogaiHaishi() {
             {c.name} <span className={`kj-badge ${c.org === "JRA" ? "jra" : "nar"}`}>{c.org}</span>
           </h3>
           <p className="muted" style={{ marginTop: 0 }}>{c.pref}{c.city}｜{c.brand}｜{c.years}</p>
+          {c.photos?.[0] && (
+            <figure style={{ margin: "0 0 10px" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={c.photos[0].src} alt={c.photos[0].alt} style={{ width: "100%", maxWidth: 560, borderRadius: 8, display: "block" }} loading="lazy" decoding="async" />
+              <figcaption className="muted" style={{ fontSize: 11.5, marginTop: 4 }}>
+                {c.photos[0].alt}｜{c.photos[0].credit}（{c.photos[0].license}）／<a href={c.photos[0].page} target="_blank" rel="noreferrer">出典ページ</a>
+              </figcaption>
+            </figure>
+          )}
           {c.body.map((p, i) => <p key={i} style={i === c.body.length - 1 ? { marginBottom: 0 } : undefined}>{p}</p>)}
           <p className="muted" style={{ marginBottom: 0, fontSize: 12 }}>出典：<a href={c.source.url} target="_blank" rel="noreferrer">{c.source.label}</a></p>
         </div>
