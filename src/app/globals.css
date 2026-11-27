@@ -270,6 +270,12 @@ table.list.compact td { padding: 5px 10px; font-size: 13px; }
 .official-actions { flex: none; display: flex; flex-direction: column; align-items: center; gap: 7px; }
 .official-actions .btn { background: var(--gold); color: #1b1400; font-size: 15px; padding: 10px 22px; white-space: nowrap; }
 .official-joined { font-size: 11.5px; opacity: .85; }
+.official-goal { margin-top: 12px; max-width: 430px; }
+.official-goal-label { display: flex; justify-content: space-between; gap: 10px; font-size: 12px; opacity: .95; margin-bottom: 5px; flex-wrap: wrap; }
+.official-goal-label b { color: #ffd966; font-size: 14px; }
+.official-goal-bar { height: 8px; background: rgba(255,255,255,.16); border-radius: 4px; overflow: hidden; }
+.official-goal-bar > span { display: block; height: 100%; background: linear-gradient(90deg, #d4a514, #ffd966); border-radius: 4px; min-width: 3px; }
+.lead .official-goal { margin-top: 10px; }
 @media (max-width: 560px) {
   .official-card { flex-direction: column; align-items: stretch; gap: 12px; padding: 16px; }
   .official-name { font-size: 20px; }
