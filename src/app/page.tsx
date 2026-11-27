@@ -71,8 +71,10 @@ export default async function Home() {
             <p>馬名を数文字入れるだけで指名完了。成績・賞金・順位はサイトが自動で集計します。招待リンクをLINEで送れば、仲間はそのまま参加できます。</p>
             <div className="lead-actions">
               <Link href="/login?mode=signup" className="btn gold">無料で大会を作る</Link>
+              <Link href={OFFICIAL_POG.joinPath} className="btn navy">公式POGに参加する</Link>
               <Link href="/guide" className="btn ghost">使い方を見る</Link>
             </div>
+            <p className="lead-official-note">公式大会「たんぷくPOG 2026-27」は参加受付中。登録するとそのまま参加できます。</p>
           </div>
           <ul className="lead-points">
             <li><b>かんたん登録</b>馬名・父・母で検索、URL貼り付け、まとめて登録</li>
