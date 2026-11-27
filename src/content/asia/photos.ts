@@ -96,4 +96,6 @@ export const PHOTOS: Record<string, Photo[]> = {
 export const CLOSED_PHOTOS = {
   singapore: p("d/de", "Kranji_Racecourse_05-12-2024.jpg", "シンガポールのクランジ競馬場（2024年撮影）", "LN9267", "CC BY-SA 4.0"),
   macau: p("6/6e", "Macau_Jockey_Club_Racecourse2021.jpg", "タイパ島のマカオ競馬場（2021年）", "Charlie fong", "CC BY-SA 4.0"),
+  penang: p("9/93", "Penang_Turf_Club_in_2025.jpg", "空から見たペナン競馬場（2025年、閉場の年）", "HundenvonPenang", "CC BY-SA 4.0"),
+  nangloeng: p("3/31", "Nang_Loeng_horse_race.jpg", "ナーンルーン競馬場（タイ王立競馬場）のレース", "France Sire", "CC BY 3.0"),
 };
