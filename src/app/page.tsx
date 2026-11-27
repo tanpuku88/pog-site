@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getUser } from "@/lib/supabase/server";
 import { HomeBoard, Columns, PickupNote } from "@/components/HomeSections";
 import { OFFICIAL_POG } from "@/config/site";
+import { loadInvite } from "@/lib/invite";
 
 type HomeGroup = { id: string; name: string; crop_year: number; season_start: string; season_end: string };
 
@@ -10,7 +11,22 @@ const fmtDay = (iso: string) => {
   return `${d.getUTCFullYear()}年${d.getUTCMonth() + 1}月${d.getUTCDate()}日`;
 };
 
-function OfficialCard({ group }: { group: HomeGroup | null }) {
+/** 公式POGの参加者数と目標（1,000人）までの進み具合 */
+function MemberGoal({ members }: { members: number }) {
+  const goal = OFFICIAL_POG.memberGoal;
+  const pct = Math.min(100, Math.round((members / goal) * 1000) / 10);
+  return (
+    <div className="official-goal">
+      <div className="official-goal-label">
+        <span>参加者 <b>{members.toLocaleString()}人</b></span>
+        <span>目標{goal.toLocaleString()}人まで あと{Math.max(0, goal - members).toLocaleString()}人</span>
+      </div>
+      <div className="official-goal-bar"><span style={{ width: `${pct}%` }} /></div>
+    </div>
+  );
+}
+
+function OfficialCard({ group, members }: { group: HomeGroup | null; members: number | null }) {
   return (
     <section className="official-card">
       <div className="official-main">
@@ -21,6 +37,7 @@ function OfficialCard({ group }: { group: HomeGroup | null }) {
           {group && <>｜{group.crop_year}年生まれ世代｜{fmtDay(group.season_start)}〜{fmtDay(group.season_end)}</>}
         </p>
         <p className="official-blurb">{OFFICIAL_POG.blurb}</p>
+        {members !== null && <MemberGoal members={members} />}
       </div>
       <div className="official-actions">
         {group ? (
@@ -61,6 +78,14 @@ function QuickMenu() {
 
 export default async function Home() {
   const { supabase, user } = await getUser();
+  // 公式POGの公開情報（招待コード経由）。指定IDと一致したときだけ使う
+  let officialInvite: Awaited<ReturnType<typeof loadInvite>> = null;
+  try {
+    const inv = await loadInvite(OFFICIAL_POG.joinCode);
+    if (inv && inv.id === OFFICIAL_POG.groupId) officialInvite = inv;
+  } catch {
+    officialInvite = null;
+  }
   if (!user) {
     return (
       <>
@@ -74,7 +99,14 @@ export default async function Home() {
               <Link href={OFFICIAL_POG.joinPath} className="btn navy">公式POGに参加する</Link>
               <Link href="/guide" className="btn ghost">使い方を見る</Link>
             </div>
-            <p className="lead-official-note">公式大会「たんぷくPOG 2026-27」は参加受付中。登録するとそのまま参加できます。</p>
+            {officialInvite ? (
+              <>
+                <p className="lead-official-note">公式大会「{officialInvite.name}」は参加受付中。登録するとそのまま参加できます。</p>
+                <MemberGoal members={officialInvite.members} />
+              </>
+            ) : (
+              <p className="lead-official-note">公式大会「たんぷくPOG 2026-27」は参加受付中。登録するとそのまま参加できます。</p>
+            )}
           </div>
           <ul className="lead-points">
             <li><b>かんたん登録</b>馬名・父・母で検索、URL貼り付け、まとめて登録</li>
@@ -97,12 +129,12 @@ export default async function Home() {
   const groups = (memberships ?? [])
     .map((m) => m.groups as unknown as HomeGroup | null)
     .filter((g): g is HomeGroup => !!g);
-  const official = groups.find((g) => g.name.includes(OFFICIAL_POG.nameIncludes)) ?? null;
+  const official = groups.find((g) => g.id === OFFICIAL_POG.groupId) ?? groups.find((g) => g.name.includes(OFFICIAL_POG.nameIncludes)) ?? null;
   const others = official ? groups.filter((g) => g.id !== official.id) : groups;
 
   return (
     <>
-      <OfficialCard group={official} />
+      <OfficialCard group={official} members={officialInvite?.members ?? null} />
       <div className="sec-title" style={{ marginTop: 8 }}>
         <h2>参加中の大会</h2>
         <Link href="/groups/new">＋ 新しい大会を作る</Link>
