@@ -49,6 +49,8 @@ export type ClosedFacility = {
   /** 営業期間・閉鎖時期 */
   years: string;
   body: string[];
+  /** 施設や周辺の写真（Wikimedia Commons の自由ライセンス） */
+  photos?: Photo[];
   source: Source;
 };
 
