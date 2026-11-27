@@ -33,6 +33,15 @@ export const PICKUP_NOTE = {
   ],
 };
 
+/** 公式POG（たんぷくPOG）。トップで紹介カードを出すための情報。
+ *  参加中かどうかは大会名に nameIncludes を含むかで判定する。招待コードが変わったら joinPath を直す。 */
+export const OFFICIAL_POG = {
+  nameIncludes: "たんぷくPOG",
+  joinPath: "/join/1656c6a66b87",
+  host: "たんぷく88",
+  blurb: "このサイトの公式大会です。指名馬の本賞金合計で競い、順位は毎晩自動で更新されます。新馬戦の狙い目やPOGデータも使って、ダービーまで一緒に楽しみましょう。",
+};
+
 /** 公開URL（検索エンジン向けのリンクやサイトマップに使う） */
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://pog-site.vercel.app").replace(/\/$/, "");
 export const SITE_NAME = "POG（ペーパーオーナーゲーム）";
