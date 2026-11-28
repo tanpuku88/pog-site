@@ -15,6 +15,12 @@ export const RECOMMENDED_SITES: RecommendedSite[] = [
     desc: "ウイニングポストのデータ検証や血統・産駒分析が充実したサイト。POGドラフト向けの記事もあり、指名馬選びの参考になります。",
   },
   {
+    name: "元美浦トラックマンの競馬血統ブログ",
+    url: "https://blood-keiba.themedia.jp/",
+    label: "血統",
+    desc: "競馬専門紙の元美浦トラックマン・高田湊都さんのブログ。血統・配合論を中心に読み解き、クラブ馬POGの主催もしています。血統から指名馬を探したいときに。",
+  },
+  {
     name: "まとまり系競馬サロン Mラジ",
     url: "https://keiba-mradio.com/",
     label: "ラジオ",
