@@ -61,7 +61,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <div className="footer-sv">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <Link href="/supervisor"><img src={SUPERVISOR.avatar} alt="" width={24} height={24} />監修：{SUPERVISOR.name}</Link>
-              <a href="https://www.keibanomiryoku.com/" target="_blank" rel="noreferrer">競馬の魅力 ↗</a>
               {OWNER_SITES.map((s) => (
                 <a key={s.url} href={s.url} target="_blank" rel="noreferrer">{s.name} ↗</a>
               ))}
