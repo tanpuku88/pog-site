@@ -8,7 +8,11 @@ import { cropOfArea, KINDS } from "@/lib/connections";
 import { AreaTabs } from "@/components/AreaTabs";
 import { AREA_LABEL, areaHref, parseArea } from "@/lib/area";
 
-export const metadata = { title: "種牡馬ランキング | POG" };
+export const metadata = {
+  title: "種牡馬ランキング",
+  description: "2歳馬の父（種牡馬）ごとの勝ち上がり率・本賞金・指名数をランキング。POGの指名馬選びに効く種牡馬データを、中央・地方まとめて集計しています。",
+  alternates: { canonical: "/sires" },
+};
 export const revalidate = 3600;
 
 type K = { points: number; picks: number; winners: number; horses: number; earned: number; aei: number | null };

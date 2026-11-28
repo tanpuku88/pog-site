@@ -9,7 +9,7 @@ import { DataTabs } from "@/components/DataTabs";
 
 export const revalidate = 3600;
 export const metadata = {
-  title: `セリ価格と回収率 ${defaultSeason().crop_year}年生まれ2歳馬｜セレクトセールの馬は稼いでいる？ | POG`,
+  title: `セリ価格と回収率 ${defaultSeason().crop_year}年生まれ2歳馬｜セレクトセールの馬は稼いでいる？`,
   description: "2歳馬のセリ落札価格・一口クラブの募集総額と、今シーズンの本賞金を比べた回収率。高額馬の今、回収率の高い馬、種牡馬・生産牧場・馬主ごとの回収率をまとめています。",
   alternates: { canonical: "/data/sales" },
 };
