@@ -27,6 +27,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/horses`, changeFrequency: "weekly", priority: 0.5 },
     { url: `${SITE_URL}/guide`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${SITE_URL}/supervisor`, changeFrequency: "monthly", priority: 0.4 },
+    { url: `${SITE_URL}/links`, changeFrequency: "monthly", priority: 0.4 },
     { url: `${SITE_URL}/keibajo`, changeFrequency: "monthly", priority: 0.6 },
     ...TRACKS.map((t) => ({ url: `${SITE_URL}/keibajo/${t.slug}`, lastModified: new Date(t.updated), changeFrequency: "monthly" as const, priority: 0.6 })),
     { url: `${SITE_URL}/keibajo/haishi`, changeFrequency: "monthly", priority: 0.5 },
