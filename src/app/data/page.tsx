@@ -11,7 +11,7 @@ import { AREA_LABEL, areaHref, parseArea } from "@/lib/area";
 
 export const revalidate = 3600;
 export const metadata = {
-  title: `POGデータ ${defaultSeason().crop_year}年生まれ2歳馬｜種牡馬・厩舎・馬主・生産牧場 | POG`,
+  title: `POGデータ ${defaultSeason().crop_year}年生まれ2歳馬｜種牡馬・厩舎・馬主・生産牧場`,
   description: "POGのドラフトの参考に。種牡馬・厩舎・馬主・生産牧場ごとの2歳馬の勝ち上がり率・賞金・指名数をまとめています。",
   alternates: { canonical: "/data" },
 };

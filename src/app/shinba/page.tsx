@@ -14,7 +14,11 @@ import { defaultSeason } from "@/lib/standings";
 import { rankShinbaRace, scoreShinbaHorse, shinbaHighlights, type ShinbaScore } from "@/lib/shinba-picks";
 import { jockeyData } from "@/lib/jockey-data";
 
-export const metadata = { title: "今週の新馬戦 | POG" };
+export const metadata = {
+  title: "今週の新馬戦",
+  description: "今週デビューする2歳馬を、父・母父の勝ち上がり率、厩舎の仕上がり、騎手の新馬戦成績からスコア化した「狙い目」と一緒に一覧。POGの指名馬選びの参考に。",
+  alternates: { canonical: "/shinba" },
+};
 
 const WEEK = ["日", "月", "火", "水", "木", "金", "土"];
 

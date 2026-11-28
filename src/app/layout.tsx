@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import GlobalNav from "@/components/GlobalNav";
+import JsonLd from "@/components/JsonLd";
 import { getUser } from "@/lib/supabase/server";
 import { GOOGLE_SITE_VERIFICATION, OWNER_SITES, SITE_NAME, SITE_URL, SUPERVISOR } from "@/config/site";
 
@@ -21,6 +22,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="ja">
       <body>
+        <JsonLd data={{
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: SITE_NAME,
+          alternateName: "たんぷくPOG",
+          url: SITE_URL,
+          inLanguage: "ja",
+          publisher: { "@type": "Organization", name: "たんぷく88", url: SITE_URL },
+        }} />
         <header className="topbar">
           <div className="topbar-in">
             <Link href="/" className="logo">{/* eslint-disable-next-line @next/next/no-img-element */}<img className="logo-mark" src="/brand/pog88.png" alt="" width={30} height={30} />POG<small>ペーパーオーナーゲーム</small></Link>

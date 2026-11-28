@@ -1,6 +1,10 @@
 import Link from "next/link";
 
-export const metadata = { title: "使い方 | POG" };
+export const metadata = {
+  title: "使い方",
+  description: "POG大会の作り方と参加のしかた。招待リンクで仲間を呼ぶ、馬名を入れて指名する、順位表を見るまでを順番に説明します。",
+  alternates: { canonical: "/guide" },
+};
 
 export default function Guide() {
   return (
