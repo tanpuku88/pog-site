@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { sizedPhoto } from "@/lib/photo-src";
 import Link from "next/link";
 import { BRANDS, CLOSED_FACILITIES, FACILITIES, JRA_FACILITIES, NAR_FACILITIES, REGIONS } from "@/content/jyogai";
 import type { Facility } from "@/content/jyogai";
@@ -40,7 +41,7 @@ function Card({ f }: { f: Facility }) {
     <Link href={`/jyogai/${f.slug}`} className={ph ? "asia-country has-photo" : "asia-country"}>
       {ph && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img className="asia-country-thumb" src={ph.src} alt="" loading="lazy" decoding="async" />
+        <img className="asia-country-thumb" src={sizedPhoto(ph.src, 640)} alt="" loading="lazy" decoding="async" />
       )}
       <span className={`kj-badge ${f.org === "JRA" ? "jra" : "nar"}`}>{f.org}</span>
       <span>

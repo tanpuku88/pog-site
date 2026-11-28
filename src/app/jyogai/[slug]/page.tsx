@@ -47,7 +47,7 @@ export default async function JyogaiDetail({ params }: { params: Promise<{ slug:
       {f.photos && f.photos.length > 0 && (
         <figure style={{ margin: "12px 0" }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={f.photos[0].src} alt={f.photos[0].alt} style={{ width: "100%", borderRadius: 8 }} loading="lazy" decoding="async" />
+          <img src={f.photos[0].src} alt={f.photos[0].alt} style={{ width: "100%", borderRadius: 8 }} loading="eager" fetchPriority="high" decoding="async" />
           <figcaption className="muted" style={{ fontSize: 12 }}>
             {f.photos[0].credit}（{f.photos[0].license}）／<a href={f.photos[0].page} target="_blank" rel="noreferrer">出典ページ</a>
           </figcaption>

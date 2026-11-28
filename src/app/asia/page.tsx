@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { sizedPhoto } from "@/lib/photo-src";
 import Link from "next/link";
 import { COUNTRIES, COMING_SOON } from "@/content/asia";
 import { CLOSED } from "@/content/asia/closed";
@@ -54,7 +55,7 @@ export default function AsiaTop() {
           <Link key={c.slug} href={`/asia/${c.slug}`} className={c.photos?.[0] ? "asia-country has-photo" : "asia-country"}>
             {c.photos?.[0] && (
               // eslint-disable-next-line @next/next/no-img-element
-              <img className="asia-country-thumb" src={c.photos[0].src} alt="" loading="lazy" decoding="async" />
+              <img className="asia-country-thumb" src={sizedPhoto(c.photos[0].src, 640)} alt="" loading="lazy" decoding="async" />
             )}
             <span className="asia-flag"><Flag code={c.flag} name={c.name} /></span>
             <span>
@@ -83,7 +84,7 @@ export default function AsiaTop() {
             {t.photo && (
               <figure className="asia-photo">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <span className="ph-box"><img src={t.photo.src} alt={t.photo.alt} loading="lazy" decoding="async" /></span>
+                <span className="ph-box"><img src={sizedPhoto(t.photo.src, 640)} alt={t.photo.alt} loading="lazy" decoding="async" /></span>
                 <figcaption>{t.photo.alt}<span>写真：<a href={t.photo.page} target="_blank" rel="noopener noreferrer">{t.photo.credit}</a>（{t.photo.license}／Wikimedia Commons）</span></figcaption>
               </figure>
             )}
