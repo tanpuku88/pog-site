@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { sizedPhoto } from "@/lib/photo-src";
 import Link from "next/link";
 import { LOST_BRIEF, LOST_TRACKS } from "@/content/keibajo/lost";
 import { RaceHero } from "@/components/asia/Art";
@@ -74,7 +75,7 @@ export default function LostTop() {
           <Link key={t.slug} href={`/keibajo/haishi/${t.slug}`} className={t.photos?.length ? "asia-country has-photo" : "asia-country"}>
             {t.photos?.[0] && (
               // eslint-disable-next-line @next/next/no-img-element
-              <img className="asia-country-thumb" src={t.photos[0].src} alt="" loading="lazy" decoding="async" />
+              <img className="asia-country-thumb" src={sizedPhoto(t.photos[0].src, 640)} alt="" loading="lazy" decoding="async" />
             )}
             <span className="kj-badge lost">{t.closedYear}</span>
             <span>

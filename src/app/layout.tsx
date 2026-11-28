@@ -20,6 +20,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const { user } = await getUser();
   return (
     <html lang="ja">
+      <head>
+        {/* 写真は Wikimedia から直接表示するので、先に接続しておくと表示が速くなる */}
+        <link rel="preconnect" href="https://upload.wikimedia.org" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://upload.wikimedia.org" />
+      </head>
       <body>
         <header className="topbar">
           <div className="topbar-in">
